@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pendidikan Agama Islam — Portal Belajar ASAS</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --arab: "Amiri", "Traditional Arabic", "Scheherazade New", "Times New Roman", serif;
+    --gap: 24px;
+    --pad: clamp(16px, 4vw, 48px);
+    --al: #2D6A35;
+    --ad: #81B887;
+  }
+  html[data-theme="light"] {
+    --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
+    --a: var(--al); color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    --bg: #141416; --surface: #1B1B1E; --fg: #ECEAE5; --muted: #8E8D88; --line: #2C2C30; --strong: #ECEAE5;
+    --a: var(--ad); color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
+  }
+  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+  b, strong { font-weight: 600; }
+
+  /* header */
+  header.top { border-bottom: 1px solid var(--strong); position: relative; }
+  header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .back:hover { color: var(--fg); }
+  .toggle {
+    display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
+    padding: 6px 10px 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .toggle:hover { border-color: var(--strong); }
+  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
+  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+  .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
+  .masthead .t { grid-column: span 8; }
+  .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .code i, .sq { width: 8px; height: 8px; background: var(--a); display: inline-block; flex: none; }
+  h1 { margin: 0; font-size: clamp(32px, 5.4vw, 60px); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; }
+  .subtitle { margin-top: 10px; color: var(--muted); }
+  .meta { grid-column: span 4; display: grid; gap: 6px; }
+  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  /* layout */
+  .layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: 32px 0 64px; }
+  aside.side { grid-column: span 3; }
+  main.content { grid-column: span 9; min-width: 0; }
+  .side-inner { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding-right: 4px; }
+  details.toc > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--strong); padding: 10px 0; }
+  details.toc > summary::-webkit-details-marker { display: none; }
+  details.toc > summary .chev { font-family: var(--mono); color: var(--muted); }
+  details.toc[open] > summary .chev { transform: rotate(180deg); }
+  .toc-group { margin-top: 12px; }
+  .toc-group .label { display: block; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .toc a { display: grid; grid-template-columns: 26px 1fr 10px; gap: 8px; align-items: center; padding: 7px 0 7px 8px; border-left: 2px solid transparent; font-size: 14px; color: var(--muted); }
+  .toc a:hover { color: var(--fg); }
+  .toc a.active { color: var(--fg); border-left-color: var(--a); }
+  .toc a .n { font-family: var(--mono); font-size: 12px; }
+  .toc a .st { width: 8px; height: 8px; border: 1px solid var(--line); }
+  .toc a.mastered .st { background: var(--a); border-color: var(--a); }
+  .side-tools { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 12px; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; }
+  .switch-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .switch-row .switch { flex: none; }
+  .switch-row input:checked + .switch::after { transform: translateX(14px); }
+  .switch-row input:focus-visible + .switch { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-align: left; }
+  .link-btn:hover { color: var(--fg); }
+
+  /* guide box */
+  .guide { border: 1px solid var(--line); border-left: 2px solid var(--a); padding: 16px 18px; margin-bottom: 28px; background: var(--surface); }
+  .guide .label { display: block; margin-bottom: 8px; color: var(--fg); }
+  .guide ul { margin: 0; padding: 0 0 0 18px; font-size: 14px; }
+  .guide li { margin-bottom: 4px; }
+  .guide .note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+
+  /* section */
+  .sec { border-top: 1px solid var(--strong); padding: 16px 0 48px; }
+  .sec-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sec-meta .label { display: inline-flex; align-items: center; gap: 8px; }
+  .sec-title { margin: 14px 0 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 700; }
+  .sec-intro { margin: 12px 0 0; max-width: 72ch; color: var(--muted); }
+  .master {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); padding: 5px 10px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: transparent;
+  }
+  .master:hover { border-color: var(--strong); }
+  .master .box { width: 12px; height: 12px; border: 1px solid var(--strong); display: inline-grid; place-items: center; }
+  .master[aria-pressed="true"] { border-color: var(--a); }
+  .master[aria-pressed="true"] .box { background: var(--a); border-color: var(--a); }
+
+  .sub { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 14px; font-size: 13px; font-family: var(--mono); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sub .k { color: var(--fg); }
+
+  /* arabic & callout */
+  .ayat { border: 1px solid var(--line); border-left: 2px solid var(--a); padding: 16px 18px; margin: 14px 0; }
+  .arab { font-family: var(--arab); font-size: clamp(22px, 3vw, 28px); line-height: 1.95; direction: rtl; text-align: right; margin-bottom: 10px; }
+  .arab-inline { font-family: var(--arab); font-size: 1.25em; direction: rtl; unicode-bidi: embed; }
+  .terjemah { font-size: 14.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+  .terjemah b { color: var(--fg); }
+
+  .callout { border: 1px solid var(--line); background: var(--surface); padding: 12px 16px; margin: 14px 0; font-size: 14px; }
+  .callout .label { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); margin-right: 8px; }
+  .ingat { margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; border-top: 1px solid var(--strong); border-bottom: 1px solid var(--strong); padding: 12px 0; font-size: 14.5px; }
+  .ingat .label { color: var(--fg); display: inline-flex; gap: 8px; align-items: center; }
+
+  /* lists & grids */
+  ul.clean { margin: 8px 0; padding: 0; list-style: none; }
+  ul.clean li { padding: 6px 0 6px 16px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.clean li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+  ol.num { margin: 8px 0; padding: 0; list-style: none; counter-reset: n; }
+  ol.num li { counter-increment: n; display: grid; grid-template-columns: 28px 1fr; padding: 7px 0; border-bottom: 1px solid var(--line); }
+  ol.num li::before { content: counter(n, decimal-leading-zero); font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 3px; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .two > div { min-width: 0; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; margin: 12px 0; border-top: 1px solid var(--strong); }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.tbl th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--strong); padding: 10px 12px 10px 0; white-space: nowrap; }
+  table.tbl td { border-bottom: 1px solid var(--line); padding: 10px 12px 10px 0; vertical-align: top; }
+  table.tbl td.mono { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  /* ulama cards */
+  .ulama-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .ulama { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .ulama .u-num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+  .ulama h4 { margin: 0 0 8px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+  .ulama p { margin: 6px 0; }
+  .ulama .u-meta { margin-top: 10px; display: grid; gap: 6px; font-size: 14px; border-left: 2px solid var(--a); padding-left: 12px; }
+
+  /* indikator 1-40 */
+  .tools-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 16px 0; flex-wrap: wrap; }
+  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
+  .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.25; flex: none; }
+  .search input { border: 0; background: transparent; padding: 9px 0; outline: none; width: 100%; }
+  .search input::placeholder { color: var(--muted); }
+  .ind-list { border-top: 1px solid var(--line); }
+  .ind { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .ind-n { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+  .ind-title { font-weight: 600; margin-bottom: 4px; }
+  .ind-fokus { font-size: 14px; color: var(--muted); }
+  .ind-arah { display: none; margin-top: 10px; padding: 10px 12px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; }
+  .ind-arah .label { display: block; margin-bottom: 4px; color: var(--fg); }
+  .ind.open .ind-arah, body.show-arah .ind-arah { display: block; }
+  body.show-arah .abtn { visibility: hidden; }
+  .abtn { border: 1px solid var(--line); background: transparent; padding: 4px 10px; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .abtn:hover { border-color: var(--strong); }
+  .empty-search { padding: 20px 0; color: var(--muted); display: none; }
+
+  footer { border-top: 1px solid var(--strong); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    aside.side, main.content, .masthead .t, .meta { grid-column: 1 / -1; }
+    .side-inner { position: static; max-height: none; overflow: visible; }
+  }
+  @media (max-width: 680px) {
+    body { font-size: 14px; }
+    .two { grid-template-columns: 1fr; }
+    .ulama { grid-template-columns: 1fr; gap: 4px; }
+    .ind { grid-template-columns: 32px 1fr; }
+    .abtn { grid-column: 2; justify-self: start; }
+  }
+  @media print {
+    aside.side, .bar, .abtn, .master, .tools-bar, footer { display: none !important; }
+    .ind-arah { display: block !important; }
+    main.content { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="back label" href="index.html">&larr; Indeks</a>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+      </button>
+    </div>
+    <div class="masthead">
+      <div class="t">
+        <div class="label code"><i></i>03 / PAI</div>
+        <h1>Pendidikan Agama Islam</h1>
+        <div class="subtitle">Kelas XI &middot; Materi Lengkap &amp; Pembahasan Kisi-Kisi 1–40</div>
+      </div>
+      <div class="meta">
+        <div class="meta-row"><span class="label">Bagian</span><span>A – F</span></div>
+        <div class="meta-row"><span class="label">Bagian dikuasai</span><span id="m-done">0/6</span></div>
+        <div class="meta-row"><span class="label">Indikator kisi-kisi</span><span>40</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="layout">
+    <aside class="side">
+      <div class="side-inner">
+        <details class="toc" id="toc-box">
+          <summary><span class="label">Daftar isi</span><span class="chev">&darr;</span></summary>
+          <nav class="toc" id="toc" aria-label="Daftar bagian">
+            <div class="toc-group">
+              <span class="label">Materi &amp; Pembahasan</span>
+              <a href="#bagian-a" data-id="bagian-a"><span class="n">A</span><span>Q.S. Ali Imran 190–191</span><span class="st"></span></a>
+              <a href="#bagian-b" data-id="bagian-b"><span class="n">B</span><span>Syu'abul Iman &amp; Akhlak</span><span class="st"></span></a>
+              <a href="#bagian-c" data-id="bagian-c"><span class="n">C</span><span>Khutbah, Tabligh, Dakwah</span><span class="st"></span></a>
+              <a href="#bagian-d" data-id="bagian-d"><span class="n">D</span><span>Ulama Nusantara</span><span class="st"></span></a>
+              <a href="#bagian-e" data-id="bagian-e"><span class="n">E</span><span>Pembahasan 1–40</span><span class="st"></span></a>
+              <a href="#bagian-f" data-id="bagian-f"><span class="n">F</span><span>Ringkasan Hafalan Cepat</span><span class="st"></span></a>
+            </div>
+          </nav>
+        </details>
+        <div class="side-tools">
+          <label class="switch-row">
+            <span class="label">Buka semua arah jawaban</span>
+            <input type="checkbox" id="show-arah"><span class="switch" aria-hidden="true"></span>
+          </label>
+          <button class="link-btn" id="reset" type="button">Reset tanda dikuasai</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="guide">
+        <span class="label">Petunjuk Penggunaan</span>
+        <ul>
+          <li>Baca materi per bagian, lalu coba jelaskan kembali dengan kata-katamu sendiri.</li>
+          <li><b>Pilihan ganda kompleks:</b> nilai setiap opsi secara mandiri — jangan memilih hanya karena terdengar baik; pastikan sesuai ayat, hadis, dan konteks.</li>
+          <li><b>Benar/salah:</b> perhatikan kata mutlak seperti <i>“selalu”</i>, <i>“hanya”</i>, <i>“pasti”</i>, <i>“boleh menyebarkan”</i>, atau <i>“tidak perlu diperiksa”</i>.</li>
+          <li><b>Soal narasi:</b> identifikasi masalah, prinsip agama yang relevan, akibat tindakan, dan solusi paling bertanggung jawab.</li>
+        </ul>
+        <div class="note"><b>Catatan:</b> Pembahasan fikih khutbah dapat memiliki variasi antarmazhab. Bagian ini menyajikan rumusan umum pembelajaran PAI sekolah; ikuti juga buku dan arahan guru di kelas.</div>
+      </div>
+
+      <!-- ===================== BAGIAN A ===================== -->
+      <section class="sec" id="bagian-a">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian A</span>
+          <button type="button" class="master" data-id="bagian-a" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Q.S. Ali Imran Ayat 190–191</h2>
+        <p class="sec-intro">Ulul albab, tafakur, tajwid, serta hubungan ilmu pengetahuan, teknologi, dan akhlak.</p>
+
+        <h3 class="sub"><span class="k">01</span> Teks Ayat, Terjemah, dan Gambaran Umum</h3>
+        <div class="ayat">
+          <div class="arab">إِنَّ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ وَاخْتِلَافِ اللَّيْلِ وَالنَّهَارِ لَآيَاتٍ لِأُولِي الْأَلْبَابِ</div>
+          <div class="terjemah"><b>Q.S. Ali Imran [3]: 190</b> — “Sesungguhnya dalam penciptaan langit dan bumi serta pergantian malam dan siang terdapat tanda-tanda (kebesaran Allah) bagi orang-orang yang berakal.”</div>
+        </div>
+        <div class="ayat">
+          <div class="arab">الَّذِينَ يَذْكُرُونَ اللَّهَ قِيَامًا وَقُعُودًا وَعَلَىٰ جُنُوبِهِمْ وَيَتَفَكَّرُونَ فِي خَلْقِ السَّمَاوَاتِ وَالْأَرْضِ رَبَّنَا مَا خَلَقْتَ هَٰذَا بَاطِلًا سُبْحَانَكَ فَقِنَا عَذَابَ النَّارِ</div>
+          <div class="terjemah"><b>Q.S. Ali Imran [3]: 191</b> — “(Yaitu) orang-orang yang mengingat Allah sambil berdiri, duduk, atau dalam keadaan berbaring, dan mereka memikirkan tentang penciptaan langit dan bumi (seraya berkata), ‘Ya Tuhan kami, tidaklah Engkau menciptakan semua ini sia-sia. Mahasuci Engkau, lindungilah kami dari azab neraka.’”</div>
+        </div>
+        <p>Dua ayat ini saling melengkapi: ayat 190 mengarahkan manusia memperhatikan tanda kebesaran Allah di alam semesta; ayat 191 menjelaskan ciri orang yang merespons tanda itu — terus mengingat Allah, berpikir mendalam, menyadari ciptaan-Nya tidak sia-sia, lalu berdoa dan memperbaiki hidupnya.</p>
+
+        <h3 class="sub"><span class="k">02</span> Kandungan Q.S. Ali Imran 190</h3>
+        <ul class="clean">
+          <li><b>Penciptaan langit dan bumi</b> menunjukkan keteraturan, keluasan, keseimbangan, dan kekuasaan Allah. Manusia diajak mengamati alam, bukan sekadar melewatinya tanpa berpikir.</li>
+          <li><b>Pergantian malam dan siang</b> menunjukkan keteraturan waktu dan sistem alam (terang-gelap, aktivitas, suhu, ritme kehidupan) sebagai bahan renungan.</li>
+          <li><b>Ayat kauniyah:</b> tanda kebesaran Allah yang dapat diamati pada alam, mendorong manusia belajar, meneliti, dan mengambil pelajaran.</li>
+          <li><b>Ulul albab:</b> orang yang menggunakan akal secara benar dan menghubungkan pengetahuan dengan keimanan serta tindakan baik.</li>
+        </ul>
+        <div class="callout"><span class="label"><span class="sq"></span>Inti Ayat 190</span> Alam semesta bukan sesuatu yang terjadi tanpa makna. Keteraturan ciptaan mengajak manusia berpikir, bersyukur, dan mengenal kebesaran Allah.</div>
+
+        <h3 class="sub"><span class="k">03</span> Karakter Ulul Albab Menurut Ayat 191</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Ungkapan Ayat</th><th>Makna</th><th>Contoh Penerapan</th></tr></thead>
+            <tbody>
+              <tr><td><span class="arab-inline">يَذْكُرُونَ اللَّهَ</span><br><span class="label">yadzkuruunallaah</span></td><td>Mengingat Allah melalui zikir, doa, ibadah, dan kesadaran bahwa Allah mengawasi perbuatan.</td><td>Berdoa, bersyukur, menjaga kejujuran ketika meneliti atau mengerjakan tugas.</td></tr>
+              <tr><td><span class="arab-inline">قِيَامًا</span><br><span class="label">qiyaaman</span></td><td>Dalam keadaan berdiri.</td><td>Tetap mengingat Allah saat bekerja, belajar, atau beraktivitas.</td></tr>
+              <tr><td><span class="arab-inline">وَقُعُودًا</span><br><span class="label">wa qu‘uudan</span></td><td>Dalam keadaan duduk.</td><td>Mengingat Allah ketika berdiskusi, belajar, dan beristirahat.</td></tr>
+              <tr><td><span class="arab-inline">وَعَلَىٰ جُنُوبِهِمْ</span><br><span class="label">wa ‘alaa junuubihim</span></td><td>Dalam keadaan berbaring atau beristirahat.</td><td>Menjaga kesadaran kepada Allah dalam keadaan santai maupun sulit.</td></tr>
+              <tr><td><span class="arab-inline">وَيَتَفَكَّرُونَ</span><br><span class="label">wa yatafakkaruun</span></td><td>Merenungkan secara mendalam penciptaan alam.</td><td>Mempelajari sebab pencemaran sungai dan mencari solusi berdasarkan bukti.</td></tr>
+              <tr><td><span class="arab-inline">مَا خَلَقْتَ هَٰذَا بَاطِلًا</span></td><td>Meyakini bahwa ciptaan Allah tidak sia-sia.</td><td>Menggunakan alam secara bertanggung jawab dan tidak merusaknya.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="label" style="text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:13.5px;">Catatan: <i>qiyaman, qu‘udan, dan ‘ala junubihim</i> berarti kesadaran beriman menyertai seluruh keadaan hidup, bukan berarti mengucapkan zikir terus-menerus sampai mengabaikan kewajiban lain.</p>
+
+        <h3 class="sub"><span class="k">04</span> Hubungan Zikir, Pikir, dan Tindakan</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Unsur</th><th>Pertanyaan Pengarah</th><th>Hasil yang Diharapkan</th></tr></thead>
+            <tbody>
+              <tr><td><b>Zikir</b></td><td>Apa hubungan temuan ini dengan tanggung jawab kepada Allah?</td><td>Rendah hati, syukur, jujur, dan tidak merusak.</td></tr>
+              <tr><td><b>Pikir / Tafakur</b></td><td>Apa penyebab, bukti, pola, dan dampak fenomena?</td><td>Pengetahuan yang akurat dan masuk akal.</td></tr>
+              <tr><td><b>Amal / Akhlak</b></td><td>Bagaimana ilmu digunakan untuk menyelesaikan masalah?</td><td>Solusi yang bermanfaat, adil, dan bertanggung jawab.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">05</span> Contoh Penerapan: Penelitian Pencemaran Sungai</h3>
+        <ul class="clean">
+          <li>Mengamati kondisi sungai, mengambil sampel dan menguji kualitas air melalui prosedur aman dan sesuai bimbingan, lalu membandingkan dengan standar relevan secara jujur.</li>
+          <li>Tidak langsung menuduh warga atau pabrik tertentu tanpa bukti yang cukup.</li>
+          <li>Mencatat lokasi, waktu, metode, dan keterbatasan data agar hasil dapat diperiksa.</li>
+          <li>Mengusulkan tindakan realistis (edukasi pengelolaan sampah atau pelaporan ke instansi berwenang) dan tidak memanipulasi data demi nilai atau popularitas.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">06</span> Tajwid Q.S. Ali Imran Ayat 190–191</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Lafaz</th><th>Hukum Bacaan</th><th>Alasan &amp; Cara Membaca</th></tr></thead>
+            <tbody>
+              <tr><td><span class="arab-inline">إِنَّ</span> — <i>inna</i></td><td>Ghunnah musyaddadah</td><td>Nun bertasydid dibaca dengung sekitar 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">فِي</span> — <i>fii</i></td><td>Mad tabi‘i</td><td>Ya sukun didahului kasrah; dipanjangkan 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">السَّمَاوَاتِ</span> — <i>as-samaawaati</i></td><td>Alif lam syamsiyah; mad tabi‘i</td><td>Lam melebur ke sin (sin bertasydid). Alif mad dipanjangkan 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">الْأَرْضِ</span> — <i>al-ardhi</i></td><td>Alif lam qamariyah</td><td>Lam dibaca jelas karena bertemu huruf qamariyah (hamzah).</td></tr>
+              <tr><td><span class="arab-inline">اخْتِلَافِ</span> — <i>ikhtilaafi</i></td><td>Mad tabi‘i</td><td>Alif setelah fathah pada bagian <i>laa</i> dipanjangkan 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">اللَّيْلِ</span> — <i>al-layli</i></td><td>Alif lam syamsiyah</td><td>Lam melebur ke lam berikutnya; dibaca bertasydid.</td></tr>
+              <tr><td><span class="arab-inline">النَّهَارِ</span> — <i>an-nahaari</i></td><td>Alif lam syamsiyah; mad tabi‘i</td><td>Lam melebur ke nun; alif pada <i>haa</i> dipanjangkan 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">لَآيَاتٍ</span> — <i>la-aayaatin</i></td><td>Mad badal &amp; mad tabi‘i</td><td>Hamzah diikuti huruf mad dalam satu kata (mad badal); mad tabi‘i 2 harakat.</td></tr>
+              <tr><td><span class="arab-inline">آيَاتٍ لِأُولِي</span> — <i>aayaatil-li’uuli</i></td><td>Idgham bila ghunnah</td><td>Tanwin bertemu lam; bunyi tanwin masuk ke lam tanpa dengung.</td></tr>
+              <tr><td><span class="arab-inline">الْأَلْبَابِ</span> — <i>al-albaab</i></td><td>Alif lam qamariyah; mad tabi‘i</td><td>Lam dibaca jelas. Jika waqaf di akhir ayat, mad ‘aridh lis-sukun 2, 4, atau 6 harakat.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">07</span> Tanwin Bertemu Wawu: <span class="arab-inline">قِيَامًا وَقُعُودًا</span></h3>
+        <div class="callout"><span class="label"><span class="sq"></span>Penting</span> Tajwid pada frasa <i>qiyāman wa qu‘ūdan</i> bukan ikhfa atau iqlab. Tanwin fathah di akhir <i>qiyāman</i> bertemu huruf wawu (<span class="arab-inline">ي ن م و</span>), sehingga hukumnya <b>idgham bighunnah</b> — dibaca masuk dengan dengung sekitar 2 harakat (mendekati <i>qiyāmaw wa qu‘ūdan</i>). Berlaku pula pada <i>qu‘ūdan wa ‘alā</i>.</div>
+
+        <h3 class="sub"><span class="k">08</span> Hubungan Ilmu Pengetahuan, Teknologi, dan Akhlak</h3>
+        <ul class="clean">
+          <li><b>Ilmu pengetahuan</b> menjelaskan fenomena lewat pengamatan, pengujian, dan penalaran yang dapat dipertanggungjawabkan.</li>
+          <li><b>Teknologi</b> menerapkan ilmu untuk memudahkan hidup (alat uji air, pengolahan limbah, pemantau lingkungan).</li>
+          <li><b>Akhlak</b> mengarahkan tujuan dan cara pemakaiannya: jujur, adil, menjaga privasi, tidak merusak, dan mempertimbangkan dampak sosial-lingkungan.</li>
+        </ul>
+      </section>
+
+      <!-- ===================== BAGIAN B ===================== -->
+      <section class="sec" id="bagian-b">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian B</span>
+          <button type="button" class="master" data-id="bagian-b" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Syu'abul Iman dan Akhlak Terpuji</h2>
+        <p class="sec-intro">Cabang iman, syukur, menepati janji, menjaga lisan, menutup aib, serta menghindari penyakit hati dan sosial.</p>
+
+        <h3 class="sub"><span class="k">01</span> Pengertian Syu'abul Iman</h3>
+        <p><b>Syu'abul iman</b> berarti cabang-cabang iman. Dalam hadis riwayat Muslim, iman memiliki lebih dari 70 cabang: tertinggi adalah ucapan <i>“la ilaha illallah”</i>, terendah menyingkirkan gangguan dari jalan, dan rasa malu adalah salah satu cabang iman. Iman meliputi keyakinan, ibadah, akhlak, dan kepedulian sosial.</p>
+
+        <h3 class="sub"><span class="k">02</span> Syukur: Q.S. Ibrahim Ayat 7</h3>
+        <div class="ayat">
+          <div class="arab">وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِنْ شَكَرْتُمْ لَأَزِيدَنَّكُمْ وَلَئِنْ كَفَرْتُمْ إِنَّ عَذَابِي لَشَدِيدٌ</div>
+          <div class="terjemah"><b>Q.S. Ibrahim [14]: 7</b> — “(Ingatlah) ketika Tuhanmu memaklumkan, ‘Sesungguhnya jika kamu bersyukur, niscaya Aku akan menambah (nikmat) kepadamu, tetapi jika kamu mengingkari (nikmat-Ku), sesungguhnya azab-Ku benar-benar sangat keras.’”</div>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Bentuk Syukur</th><th>Makna</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Syukur hati</b></td><td>Mengakui dan menyadari nikmat berasal dari Allah.</td><td>Tidak menganggap keberhasilan semata-mata kehebatan diri.</td></tr>
+              <tr><td><b>Syukur lisan</b></td><td>Memuji Allah dan berterima kasih dengan tulus.</td><td>Mengucapkan alhamdulillah dan berterima kasih kepada yang membantu.</td></tr>
+              <tr><td><b>Syukur perbuatan</b></td><td>Memakai nikmat untuk hal baik sesuai tuntunan agama.</td><td>Memakai ilmu untuk belajar/membantu teman, menjaga kesehatan, berbagi rezeki.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;color:var(--muted);">Tambahan nikmat tidak selalu berupa harta seketika; bisa berupa keberkahan, ketenangan, kesehatan, ilmu, atau kesempatan berbuat baik.</p>
+
+        <h3 class="sub"><span class="k">03</span> Menepati Janji dan Menjaga Amanah</h3>
+        <p><b>Janji</b> adalah kesanggupan melakukan sesuatu; <b>amanah</b> adalah tanggung jawab atau kepercayaan yang harus dijaga. Perintah memenuhi janji tercantum dalam Q.S. Al-Isra' [17]: 34 dan Q.S. Al-Ma'idah [5]: 1. Tanda kemunafikan perilaku menurut H.R. al-Bukhari &amp; Muslim: berkata dusta, berjanji mengingkari, diberi amanah berkhianat (hadis ini memperingatkan perilaku, bukan memberi hak melabeli orang).</p>
+        <ul class="clean">
+          <li><b>Contoh dalam kerja kelompok:</b> menyepakati pembagian tugas &amp; tenggat secara jelas; mengerjakan bagian sendiri tepat waktu; tidak mengklaim kerja teman; melapor sejak awal jika ada hambatan; menjaga file, data, dan uang kelompok secara terbuka.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">04</span> Menjaga Lisan</h3>
+        <p>H.R. al-Bukhari dan Muslim: siapa beriman kepada Allah dan hari akhir hendaklah berkata baik atau diam. “Diam” berarti tidak mengucapkan hal buruk/sia-sia, bukan membiarkan kezaliman.</p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Istilah</th><th>Pengertian</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Gibah</b></td><td>Menyebut kekurangan seseorang yang benar adanya, tetapi ia tidak suka jika dibicarakan saat tidak hadir.</td><td>Membicarakan kelemahan teman untuk hiburan grup.</td></tr>
+              <tr><td><b>Buhtan</b></td><td>Tuduhan atau cerita dusta tentang seseorang.</td><td>Mengarang bahwa teman mencuri tanpa bukti.</td></tr>
+              <tr><td><b>Fitnah</b></td><td>Tuduhan/berita bohong yang merusak nama baik atau memicu konflik.</td><td>Menyebar kabar palsu bahwa seorang siswa melakukan sesuatu.</td></tr>
+              <tr><td><b>Namimah</b></td><td>Mengadu domba dengan memindahkan ucapan antarorang untuk memicu permusuhan.</td><td>Menyampaikan potongan ucapan teman agar dua orang bertengkar.</td></tr>
+              <tr><td><b>Tabayyun</b></td><td>Memeriksa kebenaran informasi sebelum percaya atau menyebarkannya.</td><td>Memeriksa sumber, konteks, dan bukti sebelum meneruskan berita.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;"><b>Saat diskusi:</b> dengarkan sampai selesai, kritik gagasan (bukan menghina orangnya), pakai bahasa sopan, dan akui jika keliru.</p>
+
+        <h3 class="sub"><span class="k">05</span> Menutup Aib dan Menjaga Privasi</h3>
+        <p>H.R. Muslim: Allah akan menutupi kekurangan seorang hamba yang menutupi kekurangan saudaranya. Contoh: tidak meneruskan rekaman suara masalah keluarga teman ke grup kelas, meminta pengirim berhenti menyebarkan, dan menjaga privasi.</p>
+        <div class="callout"><span class="label"><span class="sq"></span>Batas Penting</span> Menutup aib <b>bukan</b> berarti menutupi kekerasan, pelecehan, ancaman, perundungan, penipuan, atau bahaya yang sedang berlangsung. Laporkan melalui jalur tepat (orang dewasa tepercaya, guru, konselor, pihak berwenang) tanpa menyebar ke publik.</div>
+
+        <h3 class="sub"><span class="k">06</span> Penyakit Hati dan Penyakit Sosial</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>Hasad:</b> tidak senang atas nikmat orang lain dan berharap nikmat itu hilang. Lawannya <b>ghibthah</b>: mengagumi keberhasilan orang lain dan ingin kebaikan serupa tanpa berharap nikmatnya hilang.</li>
+              <li><b>Mengubah iri jadi motivasi:</b> akui perasaan, syukuri kemampuan diri, beri selamat, pelajari usaha baiknya, tetapkan target, berusaha, berdoa.</li>
+              <li><b>Takabur:</b> menolak kebenaran dan merendahkan manusia (H.R. Muslim). Percaya diri/bangga hasil kerja bukan otomatis takabur.</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Tabayyun (Q.S. Al-Hujurat [49]: 6):</b> periksa sumber asli, tanggal, konteks, bukti, dan konfirmasi; banyaknya <i>likes</i> bukan bukti kebenaran.</li>
+              <li><b>Riya:</b> berbuat baik agar dilihat/dipuji orang, bukan ikhlas.</li>
+              <li><b>Ujub:</b> kagum berlebihan pada diri sendiri hingga lupa kelebihan adalah nikmat yang bisa hilang.</li>
+              <li><b>Lagu/teks Syu'abul Iman menutup aib:</b> fokus pada pesan menjaga kehormatan, persaudaraan, dan menasihati secara bijak.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">07</span> Pola Menyelesaikan Kasus Akhlak di Sekolah</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Situasi</th><th>Jangan Dilakukan</th><th>Tindakan yang Tepat</th></tr></thead>
+            <tbody>
+              <tr><td>Teman mendapat prestasi/beasiswa</td><td>Mencela, iri, berharap ia gagal.</td><td>Beri selamat, belajar dari usahanya, tingkatkan diri.</td></tr>
+              <tr><td>Anggota kelompok terlambat tugas</td><td>Menghilang, berbohong, menuduh.</td><td>Hubungi baik-baik, klarifikasi hambatan, atur ulang tugas.</td></tr>
+              <tr><td>Ada rekaman masalah keluarga teman</td><td>Menyebar ke grup atau membuat meme.</td><td>Jangan teruskan, lindungi privasi, laporkan bila ada bahaya.</td></tr>
+              <tr><td>Beredar kabar siswa berbuat salah</td><td>Ikut menyebar tanpa bukti.</td><td>Tabayyun, jangan menghakimi, sampaikan ke guru bila perlu.</td></tr>
+              <tr><td>Teman berbeda pendapat</td><td>Menghina, memotong, mengejek.</td><td>Dengarkan, tanggapi argumen dengan alasan &amp; bukti.</td></tr>
+              <tr><td>Seseorang bersikap sombong</td><td>Membalas dengan penghinaan.</td><td>Tegur santun secara pribadi, fokus pada perilaku, tetap rendah hati.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAGIAN C ===================== -->
+      <section class="sec" id="bagian-c">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian C</span>
+          <button type="button" class="master" data-id="bagian-c" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Khutbah, Tabligh, dan Dakwah</h2>
+        <p class="sec-intro">Perbedaan konsep, ketentuan khutbah Jumat, prinsip dakwah Q.S. An-Nahl 125, serta dakwah digital.</p>
+
+        <h3 class="sub"><span class="k">01</span> Pengertian dan Perbedaan</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Istilah</th><th>Pengertian</th><th>Ciri Utama / Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Dakwah</b></td><td>Usaha mengajak manusia menuju keimanan dan kebaikan sesuai ajaran Islam.</td><td>Maknanya paling luas: lisan, tulisan, tindakan, pendidikan, pelayanan, media digital.</td></tr>
+              <tr><td><b>Tabligh</b></td><td>Menyampaikan atau meneruskan ajaran Islam kepada orang lain.</td><td>Menjelaskan pesan agama, nasihat, atau informasi keislaman yang benar.</td></tr>
+              <tr><td><b>Khutbah</b></td><td>Pidato/uraian keagamaan dalam rangkaian ibadah tertentu dengan ketentuan khusus.</td><td>Khutbah Jumat: sebelum salat Jumat dalam dua khutbah, terikat rukun &amp; syarat.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">02</span> Ketentuan Umum Khutbah Jumat</h3>
+        <ol class="num">
+          <li>Memuji Allah (<b>hamdalah</b>).</li>
+          <li>Membaca <b>salawat</b> kepada Nabi Muhammad saw.</li>
+          <li><b>Berwasiat / menasihati jamaah agar bertakwa</b> kepada Allah.</li>
+          <li>Membaca <b>ayat Al-Qur'an</b> pada salah satu khutbah.</li>
+          <li><b>Mendoakan kaum muslimin</b> pada khutbah kedua (rumusan lazim di sekolah).</li>
+        </ol>
+        <p style="font-size:14px;">Dilaksanakan <b>dua kali</b> dipisahkan dengan duduk khatib, setelah masuk waktu zuhur sebelum salat Jumat; khatib berdiri jika mampu, suara terdengar jelas, menjaga kesucian, dan menutup aurat.</p>
+        <div class="callout"><span class="label"><span class="sq"></span>Kunci Soal</span> Nasihat takwa adalah unsur penting khutbah. Jangan tertukar antara khutbah (terikat aturan ibadah &amp; dua khutbah) dengan ceramah bebas/tabligh biasa.</div>
+
+        <h3 class="sub"><span class="k">03</span> Prinsip Berdakwah (Q.S. An-Nahl [16]: 125)</h3>
+        <ul class="clean">
+          <li><b>Hikmah:</b> tepat isi dan cara, mempertimbangkan pengetahuan serta kondisi audiens.</li>
+          <li><b>Mau‘izhah hasanah:</b> nasihat yang baik, menyentuh, jelas, dan tidak merendahkan.</li>
+          <li><b>Mujadalah billati hiya ahsan:</b> berdialog dengan argumen dan adab terbaik, bukan hinaan atau amarah.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">04</span> Dakwah Digital &amp; Strategi Sesuai Kondisi Audiens</h3>
+        <p>Video singkat ajakan kebaikan sah menjadi dakwah bila pesan benar, kutipan ayat/hadis diperiksa, bahasa santun, tidak memotong konteks, dan tidak mempermalukan orang.</p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Kondisi Audiens</th><th>Strategi yang Tepat</th></tr></thead>
+            <tbody>
+              <tr><td>Belum memahami dasar materi</td><td>Bahasa sederhana, definisi singkat, contoh dekat kehidupan.</td></tr>
+              <tr><td>Sudah paham dasar tapi punya pertanyaan</td><td>Berikan alasan, dalil, dan ruang dialog; akui jika ada hal perlu diperiksa.</td></tr>
+              <tr><td>Sedang marah atau malu</td><td>Jangan permalukan di depan umum; tenangkan situasi dan bicara secara pribadi.</td></tr>
+              <tr><td>Audiens beragam usia/kemampuan</td><td>Bahasa inklusif, contoh bervariasi, hindari istilah teknis tanpa penjelasan.</td></tr>
+              <tr><td>Topik sensitif / berpotensi konflik</td><td>Periksa fakta, nada tenang, hindari generalisasi dan serangan pribadi.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAGIAN D ===================== -->
+      <section class="sec" id="bagian-d">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian D</span>
+          <button type="button" class="master" data-id="bagian-d" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Ulama Nusantara yang Mendunia</h2>
+        <p class="sec-intro">Tujuh tokoh ulama Nusantara, bidang keilmuan, karya penting, serta teladan untuk masa kini.</p>
+
+        <h3 class="sub"><span class="k">01</span> Profil Tujuh Ulama Nusantara</h3>
+        <div class="ulama-list">
+          <div class="ulama">
+            <div class="u-num">01</div>
+            <div>
+              <h4>Syekh Nawawi al-Bantani</h4>
+              <p>Muhammad Nawawi bin Umar al-Bantani berasal dari Tanara, Banten. Menjadi ulama besar yang mengajar di Makkah dan sangat produktif menulis di berbagai disiplin ilmu hingga karyanya dipelajari di pesantren dan dunia Islam.</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> <i>Marah Labid / al-Tafsir al-Munir</i> (tafsir), <i>Nihayatuz Zain</i> (fikih), <i>Uqud al-Lujain</i> (akhlak/keluarga), <i>Nashaih al-Ibad</i> (nasihat), <i>Kasyifatus Saja</i> (fikih).</div>
+                <div><b>Teladan:</b> tekun belajar, rendah hati, disiplin, mengajar, produktif menghasilkan karya bermanfaat.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">02</div>
+            <div>
+              <h4>Hamzah al-Fansuri</h4>
+              <p>Penyair sufi dan tokoh penting sastra Melayu klasik yang memakai bahasa Melayu sebagai media gagasan tasawuf (sering dibahas terkait tasawuf wujudiyah).</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> prosa <i>Asrar al-‘Arifin</i>, <i>Syarab al-‘Asyiqin</i>, <i>al-Muntahi</i>; serta syair sufi seperti <i>Syair Perahu</i>.</div>
+                <div><b>Teladan:</b> kreativitas menyampaikan ilmu, kecakapan bahasa, kedalaman renungan, memakai sastra untuk pendidikan rohani.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">03</div>
+            <div>
+              <h4>Nuruddin ar-Raniri</h4>
+              <p>Ulama yang berkiprah di Aceh pada abad ke-17 di bidang fikih, tasawuf, teologi, sejarah, dan pemerintahan. Berbeda pandangan dengan Hamzah al-Fansuri soal wujudiyah — perbedaan itu harus dikaji secara ilmiah, bukan dijadikan alasan menghina.</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> <i>Sirat al-Mustaqim</i> (fikih ibadah), <i>Bustan al-Salatin</i> (sejarah &amp; nasihat pemerintahan), <i>Hujjat al-Siddiq li Daf‘ al-Zindiq</i> (teologi/tasawuf), <i>al-Tibyan fi Ma‘rifat al-Adyan</i>.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">04</div>
+            <div>
+              <h4>Syekh Abdurrauf as-Singkili (Syiah Kuala)</h4>
+              <p>Ulama Aceh berpengaruh dalam keilmuan Islam Melayu di bidang tafsir, fikih, dan tasawuf.</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> <i>Tarjuman al-Mustafid</i> (<b>tafsir</b> berbahasa Melayu — jangan tertukar!), <i>Mir’at al-Tullab</i> (<b>fikih</b>), <i>Umdat al-Muhtajin</i> (tasawuf).</div>
+                <div><b>Teladan:</b> mengembangkan ilmu lintas bidang dan menulis dalam bahasa yang dipahami masyarakat.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">05</div>
+            <div>
+              <h4>Syekh Yusuf al-Makassari (1626/1627–1699)</h4>
+              <p>Berasal dari Gowa/Makassar, ulama sufi sekaligus pejuang perlawanan anti-VOC bersama Sultan Ageng Tirtayasa di Banten. Ditangkap dan diasingkan ke Ceylon/Sri Lanka (1684), lalu ke Tanjung Harapan/Cape of Good Hope, Afrika Selatan (1694), dan tetap mengajar di pengasingan.</p>
+              <div class="u-meta">
+                <div><b>Ciri ujian:</b> ulama sufi, pejuang anti-kolonial, diasingkan Belanda (Ceylon &rarr; Cape).</div>
+                <div><b>Teladan:</b> keberanian, keteguhan prinsip, keluasan jaringan ilmu, tetap bermanfaat di tengah kesulitan.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">06</div>
+            <div>
+              <h4>Abdus Samad al-Palimbani</h4>
+              <p>Ulama dari Palembang yang dikenal lewat karya tasawuf dan pembinaan spiritual, mengolah tradisi Imam al-Ghazali agar mudah dipahami masyarakat Melayu.</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> <i>Hidayat al-Salikin</i> dan <i>Siyar al-Salikin</i> (bahasa Melayu-Jawi, merujuk al-Ghazali).</div>
+                <div><b>Teladan:</b> menyeimbangkan ilmu dan amal, membersihkan hati, mendahulukan akhlak, tidak menyombongkan ilmu.</div>
+              </div>
+            </div>
+          </div>
+          <div class="ulama">
+            <div class="u-num">07</div>
+            <div>
+              <h4>Kiai Sholeh Darat (Muhammad Shalih bin Umar al-Samarani, ~1820–1903)</h4>
+              <p>Ulama dan pendidik di Jawa (juga dikenal sebagai guru sejumlah tokoh termasuk R.A. Kartini) yang membumikan pemahaman agama agar dekat dengan masyarakat.</p>
+              <div class="u-meta">
+                <div><b>Karya penting:</b> <i>Faid al-Rahman</i> (tafsir Al-Qur'an berbahasa Jawa beraksara Arab Pegon).</div>
+                <div><b>Teladan:</b> membumikan ilmu dengan bahasa yang dipahami, memperluas akses pendidikan, mengajar dengan sabar.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">02</span> Cara Meneladani Ulama pada Masa Kini</h3>
+        <ul class="clean">
+          <li>Tekun belajar dari sumber tepercaya, menghasilkan karya nyata (riset, tulisan, pengajaran sebaya, kegiatan sosial).</li>
+          <li>Menggunakan bahasa sesuai audiens tanpa mengubah kebenaran isi; menghormati perbedaan ilmiah berdasarkan bukti.</li>
+          <li>Program meneladani ulama yang baik memiliki tujuan terukur, sumber akurat, kegiatan nyata (kelompok baca, diskusi, proyek literasi), jadwal, dan evaluasi — bukan sekadar slogan atau poster.</li>
+        </ul>
+      </section>
+
+      <!-- ===================== BAGIAN E ===================== -->
+      <section class="sec" id="bagian-e">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian E</span>
+          <button type="button" class="master" data-id="bagian-e" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Pembahasan Kisi-Kisi Nomor 1–40</h2>
+        <p class="sec-intro">Panduan fokus konsep dan arah jawaban untuk setiap indikator. Klik tombol “Arah jawaban” per nomor, atau buka semua dari panel samping.</p>
+
+        <div class="tools-bar">
+          <label class="search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+            <input id="q-ind" type="search" placeholder="Cari nomor atau kata kunci (misal: tajwid, hasad, khutbah, Nawawi)" aria-label="Cari indikator">
+          </label>
+          <span class="label" id="ind-count">40 indikator</span>
+        </div>
+        <div class="ind-list" id="ind-list"></div>
+        <div class="empty-search" id="empty-ind">Tidak ada indikator yang cocok dengan pencarianmu.</div>
+      </section>
+
+      <!-- ===================== BAGIAN F ===================== -->
+      <section class="sec" id="bagian-f">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian F</span>
+          <button type="button" class="master" data-id="bagian-f" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Ringkasan Hafalan Cepat</h2>
+        <p class="sec-intro">Rekap dalil, kata kunci tajwid, pasangan ulama–karya, dan strategi menjawab soal berbasis narasi.</p>
+
+        <h3 class="sub"><span class="k">01</span> Ayat dan Dalil yang Perlu Diingat</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Dalil</th><th>Pokok Pesan</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Q.S. Ali Imran 190</td><td>Penciptaan langit-bumi &amp; pergantian malam-siang adalah tanda kebesaran Allah bagi orang berakal.</td></tr>
+              <tr><td class="mono">Q.S. Ali Imran 191</td><td>Ulul albab mengingat Allah dalam berbagai keadaan, bertafakur, dan menyadari ciptaan tidak sia-sia.</td></tr>
+              <tr><td class="mono">Q.S. Ibrahim 7</td><td>Syukur mendatangkan tambahan nikmat; diwujudkan dengan hati, lisan, dan perbuatan.</td></tr>
+              <tr><td class="mono">Q.S. Al-Hujurat 6</td><td>Tabayyun: periksa berita agar tidak merugikan orang karena informasi yang salah.</td></tr>
+              <tr><td class="mono">Q.S. An-Nahl 125</td><td>Dakwah dengan hikmah, nasihat yang baik, dan dialog dengan cara terbaik.</td></tr>
+              <tr><td class="mono">Q.S. Al-Isra 34 / Al-Ma'idah 1</td><td>Menepati janji dan memenuhi komitmen.</td></tr>
+              <tr><td class="mono">Hadis iman bercabang (Muslim)</td><td>Iman memiliki lebih dari 70 cabang; termasuk menyingkirkan gangguan di jalan dan rasa malu.</td></tr>
+              <tr><td class="mono">Hadis berkata baik/diam (Bukhari-Muslim)</td><td>Jaga ucapan; sampaikan yang baik dan bermanfaat.</td></tr>
+              <tr><td class="mono">Hadis munafik amali (Bukhari-Muslim)</td><td>Dusta, ingkar janji, dan khianat merupakan perilaku tercela.</td></tr>
+              <tr><td class="mono">Hadis takabur (Muslim)</td><td>Kesombongan adalah menolak kebenaran dan merendahkan manusia.</td></tr>
+              <tr><td class="mono">Hadis menutup aib (Muslim)</td><td>Menutup aib dengan cara benar adalah bentuk kepedulian; jangan jadikan rahasia sebagai gosip.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">02</span> Kata Kunci Tajwid</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Jika Bertemu…</th><th>Hukum Bacaan</th></tr></thead>
+            <tbody>
+              <tr><td>Nun sukun/tanwin + <span class="arab-inline">ي ن م و</span></td><td><b>Idgham bighunnah</b> (masuk dengan dengung)</td></tr>
+              <tr><td>Nun sukun/tanwin + <span class="arab-inline">ل ر</span></td><td><b>Idgham bila ghunnah</b> (masuk tanpa dengung)</td></tr>
+              <tr><td>Nun sukun/tanwin + <span class="arab-inline">ب</span></td><td><b>Iqlab</b> (berubah menjadi bunyi mim)</td></tr>
+              <tr><td>Nun sukun/tanwin + huruf ikhfa (selain di atas)</td><td><b>Ikhfa haqiqi</b> (samar dengan dengung)</td></tr>
+              <tr><td>Nun/mim bertasydid</td><td><b>Ghunnah musyaddadah</b> (dengung ~2 harakat)</td></tr>
+              <tr><td>Alif lam + huruf syamsiyah</td><td><b>Alif lam syamsiyah</b> (lam melebur)</td></tr>
+              <tr><td>Alif lam + huruf qamariyah</td><td><b>Alif lam qamariyah</b> (lam dibaca jelas)</td></tr>
+              <tr><td>Huruf mad bertemu kondisi mad asli</td><td><b>Mad tabi‘i</b> (umumnya 2 harakat)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">03</span> Tujuh Pasangan Ulama–Karya yang Wajib Lancar</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tokoh</th><th>Kata Kunci Cepat</th></tr></thead>
+            <tbody>
+              <tr><td><b>Syekh Nawawi al-Bantani</b></td><td>Banten; <i>Marah Labid</i>; mengajar di Makkah.</td></tr>
+              <tr><td><b>Hamzah al-Fansuri</b></td><td>Penyair sufi Melayu; <i>Asrar al-‘Arifin</i>; <i>Syair Perahu</i>.</td></tr>
+              <tr><td><b>Nuruddin ar-Raniri</b></td><td><i>Bustan al-Salatin</i> (sejarah); <i>Sirat al-Mustaqim</i> (fikih).</td></tr>
+              <tr><td><b>Abdurrauf as-Singkili</b></td><td><i>Tarjuman al-Mustafid</i> = tafsir; <i>Mir’at al-Tullab</i> = fikih.</td></tr>
+              <tr><td><b>Syekh Yusuf al-Makassari</b></td><td>Sufi &amp; pejuang anti-VOC; Ceylon lalu Cape.</td></tr>
+              <tr><td><b>Abdus Samad al-Palimbani</b></td><td><i>Hidayat al-Salikin</i>; <i>Siyar al-Salikin</i>.</td></tr>
+              <tr><td><b>Kiai Sholeh Darat</b></td><td><i>Faid al-Rahman</i>; tafsir Jawa Pegon.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">04</span> Strategi Menjawab Soal Berbasis Narasi</h3>
+        <ol class="num">
+          <li>Tandai tindakan tokoh dalam cerita: berkata, menyebarkan, meneliti, menepati janji, atau menasihati.</li>
+          <li>Cari prinsip yang tepat: syukur, amanah, menjaga lisan, menutup aib, tabayyun, hikmah, atau keteladanan ulama.</li>
+          <li>Tentukan akibat tindakan: menjaga atau merusak kehormatan, menyelesaikan atau memperbesar konflik, memberi manfaat atau mudarat.</li>
+          <li>Pilih tindakan yang benar, proporsional, dan bertanggung jawab (untuk bahaya serius, gunakan jalur pertolongan/pelaporan yang aman).</li>
+        </ol>
+
+        <div class="ingat"><span class="label"><span class="sq"></span>Penutup</span><span>Kunci memahami seluruh kisi-kisi ini adalah menghubungkan dalil dengan perilaku. Pahami arti ayat, kenali prinsip akhlak, lalu terapkan prinsip itu pada kasus yang diberikan — jangan berhenti pada hafalan definisi.</span></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span class="label">Portal Belajar ASAS / PAI</span>
+    <a class="label" href="#top">Ke atas &uarr;</a>
+  </footer>
+</div>
+
+<script>
+const INDIKATOR = [
+  { n: 1, j: "Kandungan utama Q.S. Ali Imran 190",
+    f: "Tanda kebesaran Allah berupa penciptaan langit-bumi serta pergantian malam-siang. Ayat ini mengajak mengamati keteraturan alam dan memakai akal untuk mengambil pelajaran.",
+    a: "Alam semesta dan pergantian malam-siang merupakan tanda kekuasaan Allah bagi orang berpikir. Jangan menyempitkan ayat hanya pada keindahan langit; tekankan keteraturan ciptaan dan dorongan merenung." },
+  { n: 2, j: "Karakter ulul albab dalam Q.S. Ali Imran 191",
+    f: "Mengingat Allah saat berdiri (qiyaman), duduk (qu‘udan), berbaring (wa ‘ala junubihim), memikirkan ciptaan (yatafakkaruna), menyadari ciptaan tidak sia-sia, dan berdoa.",
+    a: "Ulul albab menggabungkan zikir dan pikir — bukan hanya cerdas akademik, tetapi beriman, rendah hati, reflektif, dan memakai ilmunya untuk kebaikan." },
+  { n: 3, j: "Hukum tajwid pada lafaz Q.S. Ali Imran 190",
+    f: "Cocokkan pertemuan huruf: إِنَّ (ghunnah musyaddadah), السَّمَاوَاتِ (alif lam syamsiyah + mad tabi‘i), الْأَرْضِ (alif lam qamariyah), لَآيَاتٍ (mad badal + mad tabi‘i), آيَاتٍ لِأُولِي (idgham bila ghunnah).",
+    a: "Sebutkan nama hukum, sebab hurufnya, dan cara membacanya. Jangan menebak satu hukum untuk seluruh ayat." },
+  { n: 4, j: "Tanwin bertemu wawu pada “qiyaman wa qu‘udan”",
+    f: "Tanwin di akhir qiyaman bertemu wawu pada wa qu‘udan (huruf ي ن م و), sehingga hukumnya idgham bighunnah.",
+    a: "Idgham bighunnah, dibaca masuk dengan dengung sekitar 2 harakat (bunyi mendekati qiyāmaw wa qu‘ūdan)." },
+  { n: 5, j: "Pengamalan ayat melalui penelitian pencemaran sungai",
+    f: "Penelitian sungai mencerminkan tafakur bila data dikumpulkan jujur, dianalisis dengan metode tepat, dan dipakai menjaga lingkungan.",
+    a: "Mengambil sampel sesuai prosedur, menguji kualitas air, mencatat data, tidak menuduh tanpa bukti, dan mengusulkan solusi/melapor ke instansi berwenang." },
+  { n: 6, j: "Pilihan ganda kompleks: kandungan Ali Imran 190–191",
+    f: "Benar: alam sebagai tanda kebesaran Allah, ulul albab berzikir & bertafakur, zikir di berbagai keadaan, ciptaan tidak sia-sia. Salah: ilmu tanpa akhlak, atau melihat tanpa berpikir.",
+    a: "Pilih semua pernyataan yang sesuai hubungan zikir, tafakur, dan tanggung jawab terhadap ciptaan; tolak opsi yang membolehkan merusak alam." },
+  { n: 7, j: "Benar/salah: ulul albab dan tanda kebesaran Allah",
+    f: "Nilai dua unsur: mengingat Allah dan berpikir mendalam. Salah jika menyimpulkan tanpa bukti atau menganggap alam tanpa makna.",
+    a: "Waspadai pernyataan yang menyamakan ulul albab hanya dengan orang ber-IQ tinggi. Kecerdasan harus disertai iman, zikir, rendah hati, dan amal baik." },
+  { n: 8, j: "Hubungan ilmu pengetahuan, teknologi, dan akhlak",
+    f: "Ilmu menjelaskan fenomena, teknologi menerapkan pengetahuan, akhlak mengarahkan tujuan, cara, dan dampaknya.",
+    a: "Tepat: teknologi dipakai bertanggung jawab, data jujur, riset menjaga keselamatan & lingkungan. Keliru: asal canggih pasti benar." },
+  { n: 9, j: "Makna syukur menurut Q.S. Ibrahim 7",
+    f: "Jika bersyukur Allah menambah nikmat; jika kufur ada azab keras. Syukur meliputi hati, lisan, dan perbuatan.",
+    a: "Syukur bukan ucapan saja. Mengucapkan alhamdulillah sambil menyalahgunakan nikmat belum mencerminkan syukur utuh." },
+  { n: 10, j: "Contoh syukur: beasiswa atau nikmat ilmu",
+    f: "Beasiswa adalah nikmat sekaligus amanah: gunakan sesuai tujuan, belajar sungguh-sungguh, jaga integritas, dan bantu teman.",
+    a: "Tepat: menggunakan dana untuk pendidikan dan berbagi pemahaman. Tidak tepat: dipakai pamer atau merendahkan siswa lain." },
+  { n: 11, j: "Pelanggaran janji/amanah dalam kerja kelompok",
+    f: "Melanggar bila sengaja tak mengerjakan tugas yang disanggupi, berbohong soal progres, menghilang tanpa kabar, atau menyalahgunakan uang/file.",
+    a: "Komunikasikan hambatan sejak awal, beri pembaruan, minta bantuan, susun ulang kerja. Jangan membenarkan kebohongan atau pengingkaran." },
+  { n: 12, j: "Menilai penyebaran rekaman masalah keluarga teman",
+    f: "Menyebarkan rekaman pribadi ke grup adalah pelanggaran privasi, membuka aib, dan memicu perundungan.",
+    a: "Jangan meneruskan, hapus bila bisa, minta pengirim berhenti, jaga privasi. Jika mengungkap kekerasan/bahaya, laporkan terbatas ke pihak tepercaya/berwenang." },
+  { n: 13, j: "Menjaga lisan saat diskusi",
+    f: "Mendengarkan, tidak memotong pembicaraan, berbahasa santun, mengkritik argumen bukan pribadi, menerima koreksi.",
+    a: "Contoh tepat: “Saya punya pandangan berbeda karena data menunjukkan…” — diskusi mengutamakan alasan dan bukti, bukan ejekan." },
+  { n: 14, j: "Definisi hasad",
+    f: "Hasad = tidak senang atas nikmat orang lain DAN berharap nikmat tersebut hilang. Berbeda dari ghibthah (ingin meniru tanpa berharap orang lain rugi).",
+    a: "Pilih definisi yang memuat dua unsur itu. Sekadar ingin ikut berhasil bukan otomatis hasad." },
+  { n: 15, j: "Mengubah rasa iri menjadi motivasi positif",
+    f: "Sadari perasaan tanpa menyakiti, ubah fokus ke “apa yang bisa saya pelajari?”, beri selamat, syukuri diri, susun target, berusaha, berdoa.",
+    a: "Tolak opsi yang menyarankan menjatuhkan pesaing. Sikap yang dicari adalah ghibthah." },
+  { n: 16, j: "Dampak menyebarkan berita belum terverifikasi",
+    f: "Tanpa tabayyun memicu fitnah, rusak reputasi, konflik, perundungan, kepanikan, keputusan tidak adil. Banyaknya share bukan bukti kebenaran.",
+    a: "Periksa sumber asli, waktu, konteks, bukti; konfirmasi; jangan teruskan sebelum jelas; koreksi jika salah (kaitkan Q.S. Al-Hujurat 6)." },
+  { n: 17, j: "Mengidentifikasi takabur",
+    f: "Takabur adalah menolak kebenaran dan merendahkan manusia (menolak nasihat karena tak suka pemberinya, meremehkan orang lain).",
+    a: "Jangan salah menganggap percaya diri atau bangga atas hasil kerja sebagai takabur." },
+  { n: 18, j: "Tindakan menghindari penyakit sosial dan hati",
+    f: "Tabayyun, menahan diri dari menyebar kabar, menghindari gibah, mengendalikan hasad, menerima kebenaran, melapor ke pihak berwenang jika ada bahaya.",
+    a: "Pilih solusi yang menghentikan kerugian dan menjaga keadilan — bukan membalas fitnah atau diam di hadapan bahaya." },
+  { n: 19, j: "Pesan lagu Syu'abul Iman tentang menutup aib saudara",
+    f: "Menjaga kehormatan saudara, tidak menjadikan kekurangan sebagai konsumsi publik, menasihati baik-baik, membantu memperbaiki kesalahan.",
+    a: "Menutup aib adalah akhlak terpuji penjaga martabat, namun bukan berarti menutupi kekerasan atau bahaya yang wajib dilaporkan." },
+  { n: 20, j: "Pilihan ganda kompleks: akhlak terpuji",
+    f: "Benar: memakai nikmat untuk kebaikan, memenuhi janji, menjaga lisan dari gibah/fitnah, menjaga amanah, menutup aib tanpa menutupi bahaya.",
+    a: "Nilai tiap opsi secara mandiri. Opsi yang terdengar baik tapi menyebar aib demi hiburan atau berbohong tetap salah." },
+  { n: 21, j: "Pilihan ganda kompleks: mengatasi gibah, sombong, berita palsu",
+    f: "Gibah: hentikan/alihkan topik & nasihati sopan. Sombong: terima kebenaran & rendah hati. Berita palsu: tabayyun & jangan sebar.",
+    a: "Pilih tindakan yang menyelesaikan akar masalah tanpa mempermalukan pelaku; laporkan bahaya ke pihak tepercaya." },
+  { n: 22, j: "Benar/salah: syukur, janji, lisan, dan aib",
+    f: "Benar: syukur hati-lisan-perbuatan, janji ditunaikan, lisan dijaga, aib tak disebar. Salah: cukup ucapan saja, janji diingkari, rahasia berbahaya disembunyikan.",
+    a: "Nilai makna pernyataan secara utuh; jika mencampur benar dan salah, nilai berdasarkan klaim utamanya." },
+  { n: 23, j: "Benar/salah: menghindari penyakit sosial dan penyakit hati",
+    f: "Benar bila menunjukkan tabayyun, menahan hasad, menghindari takabur, menghentikan gibah, melapor bahaya. Salah bila membalas rumor atau menghakimi tanpa bukti.",
+    a: "Tabayyun bukan berarti melanggar privasi; cari info secukupnya lewat sumber layak dan jalur bertanggung jawab." },
+  { n: 24, j: "Perbedaan khutbah, tabligh, dan dakwah",
+    f: "Dakwah = ajakan luas; tabligh = penyampaian ajaran; khutbah = pidato keagamaan dalam ibadah tertentu dengan syarat & rukun khusus.",
+    a: "Ingat: dakwah (luas) > tabligh (menyampaikan) & khutbah (formal terikat ibadah)." },
+  { n: 25, j: "Ketentuan penting khutbah Jumat",
+    f: "Dua khutbah dipisahkan duduk; unsur pokok: hamdalah, salawat, wasiat takwa, ayat Al-Qur'an, doa kaum muslimin di khutbah kedua.",
+    a: "Kenali wasiat/nasihat takwa sebagai unsur penting dan jangan tertukar dengan tabligh biasa." },
+  { n: 26, j: "Contoh dakwah melalui media digital",
+    f: "Video pendek ajakan kebaikan dengan pesan sesuai ajaran, dalil diperiksa, bahasa santun, tidak memotong konteks, tidak merendahkan.",
+    a: "Contoh tepat: video edukasi menjaga kebersihan sungai dengan dalil dan data benar. Konten viral tanpa verifikasi bukan dakwah yang baik." },
+  { n: 27, j: "Menilai dakwah yang kasar dan mempermalukan",
+    f: "Menegur kasar di depan umum melanggar prinsip hikmah dan mau‘izhah hasanah, membuat orang defensif dan merusak hubungan.",
+    a: "Alternatif: tegur pribadi dengan santun, jelaskan perilaku yang perlu diperbaiki, beri alasan, dengarkan penjelasannya." },
+  { n: 28, j: "Strategi dakwah sesuai audiens",
+    f: "Kenali usia, pengetahuan, bahasa, budaya, emosi, dan kebutuhan audiens (pemula = sederhana; kritis = dalil & dialog; sensitif = tenang).",
+    a: "Jawaban terbaik memadukan bahasa santun, contoh nyata, dalil benar, dialog, dan sikap tidak memaksa." },
+  { n: 29, j: "Keistimewaan Syekh Nawawi al-Bantani",
+    f: "Berasal dari Banten, mengajar di Makkah, produktif menulis banyak kitab (tafsir Marah Labid / al-Tafsir al-Munir, Nihayatuz Zain, dll.).",
+    a: "Tekankan keluasan ilmu, produktivitas karya, pengakuan internasional, dan pengaruhnya pada pesantren." },
+  { n: 30, j: "Peran Hamzah al-Fansuri dalam tasawuf & sastra Melayu",
+    f: "Penyair sufi & tokoh tasawuf Melayu; karya prosa Asrar al-‘Arifin, Syarab al-‘Asyiqin, al-Muntahi, serta Syair Perahu.",
+    a: "Pasangkan: Hamzah al-Fansuri = penyair sufi / tasawuf wujudiyah / sastra Melayu (jangan tertukar dengan ar-Raniri)." },
+  { n: 31, j: "Karya Nuruddin ar-Raniri",
+    f: "Sirat al-Mustaqim (fikih), Bustan al-Salatin (sejarah & nasihat pemerintahan), Hujjat al-Siddiq (teologi/tasawuf).",
+    a: "Jika ditanya karya sejarah: Bustan al-Salatin. Jika ditanya fikih: Sirat al-Mustaqim." },
+  { n: 32, j: "Karya Syekh Abdurrauf as-Singkili",
+    f: "Tarjuman al-Mustafid (tafsir Al-Qur'an berbahasa Melayu) dan Mir’at al-Tullab (karya fikih).",
+    a: "Jangan tertukar: Tarjuman al-Mustafid = tafsir; Mir’at al-Tullab = fikih." },
+  { n: 33, j: "Memasangkan ulama dengan karya/ciri keilmuan",
+    f: "Yusuf = sufi anti-VOC (Ceylon-Cape); Nawawi = Banten/Marah Labid; Hamzah = syair sufi; ar-Raniri = Bustan al-Salatin; Abdurrauf = Tarjuman; Abdus Samad = Siyar al-Salikin; Sholeh Darat = Faid al-Rahman.",
+    a: "Hafalkan satu kata kunci unik tiap tokoh lalu tambahkan detail karyanya agar tidak tertukar." },
+  { n: 34, j: "Meneladani Abdus Samad al-Palimbani",
+    f: "Menekankan pendidikan rohani & tasawuf (Hidayat al-Salikin, Siyar al-Salikin); menyeimbangkan ilmu, ibadah, penyucian hati, dan akhlak.",
+    a: "Contoh masa kini: membangun kebiasaan ibadah, menjaga niat, tidak menyombongkan ilmu, berbagi ilmu dengan bertanggung jawab." },
+  { n: 35, j: "Meneladani Kiai Sholeh Darat",
+    f: "Menulis Faid al-Rahman dalam bahasa Jawa beraksara Pegon untuk mendekatkan ilmu agama kepada masyarakat Jawa.",
+    a: "Contoh: membuat ringkasan materi yang jelas dan mudah dipahami teman, memakai bahasa yang tepat, dan memperluas akses belajar." },
+  { n: 36, j: "Sikap ilmiah terhadap perbedaan Hamzah al-Fansuri & ar-Raniri",
+    f: "Kaji perbedaan tasawuf dengan membaca sumber, memahami konteks sejarah, memeriksa argumen, dan membedakan kritik ilmiah dari penghinaan.",
+    a: "Bersikap objektif, kritis, terbuka pada bukti, menghormati tokoh, tanpa melabeli secara kasar." },
+  { n: 37, j: "Keteladanan Nawawi, Abdurrauf, dan Yusuf",
+    f: "Nawawi: tekun & produktif. Abdurrauf: membumikan tafsir & fikih ke bahasa Melayu. Yusuf: teguh berprinsip, anti-kolonial, tetap mengajar di pengasingan.",
+    a: "Pilih teladan yang sesuai konteks situasi: keilmuan, keberanian moral, pengabdian, dan manfaat sosial." },
+  { n: 38, j: "Inspirasi Kiai Sholeh Darat & Nawawi bagi pendidikan kini",
+    f: "Sholeh Darat: bahasa yang dekat dengan masyarakat. Nawawi: kedalaman ilmu, disiplin, karya ilmiah, dan jaringan pendidikan.",
+    a: "Penerapan: materi berkualitas, literasi, karya tulis, bahasa inklusif, dan kegiatan belajar yang menjangkau lebih banyak siswa." },
+  { n: 39, j: "Menilai rancangan program meneladani ulama",
+    f: "Program baik punya tujuan terukur, sejarah akurat, sumber tepercaya, kegiatan nyata (diskusi karya, proyek literasi, pengabdian), jadwal, dan evaluasi.",
+    a: "Program lemah hanya berisi slogan, poster, atau lomba tanpa pemahaman dan dampak yang dievaluasi." },
+  { n: 40, j: "Benar/salah: keteladanan ulama Nusantara",
+    f: "Benar: berkarya, mengajar, adaptif bahasa, berkontribusi sosial. Salah: semua tokoh sama bidangnya, perbedaan dibalas kebencian, meneladani hanya hafal nama.",
+    a: "Cocokkan dengan fakta pasangan tokoh-karya dan nilai keteladanan yang sesungguhnya." }
+];
+
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var $ = function (id) { return document.getElementById(id); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  /* ---------- render 1-40 ---------- */
+  var list = $('ind-list'), q = $('q-ind'), empty = $('empty-ind'), cnt = $('ind-count');
+  list.innerHTML = INDIKATOR.map(function (it) {
+    return '<div class="ind" data-search="' + esc((it.n + ' ' + it.j + ' ' + it.f + ' ' + it.a).toLowerCase()) + '">' +
+      '<div class="ind-n">' + pad(it.n) + '</div>' +
+      '<div>' +
+        '<div class="ind-title">' + esc(it.j) + '</div>' +
+        '<div class="ind-fokus">' + esc(it.f) + '</div>' +
+        '<div class="ind-arah"><span class="label">Arah jawaban</span>' + esc(it.a) + '</div>' +
+      '</div>' +
+      '<button type="button" class="abtn">Arah jawaban</button>' +
+    '</div>';
+  }).join('');
+
+  list.addEventListener('click', function (e) {
+    var b = e.target.closest('.abtn');
+    if (!b) return;
+    var row = b.closest('.ind');
+    row.classList.toggle('open');
+    b.textContent = row.classList.contains('open') ? 'Tutup' : 'Arah jawaban';
+  });
+
+  q.addEventListener('input', function () {
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    list.querySelectorAll('.ind').forEach(function (el) {
+      var ok = !term || el.getAttribute('data-search').indexOf(term) !== -1;
+      el.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    cnt.textContent = shown + '/' + INDIKATOR.length + ' indikator';
+    empty.style.display = shown ? 'none' : 'block';
+  });
+
+  /* ---------- show all arah jawaban ---------- */
+  var showArah = $('show-arah');
+  try { showArah.checked = localStorage.getItem('asas.pai.showArah') === '1'; } catch (e) {}
+  function applyArah() { document.body.classList.toggle('show-arah', showArah.checked); }
+  showArah.addEventListener('change', function () {
+    try { localStorage.setItem('asas.pai.showArah', showArah.checked ? '1' : '0'); } catch (e) {}
+    applyArah();
+  });
+  applyArah();
+
+  /* ---------- mastered state ---------- */
+  var KEY = 'asas.kisi.pai';
+  var SECS = ['bagian-a', 'bagian-b', 'bagian-c', 'bagian-d', 'bagian-e', 'bagian-f'];
+  var mastered = {};
+  try { mastered = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  if (typeof mastered !== 'object' || Array.isArray(mastered)) mastered = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(mastered)); } catch (e) {} }
+
+  function refresh() {
+    var n = 0;
+    SECS.forEach(function (id) {
+      var on = !!mastered[id];
+      if (on) n++;
+      var btn = document.querySelector('.master[data-id="' + id + '"]');
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+      var a = document.querySelector('.toc a[data-id="' + id + '"]');
+      if (a) a.classList.toggle('mastered', on);
+    });
+    $('m-done').textContent = n + '/' + SECS.length;
+    $('top').style.setProperty('--p', (n / SECS.length * 100) + '%');
+  }
+
+  $('content').addEventListener('click', function (e) {
+    var m = e.target.closest('.master');
+    if (!m) return;
+    var id = m.getAttribute('data-id');
+    if (mastered[id]) delete mastered[id]; else mastered[id] = 1;
+    save(); refresh();
+  });
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua tanda "dikuasai" untuk Pendidikan Agama Islam?')) { mastered = {}; save(); refresh(); }
+  });
+
+  /* ---------- TOC ---------- */
+  var tocBox = $('toc-box');
+  if (window.matchMedia('(min-width: 961px)').matches) tocBox.open = true;
+  $('toc').addEventListener('click', function (e) {
+    if (e.target.closest('a') && !window.matchMedia('(min-width: 961px)').matches) tocBox.open = false;
+  });
+
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+          var a = links[en.target.id]; if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('section.sec').forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- theme ---------- */
+  function themeLabel() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
+  }
+  $('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('asas.theme', next); } catch (e) {}
+    themeLabel();
+  });
+
+  themeLabel();
+  refresh();
+})();
+</script>
+</body>
+</html>
