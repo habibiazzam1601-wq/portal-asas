@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fisika — Portal Belajar ASAS</title>
+
+<!-- =====================================================================
+     KISI-KISI — EDIT DI SINI SAJA
+     Setiap bab = satu objek { bab, poin, catatan }.
+       bab     : judul bab / materi
+       poin    : daftar indikator kisi-kisi (tiap item bisa dicentang)
+       catatan : (opsional) ringkasan, rumus, atau hal yang perlu diingat
+     Tambah bab baru = salin satu blok { ... }, lalu beri koma di antaranya.
+     ===================================================================== -->
+<script>
+const KISI = [
+  {
+    bab: "Contoh: Judul Bab 1",
+    poin: [
+      "Contoh indikator: menjelaskan konsep ...",
+      "Contoh indikator: menghitung / menganalisis ..."
+    ],
+    catatan: "Opsional. Tulis rumus atau poin penting di sini."
+  },
+  {
+    bab: "Contoh: Judul Bab 2",
+    poin: [
+      "Indikator pertama",
+      "Indikator kedua",
+      "Indikator ketiga"
+    ]
+  }
+];
+</script>
+<!-- ===================================================================== -->
+
+<script>
+  const MAPEL = { id: "fis", code: "FIS", num: "05", name: "Fisika", al: "#B04F17", ad: "#E3955F" };
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --gap: 24px;
+    --pad: clamp(16px, 4vw, 48px);
+  }
+  html[data-theme="light"] {
+    --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
+    --a: var(--al); color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    --bg: #141416; --surface: #1B1B1E; --fg: #ECEAE5; --muted: #8E8D88; --line: #2C2C30; --strong: #ECEAE5;
+    --a: var(--ad); color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
+  }
+  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--pad); }
+
+  header.top { border-bottom: 1px solid var(--strong); position: relative; }
+  header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .back { display: inline-flex; align-items: center; gap: 8px; }
+  .back:hover { color: var(--fg); }
+  .toggle {
+    display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
+    padding: 6px 10px 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .toggle:hover { border-color: var(--strong); }
+  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
+  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+
+  .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
+  .masthead .t { grid-column: span 8; }
+  .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .code i { width: 8px; height: 8px; background: var(--a); display: inline-block; }
+  h1 { margin: 0; font-size: clamp(32px, 5.6vw, 64px); line-height: 1; letter-spacing: -.035em; font-weight: 700; }
+  .meta { grid-column: span 4; display: grid; gap: 6px; }
+  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  .tools { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 24px 0 12px; border-bottom: 1px solid var(--strong); flex-wrap: wrap; }
+  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
+  .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.25; flex: none; }
+  .search input { border: 0; background: transparent; padding: 9px 0; outline: none; width: 100%; }
+  .search input::placeholder { color: var(--muted); }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .link-btn:hover { color: var(--fg); }
+
+  .bab { display: grid; grid-template-columns: 72px 1fr; gap: var(--gap); padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .bab-num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; }
+  .bab-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 14px; }
+  .bab h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
+  .bab-prog { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .bab.complete .bab-num { color: var(--a); }
+  ul.poin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  ul.poin li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .chk { appearance: none; -webkit-appearance: none; margin: 3px 0 0; width: 16px; height: 16px; border: 1px solid var(--strong); background: transparent; cursor: pointer; display: grid; place-items: center; }
+  .chk::after { content: ""; width: 8px; height: 4px; border-left: 1.5px solid var(--bg); border-bottom: 1.5px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+  .chk:checked { background: var(--strong); }
+  .chk:checked::after { opacity: 1; }
+  ul.poin label { cursor: pointer; overflow-wrap: anywhere; }
+  li.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .catatan { margin-top: 14px; padding: 12px 14px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; white-space: pre-line; }
+  .catatan .label { display: block; margin-bottom: 4px; }
+  .empty { padding: 32px 0; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--strong); margin-top: 40px; padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .masthead .t, .meta { grid-column: 1 / -1; }
+    .bab { grid-template-columns: 1fr; gap: 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="back label" href="index.html">&larr; Indeks</a>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+      </button>
+    </div>
+    <div class="masthead">
+      <div class="t">
+        <div class="label code"><i></i><span id="m-code"></span></div>
+        <h1 id="m-name"></h1>
+      </div>
+      <div class="meta">
+        <div class="meta-row"><span class="label">Bab</span><span id="m-bab">0</span></div>
+        <div class="meta-row"><span class="label">Indikator dikuasai</span><span id="m-done">0/0</span></div>
+        <div class="meta-row"><span class="label">Progres</span><span id="m-pct">0%</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tools">
+    <label class="search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input id="q" type="search" placeholder="Cari bab atau indikator" aria-label="Cari">
+    </label>
+    <button class="link-btn" id="reset" type="button">Reset centang mapel ini</button>
+  </div>
+  <div id="list"></div>
+</main>
+
+<div class="wrap">
+  <footer>
+    <span class="label">Portal Belajar ASAS / <span id="f-code"></span></span>
+    <a class="label" href="#top">Ke atas &uarr;</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  root.style.setProperty('--al', MAPEL.al);
+  root.style.setProperty('--ad', MAPEL.ad);
+  document.getElementById('m-code').textContent = MAPEL.num + ' / ' + MAPEL.code;
+  document.getElementById('f-code').textContent = MAPEL.code;
+  document.getElementById('m-name').textContent = MAPEL.name;
+
+  var KEY = 'asas.kisi.' + MAPEL.id;
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
+
+  // ID poin dibuat dari teks bab + teks poin, jadi urutan boleh diubah tanpa merusak centang
+  function pid(bab, poin) { return bab + '::' + poin; }
+
+  var list = document.getElementById('list');
+  var q = document.getElementById('q');
+
+  function render() {
+    var term = q.value.trim().toLowerCase();
+    list.innerHTML = '';
+    var shown = 0;
+
+    KISI.forEach(function (b, i) {
+      var poin = b.poin || [];
+      var matchBab = !term || b.bab.toLowerCase().indexOf(term) !== -1;
+      var visible = matchBab ? poin : poin.filter(function (p) { return p.toLowerCase().indexOf(term) !== -1; });
+      if (!matchBab && !visible.length) return;
+      shown++;
+
+      var d = poin.filter(function (p) { return done[pid(b.bab, p)]; }).length;
+      var sec = document.createElement('section');
+      sec.className = 'bab' + (poin.length && d === poin.length ? ' complete' : '');
+
+      var num = document.createElement('div');
+      num.className = 'bab-num'; num.textContent = String(i + 1).padStart(2, '0');
+
+      var body = document.createElement('div');
+      var head = document.createElement('div'); head.className = 'bab-head';
+      var h2 = document.createElement('h2'); h2.textContent = b.bab;
+      var pr = document.createElement('span'); pr.className = 'bab-prog'; pr.textContent = d + '/' + poin.length;
+      head.appendChild(h2); head.appendChild(pr); body.appendChild(head);
+
+      var ul = document.createElement('ul'); ul.className = 'poin';
+      visible.forEach(function (p, j) {
+        var id = pid(b.bab, p);
+        var li = document.createElement('li'); if (done[id]) li.className = 'done';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.className = 'chk'; cb.id = 'p' + i + '-' + j; cb.checked = !!done[id];
+        cb.addEventListener('change', function () {
+          if (cb.checked) done[id] = 1; else delete done[id];
+          save(); render();
+        });
+        var lb = document.createElement('label'); lb.htmlFor = cb.id; lb.textContent = p;
+        li.appendChild(cb); li.appendChild(lb); ul.appendChild(li);
+      });
+      body.appendChild(ul);
+
+      if (b.catatan) {
+        var c = document.createElement('div'); c.className = 'catatan';
+        var cl = document.createElement('span'); cl.className = 'label'; cl.textContent = 'Catatan';
+        c.appendChild(cl); c.appendChild(document.createTextNode(b.catatan));
+        body.appendChild(c);
+      }
+
+      sec.appendChild(num); sec.appendChild(body); list.appendChild(sec);
+    });
+
+    if (!shown) {
+      var e = document.createElement('div'); e.className = 'empty';
+      e.textContent = KISI.length ? 'Tidak ada hasil untuk "' + q.value + '".' : 'Belum ada kisi-kisi. Tambahkan di bagian KISI pada file ini.';
+      list.appendChild(e);
+    }
+    summary();
+  }
+
+  function summary() {
+    var total = 0, d = 0;
+    KISI.forEach(function (b) { (b.poin || []).forEach(function (p) { total++; if (done[pid(b.bab, p)]) d++; }); });
+    var pct = total ? Math.round(d / total * 100) : 0;
+    document.getElementById('m-bab').textContent = String(KISI.length).padStart(2, '0');
+    document.getElementById('m-done').textContent = d + '/' + total;
+    document.getElementById('m-pct').textContent = pct + '%';
+    document.getElementById('top').style.setProperty('--p', pct + '%');
+  }
+
+  q.addEventListener('input', render);
+  document.getElementById('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua centang untuk ' + MAPEL.name + '?')) { done = {}; save(); render(); }
+  });
+
+  function themeLabel() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    document.getElementById('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    document.getElementById('theme-toggle').setAttribute('aria-pressed', String(dark));
+  }
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('asas.theme', next); } catch (e) {}
+    themeLabel();
+  });
+
+  themeLabel();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal Belajar ASAS</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --gap: 24px;
+    --pad: clamp(16px, 4vw, 48px);
+  }
+  html[data-theme="light"] {
+    --bg: #FAF9F6;
+    --surface: #F2F0EA;
+    --fg: #141416;
+    --muted: #6B6A65;
+    --line: #DEDBD3;
+    --strong: #141416;
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    --bg: #141416;
+    --surface: #1B1B1E;
+    --fg: #ECEAE5;
+    --muted: #8E8D88;
+    --line: #2C2C30;
+    --strong: #ECEAE5;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+  }
+  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  .mono { font-family: var(--mono); }
+  .label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+
+  /* ---------- Header ---------- */
+  header.top { border-bottom: 1px solid var(--strong); }
+  .bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 14px 0; border-bottom: 1px solid var(--line);
+  }
+  .bar .left { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .masthead {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap);
+    padding: clamp(32px, 6vw, 72px) 0 clamp(24px, 4vw, 40px);
+    align-items: end;
+  }
+  .masthead h1 {
+    grid-column: span 8; margin: 0;
+    font-size: clamp(36px, 6.4vw, 76px);
+    line-height: .98; letter-spacing: -.035em; font-weight: 700;
+  }
+  .masthead .meta { grid-column: span 4; display: grid; gap: 6px; }
+  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  .toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; border: 1px solid var(--line); padding: 6px 10px 6px 8px;
+    cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .toggle:hover { border-color: var(--strong); }
+  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px;
+    background: var(--strong); transition: transform .25s ease, background-color .25s ease;
+  }
+  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+
+  /* ---------- Layout ---------- */
+  main { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: 40px 0 64px; }
+  .col-main { grid-column: span 8; min-width: 0; }
+  .col-side { grid-column: span 4; min-width: 0; }
+  .sec-head {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    border-top: 1px solid var(--strong); padding-top: 10px; margin-bottom: 20px;
+  }
+  .sec-head h2 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+  .sec-head h2 .num { font-family: var(--mono); font-weight: 400; color: var(--muted); margin-right: 10px; font-size: 14px; }
+
+  /* ---------- Cards ---------- */
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line); border-left: 1px solid var(--line);
+  }
+  .card {
+    --a: var(--al);
+    position: relative; display: flex; flex-direction: column; gap: 18px;
+    min-height: 220px; padding: 18px;
+    border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  html[data-theme="dark"] .card { --a: var(--ad); }
+  .card::before {
+    content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 0;
+    background: var(--a); transition: width .3s ease;
+  }
+  .card:hover { background: var(--surface); }
+  .card:hover::before, .card:focus-visible::before { width: 100%; }
+  .card-top { display: flex; justify-content: space-between; align-items: center; }
+  .code { display: inline-flex; align-items: center; gap: 8px; }
+  .code i { width: 8px; height: 8px; background: var(--a); display: inline-block; }
+  .card svg.ic { width: 28px; height: 28px; stroke: var(--fg); fill: none; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+  .card h3 { margin: 0; font-size: 21px; line-height: 1.15; font-weight: 600; letter-spacing: -.015em; }
+  .card .file { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 4px; word-break: break-all; }
+  .card-foot { margin-top: auto; display: grid; gap: 8px; }
+  .card-foot .row { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .card-foot .arrow { transition: transform .2s ease; color: var(--fg); }
+  .card:hover .arrow { transform: translateX(4px); }
+  .track { height: 2px; background: var(--line); position: relative; }
+  .track > span { position: absolute; inset: 0 auto 0 0; background: var(--a); width: 0; transition: width .35s ease; }
+
+  /* ---------- Checklist ---------- */
+  .side-inner { position: sticky; top: 24px; }
+  .summary { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+  .summary .big { font-family: var(--mono); font-size: 32px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .summary .big small { font-size: 16px; color: var(--muted); }
+  .track.main { margin-bottom: 24px; }
+  .track.main > span { background: var(--strong); }
+
+  form.add { display: grid; grid-template-columns: 1fr auto; border: 1px solid var(--line); margin-bottom: 12px; }
+  form.add input {
+    grid-column: 1 / -1; border: 0; border-bottom: 1px solid var(--line); background: transparent;
+    padding: 12px; outline: none; min-width: 0;
+  }
+  form.add input::placeholder { color: var(--muted); }
+  form.add select, .filter select {
+    border: 0; background: transparent; padding: 10px 12px; font-family: var(--mono); font-size: 12px;
+    text-transform: uppercase; letter-spacing: .04em; cursor: pointer; min-width: 0;
+  }
+  form.add select option, .filter select option { background: var(--bg); color: var(--fg); }
+  form.add button {
+    border: 0; border-left: 1px solid var(--line); background: var(--strong); color: var(--bg);
+    padding: 10px 16px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  form.add button:hover { opacity: .88; }
+
+  .filter { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--strong); }
+  .filter select { padding: 6px 0; text-align: right; }
+
+  ul.tasks { list-style: none; margin: 0; padding: 0; }
+  ul.tasks li {
+    display: grid; grid-template-columns: 20px 1fr auto; gap: 12px; align-items: start;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .chk {
+    appearance: none; -webkit-appearance: none; margin: 2px 0 0; width: 16px; height: 16px;
+    border: 1px solid var(--strong); background: transparent; cursor: pointer; display: grid; place-items: center;
+  }
+  .chk::after {
+    content: ""; width: 8px; height: 4px; border-left: 1.5px solid var(--bg); border-bottom: 1.5px solid var(--bg);
+    transform: rotate(-45deg) translate(1px, -1px); opacity: 0;
+  }
+  .chk:checked { background: var(--strong); }
+  .chk:checked::after { opacity: 1; }
+  .t-body { min-width: 0; }
+  .t-text { display: block; overflow-wrap: anywhere; cursor: pointer; }
+  li.done .t-text { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .t-tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+  .t-tag i { width: 6px; height: 6px; background: var(--a); display: inline-block; }
+  .del {
+    border: 0; background: transparent; cursor: pointer; padding: 2px; color: var(--muted); opacity: .6;
+  }
+  .del:hover { opacity: 1; color: var(--fg); }
+  .del svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.25; fill: none; display: block; }
+  .empty { padding: 20px 0; color: var(--muted); font-size: 14px; border-bottom: 1px solid var(--line); }
+  .side-actions { display: flex; gap: 16px; margin-top: 14px; }
+  .link-btn {
+    border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px;
+    color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  }
+  .link-btn:hover { color: var(--fg); }
+
+  footer { border-top: 1px solid var(--line); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1080px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .masthead h1, .masthead .meta, .col-main, .col-side { grid-column: 1 / -1; }
+    .side-inner { position: static; }
+  }
+  @media (max-width: 520px) {
+    body { font-size: 14px; }
+    .grid { grid-template-columns: 1fr; }
+    .card { min-height: 0; gap: 14px; }
+    .bar .hide-sm { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="left">
+        <span class="label">ASAS / Indeks</span>
+        <span class="label hide-sm" id="today-label">—</span>
+      </div>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span>
+        <span id="theme-text">Terang</span>
+      </button>
+    </div>
+    <div class="masthead">
+      <h1>Portal Belajar<br>ASAS</h1>
+      <div class="meta">
+        <div class="meta-row"><span class="label">Mata pelajaran</span><span>09</span></div>
+        <div class="meta-row"><span class="label">Target hari ini</span><span id="meta-target">0/0</span></div>
+        <div class="meta-row"><span class="label">Penyimpanan</span><span>localStorage</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main>
+    <section class="col-main" aria-labelledby="h-mapel">
+      <div class="sec-head">
+        <h2 id="h-mapel"><span class="num">01</span>Mata Pelajaran</h2>
+        <span class="label">Pilih untuk membuka</span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <aside class="col-side" aria-labelledby="h-target">
+      <div class="side-inner">
+        <div class="sec-head">
+          <h2 id="h-target"><span class="num">02</span>Target Harian</h2>
+          <span class="label" id="date-short">—</span>
+        </div>
+
+        <div class="summary">
+          <span class="label">Selesai</span>
+          <span class="big" id="sum-big">0<small>/0</small></span>
+        </div>
+        <div class="track main"><span id="sum-bar"></span></div>
+
+        <form class="add" id="add-form" autocomplete="off">
+          <input id="add-text" type="text" maxlength="120" placeholder="Contoh: Kerjakan latihan bab 3" aria-label="Teks target" required>
+          <select id="add-subject" aria-label="Mata pelajaran"></select>
+          <button type="submit">Tambah</button>
+        </form>
+
+        <div class="filter">
+          <span class="label">Tampilkan</span>
+          <select id="filter" aria-label="Filter mata pelajaran"></select>
+        </div>
+
+        <ul class="tasks" id="tasks"></ul>
+
+        <div class="side-actions">
+          <button class="link-btn" id="reset-today" type="button">Reset centang hari ini</button>
+          <button class="link-btn" id="clear-done" type="button">Hapus yang selesai</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <span class="label">Portal Belajar ASAS</span>
+    <span class="label">Centang direset otomatis setiap hari</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Data mapel ---------- */
+  var ICONS = {
+    mtkw: '<path d="M6 4v6M3 7h6M15 7h6M4 15l4 4M8 15l-4 4M15 16h6M15 19h6"/>',
+    mtkl: '<path d="M3 20h18M4 21V3"/><path d="M5 17c3 0 3-10 6-10s3 10 6 10 2-4 3-4"/>',
+    pai:  '<path d="M16 3.5a8.5 8.5 0 1 0 4.5 13A7 7 0 0 1 16 3.5z"/>',
+    bio:  '<path d="M5 19C5 10.5 10.5 5 19 5c0 8.5-5.5 14-14 14z"/><path d="M5 19l9-9"/>',
+    fis:  '<circle cx="12" cy="12" r="1.2"/><ellipse cx="12" cy="12" rx="9" ry="3.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)"/>',
+    kim:  '<path d="M9 3h6M10 3v6.5L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9.5V3"/><path d="M7.2 15h9.6"/>',
+    sej:  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    bin:  '<path d="M3 5h6a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H21z"/>',
+    big:  '<path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M9 13l3-6 3 6M10 11h4"/>'
+  };
+
+  var SUBJECTS = [
+    { id: 'mtkw', code: 'MTK-W', name: 'Matematika Wajib',  file: 'matematikawajib.html',  al: '#1F5A9E', ad: '#7FA6D6' },
+    { id: 'mtkl', code: 'MTK-L', name: 'Matematika Lanjut', file: 'matematikalanjut.html', al: '#0E6A66', ad: '#62B2AB' },
+    { id: 'pai',  code: 'PAI',   name: 'Pendidikan Agama Islam', file: 'pai.html',         al: '#2D6A35', ad: '#81B887' },
+    { id: 'bio',  code: 'BIO',   name: 'Biologi',           file: 'biologi.html',          al: '#5F7219', ad: '#B3C26A' },
+    { id: 'fis',  code: 'FIS',   name: 'Fisika',            file: 'fisika.html',           al: '#B04F17', ad: '#E3955F' },
+    { id: 'kim',  code: 'KIM',   name: 'Kimia',             file: 'kimia.html',            al: '#A12E28', ad: '#E07E74' },
+    { id: 'sej',  code: 'SEJ',   name: 'Sejarah',           file: 'sejarah.html',          al: '#86561A', ad: '#CFA062' },
+    { id: 'bin',  code: 'B.IND', name: 'Bahasa Indonesia',  file: 'bindonesia.html',       al: '#982D57', ad: '#D886A6' },
+    { id: 'big',  code: 'B.ING', name: 'Bahasa Inggris',    file: 'binggris.html',         al: '#3B4859', ad: '#9DAABD' }
+  ];
+  var BY_ID = {};
+  SUBJECTS.forEach(function (s) { BY_ID[s.id] = s; });
+
+  /* ---------- Storage ---------- */
+  var KEY = 'asas.portal.v1';
+  var THEME_KEY = 'asas.theme';
+  var FILTER_KEY = 'asas.filter';
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY));
+      if (s && Array.isArray(s.tasks) && s.done) return s;
+    } catch (e) {}
+    return { tasks: [], done: {} };
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function prune() {
+    // simpan riwayat centang maksimal 30 hari
+    var limit = Date.now() - 30 * 864e5;
+    Object.keys(state.done).forEach(function (k) {
+      if (new Date(k + 'T00:00:00').getTime() < limit) delete state.done[k];
+    });
+  }
+
+  var state = load();
+  prune();
+  var TODAY = todayKey();
+
+  function doneToday() { return state.done[TODAY] || (state.done[TODAY] = []); }
+  function isDone(id) { return (state.done[TODAY] || []).indexOf(id) !== -1; }
+
+  /* ---------- Elemen ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $('grid'), list = $('tasks'), addForm = $('add-form'), addText = $('add-text'),
+      addSubject = $('add-subject'), filterSel = $('filter');
+
+  /* ---------- Tanggal ---------- */
+  (function () {
+    var d = new Date();
+    var long = d.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+    var short = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+    $('today-label').textContent = long;
+    $('date-short').textContent = short;
+  })();
+
+  /* ---------- Select options ---------- */
+  function fillSelects() {
+    var opts = SUBJECTS.map(function (s) { return '<option value="' + s.id + '">' + s.code + '</option>'; }).join('');
+    addSubject.innerHTML = opts;
+    filterSel.innerHTML = '<option value="all">Semua</option>' + opts;
+    var f = localStorage.getItem(FILTER_KEY);
+    if (f && (f === 'all' || BY_ID[f])) filterSel.value = f;
+    if (BY_ID[filterSel.value]) addSubject.value = filterSel.value;
+  }
+
+  /* ---------- Render kartu ---------- */
+  function renderGrid() {
+    grid.innerHTML = SUBJECTS.map(function (s, i) {
+      return '' +
+        '<a class="card" href="' + s.file + '" style="--al:' + s.al + ';--ad:' + s.ad + '" data-id="' + s.id + '">' +
+          '<div class="card-top">' +
+            '<span class="label code"><i></i>' + String(i + 1).padStart(2, '0') + ' / ' + s.code + '</span>' +
+            '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[s.id] + '</svg>' +
+          '</div>' +
+          '<div>' +
+            '<h3>' + s.name + '</h3>' +
+            '<div class="file">' + s.file + '</div>' +
+          '</div>' +
+          '<div class="card-foot">' +
+            '<div class="row"><span data-prog>0/0 target</span><span class="arrow" aria-hidden="true">&rarr;</span></div>' +
+            '<div class="track"><span data-bar></span></div>' +
+          '</div>' +
+        '</a>';
+    }).join('');
+  }
+
+  function updateGridProgress() {
+    SUBJECTS.forEach(function (s) {
+      var card = grid.querySelector('[data-id="' + s.id + '"]');
+      var ts = state.tasks.filter(function (t) { return t.s === s.id; });
+      var d = ts.filter(function (t) { return isDone(t.id); }).length;
+      card.querySelector('[data-prog]').textContent = ts.length ? (d + '/' + ts.length + ' target') : 'Belum ada target';
+      card.querySelector('[data-bar]').style.width = ts.length ? (d / ts.length * 100) + '%' : '0';
+    });
+  }
+
+  /* ---------- Render checklist ---------- */
+  function renderTasks() {
+    var f = filterSel.value;
+    var items = state.tasks.filter(function (t) { return f === 'all' || t.s === f; });
+    list.innerHTML = '';
+
+    if (!items.length) {
+      var e = document.createElement('li');
+      e.className = 'empty';
+      e.style.display = 'block';
+      e.textContent = f === 'all' ? 'Belum ada target. Tambahkan satu di atas.' : 'Belum ada target untuk ' + BY_ID[f].name + '.';
+      list.appendChild(e);
+    }
+
+    items.forEach(function (t) {
+      var s = BY_ID[t.s] || SUBJECTS[0];
+      var li = document.createElement('li');
+      li.style.setProperty('--a', document.documentElement.getAttribute('data-theme') === 'dark' ? s.ad : s.al);
+      if (isDone(t.id)) li.className = 'done';
+
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.className = 'chk'; cb.id = 'c-' + t.id; cb.checked = isDone(t.id);
+      cb.addEventListener('change', function () { toggle(t.id, cb.checked); });
+
+      var body = document.createElement('div'); body.className = 't-body';
+      var lab = document.createElement('label'); lab.className = 't-text'; lab.htmlFor = cb.id; lab.textContent = t.text;
+      var tag = document.createElement('span'); tag.className = 't-tag';
+      tag.innerHTML = '<i></i>'; tag.appendChild(document.createTextNode(s.code));
+      body.appendChild(lab); body.appendChild(tag);
+
+      var del = document.createElement('button');
+      del.type = 'button'; del.className = 'del'; del.setAttribute('aria-label', 'Hapus target');
+      del.innerHTML = '<svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+      del.addEventListener('click', function () { remove(t.id); });
+
+      li.appendChild(cb); li.appendChild(body); li.appendChild(del);
+      list.appendChild(li);
+    });
+
+    updateSummary();
+    updateGridProgress();
+  }
+
+  function updateSummary() {
+    var total = state.tasks.length;
+    var d = state.tasks.filter(function (t) { return isDone(t.id); }).length;
+    $('sum-big').innerHTML = d + '<small>/' + total + '</small>';
+    $('sum-bar').style.width = total ? (d / total * 100) + '%' : '0';
+    $('meta-target').textContent = d + '/' + total;
+  }
+
+  /* ---------- Aksi ---------- */
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  function toggle(id, on) {
+    var arr = doneToday();
+    var i = arr.indexOf(id);
+    if (on && i === -1) arr.push(id);
+    if (!on && i !== -1) arr.splice(i, 1);
+    save(); renderTasks();
+  }
+  function remove(id) {
+    state.tasks = state.tasks.filter(function (t) { return t.id !== id; });
+    Object.keys(state.done).forEach(function (k) {
+      state.done[k] = state.done[k].filter(function (x) { return x !== id; });
+    });
+    save(); renderTasks();
+  }
+
+  addForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = addText.value.trim();
+    if (!text) return;
+    state.tasks.push({ id: uid(), text: text, s: addSubject.value });
+    addText.value = '';
+    save(); renderTasks();
+    addText.focus();
+  });
+
+  filterSel.addEventListener('change', function () {
+    try { localStorage.setItem(FILTER_KEY, filterSel.value); } catch (e) {}
+    if (BY_ID[filterSel.value]) addSubject.value = filterSel.value;
+    renderTasks();
+  });
+
+  $('reset-today').addEventListener('click', function () {
+    state.done[TODAY] = [];
+    save(); renderTasks();
+  });
+  $('clear-done').addEventListener('click', function () {
+    var ids = (state.done[TODAY] || []).slice();
+    if (!ids.length) return;
+    ids.forEach(function (id) { state.tasks = state.tasks.filter(function (t) { return t.id !== id; }); });
+    state.done[TODAY] = [];
+    save(); renderTasks();
+  });
+
+  /* ---------- Tema ---------- */
+  var root = document.documentElement;
+  function applyThemeLabel() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
+  }
+  $('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+    applyThemeLabel();
+    renderTasks(); // perbarui warna aksen tag
+  });
+
+  // Ganti hari saat halaman tetap terbuka melewati tengah malam
+  setInterval(function () {
+    var k = todayKey();
+    if (k !== TODAY) { TODAY = k; renderTasks(); }
+  }, 60000);
+
+  /* ---------- Init ---------- */
+  fillSelects();
+  renderGrid();
+  applyThemeLabel();
+  renderTasks();
+})();
+</script>
+</body>
+</html>

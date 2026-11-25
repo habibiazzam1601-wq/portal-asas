@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matematika Wajib — Portal Belajar ASAS</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+
+<!-- =====================================================================
+     MATERI — sumber: Catatan Binder PAS Matematika Wajib XI (15 halaman)
+
+     Format penulisan rumus (opsional, biar rapi):
+       {atas|bawah}  -> pecahan bertingkat      contoh: {n|2}(a + Uₙ)
+       ^2  atau ^{n−1} -> pangkat               contoh: r^{n−1}
+       _p  atau _{awal} -> subskrip              contoh: U_{awal}
+       **teks**      -> cetak tebal
+
+     Struktur satu topik:
+       { id, bab, babNama, judul, konsep?, penting[], rumus[], ket[],
+         contoh[{ label?, sekolah?, soal, cara?, langkah[], jawab }],
+         latihan[{ s: soal, k: kunci, note? }],
+         tips[], trik{ j, isi }, ingat }
+     ===================================================================== -->
+<script>
+const MAPEL = { id: "mtkw", code: "MTK-W", num: "01", name: "Matematika Wajib", sub: "Catatan PAS Kelas XI", al: "#1F5A9E", ad: "#7FA6D6" };
+
+const BAB = {
+  1: "Barisan & Deret",
+  2: "Fungsi & Invers",
+  3: "Lingkaran"
+};
+
+const TOPIK = [
+  /* ============================ BAB 1 ============================ */
+  {
+    id: "t01", bab: 1, judul: "Barisan Aritmetika",
+    konsep: "Barisan aritmetika adalah urutan bilangan dengan selisih (tambah/kurang) tetap bernama **beda (b)**. Contoh: 4, 7, 10, 13, 16 (selalu +3).",
+    penting: [
+      "Selisih antar suku selalu tetap (beda = b).",
+      "Jika angka naik → b positif (+); turun → b negatif (−).",
+      "Nomor suku n selalu bilangan asli (1, 2, 3, …)."
+    ],
+    rumus: ["Uₙ = a + (n − 1)b", "b = {U_p − U_q|p − q}"],
+    ket: [
+      "a = U₁ = suku pertama",
+      "b = U₂ − U₁ = beda tetap",
+      "Trik lompat: U_{ditanya} = U_{awal} + (selisih n) × b"
+    ],
+    contoh: [
+      { soal: "Tentukan rumus suku ke-n dari barisan 5, 9, 13, 17, …",
+        langkah: ["a = 5 dan b = 9 − 5 = 4", "Uₙ = a + (n − 1)b", "= 5 + (n − 1)(4)", "= 5 + 4n − 4", "= 4n + 1", "(Cepat: tulis 4n, cocokkan ke 5 → +1)"],
+        jawab: "Uₙ = 4n + 1" },
+      { soal: "Diketahui U₃ = 11 dan U₈ = 31. Tentukan nilai U₂₀!", cara: "Trik lompat",
+        langkah: ["b = {31 − 11|8 − 3} = {20|5} = 4", "Lompat dari U₈ ke U₂₀ (+12):", "U₂₀ = U₈ + 12b", "= 31 + 12(4) = 31 + 48 = 79"],
+        jawab: "U₂₀ = 79" },
+      { soal: "Barisan 50, 44, 38, … Suku ke berapa yang bernilai 2?",
+        langkah: ["a = 50, b = 44 − 50 = −6", "Uₙ = a + (n − 1)b", "2 = 50 + (n − 1)(−6)", "−48 = −6(n − 1)", "8 = n − 1 → n = 9"],
+        jawab: "Suku ke-9" }
+    ],
+    latihan: [
+      { s: "Barisan 3, 8, 13, 18, … Tentukan rumus suku ke-n!", k: "5n − 2" },
+      { s: "Barisan 12, 19, 26, … Tentukan nilai U₁₅!", k: "110" },
+      { s: "Diketahui U₄ = 17 dan U₉ = 37. Tentukan U₂₀!", k: "81" },
+      { s: "Diketahui U₂ = 20 dan U₆ = 8. Tentukan U₁₀!", k: "−4" },
+      { s: "Barisan 7, 11, 15, … Suku ke berapa bernilai 83?", k: "Suku ke-20" },
+      { s: "Tentukan beda (b) jika U₅ = 14 dan U₁₁ = 32!", k: "b = 3" }
+    ],
+    tips: [
+      "Rumus cepat Uₙ: tulis b·n lalu tambah/kurangi agar cocok dengan a.",
+      "Jika barisan turun, jangan lupa tanda minus (−) pada b!",
+      "Diketahui 2 suku acak → langsung pakai b = {U_p − U_q|p − q}."
+    ],
+    trik: { j: "Trik kilat", isi: "Dari U_p ke U_q tidak perlu cari a dulu! Cukup hitung b, lalu lompat langsung: U_{tujuan} = U_{awal} + Δn × b" },
+    ingat: "Cukup cari beda (b), lalu lompat langsung dari suku yang diketahui tanpa harus mencari a!"
+  },
+  {
+    id: "t02", bab: 1, judul: "Deret Aritmetika & Sₙ → Uₙ",
+    penting: [
+      "Deret (Sₙ) = total penjumlahan U₁ + U₂ + … + Uₙ.",
+      "Jika n ganjil, suku tengah Uₜ = {Sₙ|n} (rata-rata!).",
+      "Mencari suku dari rumus Sₙ: Uₙ = Sₙ − Sₙ₋₁."
+    ],
+    rumus: [
+      "Sₙ = {n|2}(a + Uₙ)",
+      "Sₙ = {n|2}(2a + (n − 1)b)",
+      "Uₜ = {Sₙ|n}",
+      "Uₙ = Sₙ − Sₙ₋₁   (U₁ = S₁)",
+      "Sₙ = pn² + qn  →  Uₙ = 2pn + (q − p),  b = 2p"
+    ],
+    ket: [
+      "Pakai rumus Sₙ pertama jika Uₙ diketahui; rumus kedua jika hanya tahu a dan b.",
+      "Trik kilat 5 detik hanya untuk Sₙ = pn² + qn tanpa konstanta +c. Contoh: Sₙ = 3n² + 2n → Uₙ = 6n − 1 (p = 3, q = 2)."
+    ],
+    contoh: [
+      { sekolah: 2, soal: "Ayah membagi uang Rp1.050.000 ke 7 anak (barisan aritmetika). Bungsu paling sedikit, selisih Rp25.000. Berapa uang anak sulung?", cara: "Cara kilat suku tengah",
+        langkah: ["n = 7 (ganjil) → anak tengah = anak ke-4 (U₄)", "U₄ = {S₇|7} = {1.050.000|7} = Rp150.000", "Urutan: U₁ (bungsu) … U₄ … U₇ (sulung), b = +25.000", "U₇ = U₄ + 3b = 150.000 + 3(25.000) = Rp225.000", "Cek: bungsu a = 150.000 − 3(25.000) = Rp75.000"],
+        jawab: "Rp225.000" },
+      { label: "Prediksi kisi-kisi", soal: "Diketahui rumus jumlah deret aritmetika Sₙ = 2n² − 5n. Tentukan rumus Uₙ dan nilai U₁₀!", cara: "Cara cepat, p = 2, q = −5",
+        langkah: ["Uₙ = 2pn + (q − p)", "Uₙ = 2(2)n + (−5 − 2) = 4n − 7", "U₁₀ = 4(10) − 7 = 33", "Verifikasi manual (U₁₀ = S₁₀ − S₉):", "S₁₀ = 2(100) − 50 = 150  |  S₉ = 2(81) − 45 = 117", "U₁₀ = 150 − 117 = 33 (cocok)"],
+        jawab: "Uₙ = 4n − 7 dan U₁₀ = 33" }
+    ],
+    latihan: [
+      { s: "Hitung S₁₀ dari deret 3 + 7 + 11 + …!", k: "210" },
+      { s: "Diketahui Sₙ = 3n² + 4n. Tentukan nilai U₁₀!", k: "61" },
+      { s: "Diketahui Sₙ = n² + 5n. Tentukan rumus Uₙ!", k: "2n + 4" },
+      { s: "Total kursi 11 baris = 330, beda 4. Berapa kursi baris belakang?", k: "50 kursi" },
+      { s: "Hitung jumlah 5 + 8 + 11 + … + 32 (ada 10 suku)!", k: "185" },
+      { s: "Diketahui Sₙ = 2n² + 3n. Berapa beda (b) deret ini?", k: "b = 4" }
+    ],
+    tips: [
+      "Kata “pada bulan ke-8” → cari U₈; kata “selama 8 bulan” → cari S₈.",
+      "Jangan ketukar anak bungsu vs sulung: pastikan tanda b konsisten!",
+      "Mencari 1 angka U₈ dari Sₙ? Langsung hitung S₈ − S₇."
+    ],
+    trik: { j: "Awas jebakan", isi: "Pada soal pembagian uang: jika U₁ = paling kecil → b (+); jika U₁ = paling besar → b (−). Cek lagi siapa yang ditanya!" },
+    ingat: "Jika Sₙ = pn² + qn punya konstanta +c, maka U₁ = S₁ wajib dihitung terpisah!"
+  },
+  {
+    id: "t03", bab: 1, judul: "Barisan & Deret Geometri",
+    konsep: "Geometri = barisan kelipatan (**kali tetap ×r**). Contoh: 3, 6, 12, 24, 48 (selalu ×2).",
+    penting: [
+      "Pengali antar suku selalu tetap (rasio = r).",
+      "Jika angka mengecil (80, 40, 20) → r berupa pecahan ({1|2}).",
+      "Tanda selang-seling (+, −, +, −) → rasio negatif (r < 0)."
+    ],
+    rumus: ["Uₙ = a · r^{n−1}", "r^{p−q} = {U_p|U_q}", "Sₙ = {a(r^n − 1)|r − 1}   (r > 1)", "Sₙ = {a(1 − r^n)|1 − r}   (r < 1)"],
+    ket: [
+      "r > 1 pakai rumus kiri, r pecahan pakai kanan (hasilnya sama).",
+      "Awas pangkat genap: r² = 9 → r = 3 atau r = −3!"
+    ],
+    contoh: [
+      { sekolah: 3, soal: "Geometri U₃ = 12 dan U₆ = 96. Tentukan U₉!",
+        langkah: ["r^{6−3} = {96|12} → r³ = 8 → r = 2", "U₉ = U₆ · r^{9−6} = 96 · 2³ = 96 × 8 = 768", "Cara kilat 3 detik: U₃ → U₆ → U₉ (jarak sama +3!)", "12 ×8 = 96 → 96 ×8 = 768"],
+        jawab: "U₉ = 768" },
+      { soal: "Hitung jumlah 5 suku pertama deret geometri 3 + 6 + 12 + …",
+        langkah: ["a = 3 dan r = {6|3} = 2 (r > 1)", "S₅ = {a(r^5 − 1)|r − 1} = {3(2^5 − 1)|2 − 1}", "= 3(32 − 1) = 3 × 31 = 93"],
+        jawab: "S₅ = 93" },
+      { soal: "Diketahui U₂ = 12, U₄ = 108, rasio negatif. Hitung S₄!",
+        langkah: ["r² = {108|12} = 9 → r = ±3", "Karena negatif, pilih r = −3", "a · (−3) = 12 → a = −4", "S₄ = {−4((−3)^4 − 1)|−3 − 1} = {−4(81 − 1)|−4} = 80"],
+        jawab: "S₄ = 80" }
+    ],
+    latihan: [
+      { s: "Barisan 2, 6, 18, … Tentukan nilai U₆!", k: "486" },
+      { s: "Diketahui U₂ = 6 dan U₅ = 48. Tentukan U₈!", k: "384" },
+      { s: "Hitung S₄ dari deret 2 + 6 + 18 + …!", k: "80" },
+      { s: "Barisan 64, 32, 16, … Tentukan rasio r dan U₇!", k: "r = {1|2}, U₇ = 1" },
+      { s: "Tali dipotong 5 bagian geometri: terpendek 4 cm, terpanjang 324 cm. Panjang tali semula?", k: "484 cm" },
+      { s: "Geometri suku positif: U₂ = 8, U₄ = 32. Tentukan r dan a!", k: "r = 2, a = 4" }
+    ],
+    tips: [
+      "Hafalkan pangkat 2: 2⁵ = 32, 2⁶ = 64, 2⁷ = 128, 2⁸ = 256.",
+      "Jangan pernah hitung 3 × 2⁴ jadi 6⁴! Pangkatkan dulu: 3 × 16 = 48.",
+      "Soal potongan tali: terpendek = a, terpanjang = Uₙ, total tali = Sₙ."
+    ],
+    trik: { j: "Pangkat minus", isi: "Jika rasio negatif: pangkat GENAP → (+), misal (−3)⁴ = +81. Pangkat GANJIL → (−), misal (−3)³ = −27." },
+    ingat: "Di Uₙ pangkatnya (n − 1), tapi di Sₙ pangkatnya n utuh! Dan pangkatkan r dulu baru dikali a."
+  },
+  {
+    id: "t04", bab: 1, judul: "Deret Tak Hingga & Pantulan Bola",
+    penting: [
+      "Deret tak hingga punya jumlah (konvergen) jika −1 < r < 1.",
+      "Bola dijatuhkan → lintasan awal h₀ cuma turun 1×.",
+      "Bola dilempar dari tanah → semua lintasan naik & turun (2×)."
+    ],
+    rumus: [
+      "S∞ = {a|1 − r}    syarat −1 < r < 1",
+      "Dijatuhkan dari atas:  S = h₀ × {q + p|q − p}",
+      "Dilempar dari tanah:  S = 2 · h₀ × {q|q − p}",
+      "Rasio ganjil & genap:  r = {S_{genap}|S_{ganjil}}"
+    ],
+    ket: [
+      "Syarat konvergen: −1 < r < 1 (r ≠ 0). Jika |r| ≥ 1 (misal r = 2) → divergen (tak punya jumlah).",
+      "Pada pantulan bola, rasio r = {p|q}."
+    ],
+    contoh: [
+      { sekolah: 4, soal: "Jumlah deret tak hingga 30 dan suku pertama 18. Tentukan rasionya!",
+        langkah: ["S∞ = {a|1 − r} → 30 = {18|1 − r}", "1 − r = {18|30} = {3|5}", "r = 1 − {3|5} = {2|5} = 0,4"],
+        jawab: "r = {2|5} (0,4)" },
+      { soal: "Bola dijatuhkan dari 12 m, memantul {3|4} tinggi semula sampai berhenti. Total lintasannya?", cara: "p = 3, q = 4 — karena dijatuhkan",
+        langkah: ["S = h₀ × {q + p|q − p}", "= 12 × {4 + 3|4 − 3} = 12 × 7", "= 84 meter"],
+        jawab: "84 meter" },
+      { soal: "Hitung jumlah deret tak hingga: 24 + 16 + {32|3} + …",
+        langkah: ["a = 24", "r = {16|24} = {2|3} (konvergen!)", "S∞ = {24|1 − 2/3} = 24 × 3 = 72"],
+        jawab: "S∞ = 72" }
+    ],
+    latihan: [
+      { s: "Diketahui S∞ = 40 dan a = 10. Tentukan r!", k: "r = {3|4}" },
+      { s: "Hitung 18 + 6 + 2 + … sampai tak hingga!", k: "27" },
+      { s: "Bola dijatuhkan 15 m, memantul {2|5}. Total lintasan?", k: "35 m" },
+      { s: "Bola dijatuhkan 10 m, memantul {3|5}. Total lintasan?", k: "40 m" },
+      { s: "Diketahui a = 12 dan r = −{1|3}. Hitung S∞!", k: "9" },
+      { s: "Bola dilempar dari tanah setinggi 8 m, pantulan {3|5}. Total lintasan?", k: "40 m" }
+    ],
+    tips: [
+      "Rumus cepat bola dijatuhkan: jumlahkan pecahan di atas, kurangi di bawah, lalu kali h₀!",
+      "Bagi pecahan a ÷ {1|3} = tinggal dibalik jadi a × 3.",
+      "Cek dulu apakah −1 < r < 1 sebelum memakai rumus S∞."
+    ],
+    trik: { j: "Beda kata", isi: "Dijatuhkan: h₀ × (q + p)/(q − p). Dilempar dari tanah: 2 × h₀ × q/(q − p). Jangan ketukar!" },
+    ingat: "Jembatan keledai rumus S∞: ingat kata AIR → a di atas, (1 − r) di bawah!"
+  },
+  {
+    id: "t05", bab: 1, judul: "Analisis Barisan & Bakteri",
+    penting: [
+      "Bakteri mula-mula (N₀) adalah kondisi belum membelah (k = 0).",
+      "Tiga suku aritmetika (p, q, r): 2q = p + r.",
+      "Tiga suku geometri (p, q, r): q² = p × r."
+    ],
+    rumus: ["N_{akhir} = N_{awal} × r^k", "k = {Δt|T_{periode}}", "Aritmetika:  2 · U₂ = U₁ + U₃", "Geometri:  (U₂)² = U₁ · U₃"],
+    ket: [
+      "Contoh: 09.00 → 50, 09.15 → 100, 09.30 → 200, …, 11.00 → 12.800 (k = 8).",
+      "Awas! 120 ÷ 15 = 8 kali belah → 2⁸ = 256 (BUKAN 2⁷ = 128)."
+    ],
+    contoh: [
+      { sekolah: 1, soal: "Bakteri membelah 2× lipat tiap 15 menit. Pukul 09.00 ada 50 bakteri. Berapa jumlahnya pukul 11.00?",
+        langkah: ["Durasi Δt = 11.00 − 09.00 = 2 jam = 120 menit", "Banyak belah k = {120|15} = 8 kali", "N = N₀ × r^k = 50 × 2⁸", "= 50 × 256 = 12.800"],
+        jawab: "12.800 bakteri" },
+      { sekolah: 5, label: "HOTS", soal: "Tiga bilangan membentuk barisan aritmetika. Jika U₃ + 2 dan U₂ − 3 jadi barisan geometri, serta U₃ + 2 = 9 × U₁. Tentukan suku pertama (a)!",
+        langkah: ["Misal aritmetika: a, a + b, a + 2b", "Diubah jadi geometri: a, a + b − 3, a + 2b + 2", "U₃ + 2 = 9a → a + 2b + 2 = 9a → b = 4a − 1", "Masukkan b ke U₂ geometri: a + (4a − 1) − 3 = 5a − 4", "Geometri: a, (5a − 4), 9a", "Sifat tengah: (5a − 4)² = a · 9a", "25a² − 40a + 16 = 9a² → 16a² − 40a + 16 = 0  (÷8)", "2a² − 5a + 2 = 0 → (2a − 1)(a − 2) = 0 → a = 2 atau a = {1|2}"],
+        jawab: "a = 2 (atau a = {1|2})" }
+    ],
+    latihan: [
+      { s: "Bakteri membelah 2× tiap 20 menit. Awal 30 bakteri, berapa jumlahnya setelah 2 jam?", k: "1.920 bakteri" },
+      { s: "Agar x − 1, 2x + 1, 7x − 1 membentuk barisan aritmetika, tentukan nilai x!", k: "x = 1",
+        note: "Di PDF tertulis x = 2. Dicek ulang: 2(2x + 1) = (x − 1) + (7x − 1) → 4x + 2 = 8x − 2 → x = 1 (barisannya 0, 3, 6). Dengan x = 2 barisannya 1, 5, 13 — bukan aritmetika." },
+      { s: "Agar 2, x + 2, 18 membentuk barisan geometri (x > 0), tentukan nilai x!", k: "x = 4" },
+      { s: "Zat radioaktif meluruh jadi {1|2} setiap 10 tahun. Mula-mula 160 gram, sisa setelah 40 tahun?", k: "10 gram" }
+    ],
+    tips: [
+      "Selalu samakan satuan waktu (jam → menit) sebelum membagi Δt / T!",
+      "Untuk peluruhan menjadi {1|2}: pakai N = N₀ × ({1|2})^k.",
+      "Cek kembali solusi kuadrat di soal transformasi barisan (a ≠ 0)."
+    ],
+    trik: { j: "Jangan salah", isi: "Bakteri: N₀ × r^k.  Aritmetika: 2U₂ = U₁ + U₃.  Geometri: U₂² = U₁ · U₃." },
+    ingat: "Pada soal bakteri, pangkatnya adalah k utuh (k = Δt / T) — BUKAN (k − 1)!"
+  },
+
+  /* ============================ BAB 2 ============================ */
+  {
+    id: "t06", bab: 2, judul: "Konsep Fungsi & Domain",
+    konsep: "Uji garis tegak: tarik garis vertikal pada grafik. Jika memotong di **≤ 1 titik → fungsi**; jika **≥ 2 titik → bukan fungsi**. Parabola tegak = fungsi; parabola menyamping dan lingkaran = bukan fungsi.",
+    penting: [
+      "Fungsi: setiap input x punya tepat 1 output y.",
+      "Uji grafik cepat: tarik garis tegak (vertikal)!",
+      "Pecahan dilarang bagi 0 (penyebut ≠ 0)."
+    ],
+    rumus: [
+      "Polinom / linear:  f(x) = 2x² − 3x  →  x ∈ ℝ (bebas)",
+      "Pecahan:  f(x) = {u(x)|v(x)}  →  v(x) ≠ 0",
+      "Akar di atas:  f(x) = √(u(x))  →  u(x) ≥ 0",
+      "Akar di penyebut:  f(x) = {1|√(v(x))}  →  v(x) > 0 (tegas!)"
+    ],
+    ket: ["Empat syarat daerah asal (domain) alami."],
+    contoh: [
+      { soal: "Tentukan domain dari f(x) = {x − 3|2x + 8} dan nilai f(3)!",
+        langkah: ["Syarat pecahan: penyebut ≠ 0", "2x + 8 ≠ 0 → 2x ≠ −8 → x ≠ −4", "D_f: x ≠ −4, x ∈ ℝ", "Uji nilai f(3) = {3 − 3|2(3) + 8} = {0|14} = 0 (sah!)"],
+        jawab: "x ≠ −4 dan f(3) = 0" },
+      { soal: "Tentukan domain alami dari f(x) = {√(x + 2)|x² − x − 6}!",
+        langkah: ["Syarat akar: x + 2 ≥ 0 → x ≥ −2", "Syarat penyebut: x² − x − 6 ≠ 0", "(x − 3)(x + 2) ≠ 0 → x ≠ 3, x ≠ −2", "Gabungkan: karena −2 dilarang, “≥” jadi “>”", "x > −2 dan x ≠ 3"],
+        jawab: "x > −2, x ≠ 3" },
+      { soal: "Pada x berapa f(x) = {x² − 9|x − 3} tidak terdefinisi?",
+        langkah: ["AWAS! Jangan dicoret dulu!", "Cek penyebut sebelum dicoret: x − 3 = 0 → x = 3", "Untuk x = 3 hasilnya {0|0} yang TIDAK TERDEFINISI!", "(Grafiknya berlubang di x = 3)"],
+        jawab: "x = 3" }
+    ],
+    latihan: [
+      { s: "Tentukan domain f(x) = {5x + 1|3x − 9}!", k: "x ≠ 3" },
+      { s: "Tentukan domain f(x) = √(2x − 10)!", k: "x ≥ 5" },
+      { s: "Tentukan domain f(x) = {4|√(6 − x)}!", k: "x < 6" },
+      { s: "Hitung f(2) dari f(x) = {x² + 2|x + 1}!", k: "f(2) = 2" },
+      { s: "Tentukan domain f(x) = {√(6 − 2x)|x − 1}!", k: "x ≤ 3, x ≠ 1" },
+      { s: "Apakah grafik garis tegak x = 5 termasuk fungsi?", k: "Bukan fungsi" }
+    ],
+    tips: [
+      "Garis lurus miring/mendatar = fungsi, tapi garis tegak x = k = bukan fungsi.",
+      "Jika akar ada di penyebut, tanda “≥” wajib berubah menjadi “>”!",
+      "Saat membagi pertidaksamaan dengan bilangan negatif, tanda berbalik!"
+    ],
+    trik: { j: "Ingat", isi: "Pecahan: bawah ≠ 0. Akar atas: isi ≥ 0. Akar bawah: isi > 0. Cek penyebut sebelum mencoret faktor!" },
+    ingat: "Pembilang = 0 itu BOLEH (0/5 = 0). Hanya PENYEBUT = 0 yang dilarang (tidak terdefinisi)!"
+  },
+  {
+    id: "t07", bab: 2, judul: "Komposisi Fungsi (f ∘ g)(x)",
+    konsep: "Mesin berantai: input x → mesin 1: g(x) → mesin 2: f(x) → hasil f(g(x)). Masukkan seluruh rumus g(x) menggantikan setiap huruf x di dalam rumus f(x).",
+    penting: [
+      "(f ∘ g)(x) = f(g(x)) → huruf kanan (g) kerja DULUAN!",
+      "Tidak komutatif: (f ∘ g)(x) ≠ (g ∘ f)(x).",
+      "Cari g(x) (dalam) → substitusi; cari f(x) (luar) → misalkan!"
+    ],
+    rumus: ["(f ∘ g)(x) = f(g(x))", "Asosiatif:  (f ∘ (g ∘ h))(x) = ((f ∘ g) ∘ h)(x)"],
+    ket: [
+      "Cari fungsi DALAM g(x) (tahu f & f ∘ g): langsung ganti x pada f dengan g(x), lalu pindah ruas.",
+      "Cari fungsi LUAR f(x) (tahu g & f ∘ g): misalkan p = g(x), ubah jadi x = … (dalam p), lalu substitusi ke ruas kanan."
+    ],
+    contoh: [
+      { sekolah: 7, soal: "Diketahui f(x) = 3x − 2 dan (f ∘ g)(x) = 6x² + 9x − 8. Tentukan rumus g(x)!", cara: "Cari fungsi dalam g(x)",
+        langkah: ["f(g(x)) = 6x² + 9x − 8", "3 · g(x) − 2 = 6x² + 9x − 8", "3 · g(x) = 6x² + 9x − 8 + 2", "3 · g(x) = 6x² + 9x − 6", "Bagi semua dengan 3: g(x) = 2x² + 3x − 2"],
+        jawab: "g(x) = 2x² + 3x − 2" },
+      { sekolah: 8, label: "HOTS", soal: "Diketahui f(x) = 2x + 1 dan g(x) = {4x|x + 1}. Jika (g ∘ h)(x) = x − 2, tentukan (h ∘ f)(x)!",
+        langkah: ["Cari h(x) dari g(h(x)) = x − 2:", "{4·h(x)|h(x) + 1} = x − 2 → 4h = (x − 2)(h + 1)", "4h − (x − 2)h = x − 2 → (6 − x)h = x − 2", "h(x) = {x − 2|6 − x}", "Substitusi f(x) = 2x + 1 ke h(x):", "(h ∘ f)(x) = h(2x + 1) = {(2x + 1) − 2|6 − (2x + 1)} = {2x − 1|5 − 2x}"],
+        jawab: "{2x − 1|5 − 2x}  (atau {1 − 2x|2x − 5})" }
+    ],
+    latihan: [
+      { s: "Jika f(x) = 2x + 3 dan g(x) = x − 4, tentukan (f ∘ g)(x)!", k: "2x − 5" },
+      { s: "Jika f(x) = x² + 1 dan g(x) = 3x − 2, hitung (f ∘ g)(2)!", k: "17" },
+      { s: "Diketahui f(x) = 2x + 5 dan (f ∘ g)(x) = 4x − 1. Tentukan g(x)!", k: "2x − 3" },
+      { s: "Diketahui g(x) = 2x − 3 dan (f ∘ g)(x) = 4x² − 8x + 7. Hitung f(5)!", k: "39" }
+    ],
+    tips: [
+      "Ditanya angka seperti (f ∘ g)(2)? Hitung g(2) dulu, baru masukkan ke f!",
+      "Soal no. 4 (cari f(5) dari f(2x − 3)): samakan 2x − 3 = 5 → x = 4, lalu masukkan x = 4!",
+      "Bentuk {2x − 1|5 − 2x} = {1 − 2x|2x − 5} (dikali −1/−1), jangan bingung di opsi PG!"
+    ],
+    trik: { j: "Urutan kerja", isi: "(f ∘ g)(x) = f(g(x)). Kerjakan dari KANAN ke KIRI! Hitung angka bertahap lebih cepat & aman." },
+    ingat: "Pada (f ∘ g)(x), fungsi yang nempel dekat dengan (x) yaitu g masuk ke dalam tubuh f!"
+  },
+  {
+    id: "t08", bab: 2, judul: "Aplikasi Komposisi Fungsi",
+    konsep: "Alur produksi 2 tahap: bahan baku x = 12 ton → Tahap 1 (f): f(12) = 20 → Tahap 2 (g): g(20) = 1.000. Karena masuk f dulu lalu g, lambangnya **(g ∘ f)(x) = g(f(x))**. Cukup masukkan angka tahap demi tahap: anti salah kuadrat!",
+    penting: [
+      "Baca urutan proses di cerita: Tahap 1 dulu → baru Tahap 2!",
+      "Jika Tahap 1 = f dan Tahap 2 = g, maka rumusnya g(f(x)) = (g ∘ f)(x)!",
+      "Diskon ganda 50% + 20% BUKAN 70%, tapi bayar 80% × 50%!"
+    ],
+    rumus: ["Bayar = (1 − b%) × (1 − a%) × x"],
+    ket: [
+      "Harga awal x didiskon a%, lalu didiskon lagi b%.",
+      "Contoh diskon 50% + 20%: bayar = (80%) × (50%) × x = 40% × x → setara diskon tunggal 60% (BUKAN 70%)."
+    ],
+    contoh: [
+      { sekolah: 6, soal: "Pabrik kertas 2 tahap: Mesin I f(x) = 2x − 4 (kayu → pulp, ton), Mesin II g(x) = 3x² − 10x (pulp → HVS, kuintal). Jika kayu tersedia 12 ton, berapa kuintal HVS dihasilkan?", cara: "Bertahap — cepat & aman",
+        langkah: ["Tahap 1 — masuk Mesin I f(x) dengan x = 12:", "f(12) = 2(12) − 4 = 24 − 4 = 20 ton pulp", "Tahap 2 — masuk Mesin II g(x) dengan input 20:", "g(20) = 3(20)² − 10(20) = 3(400) − 200 = 1.200 − 200 = 1.000"],
+        jawab: "1.000 kuintal" },
+      { label: "Contoh diskon ganda", soal: "Sebuah jaket seharga Rp400.000 mendapat promo diskon 30% + 20%. Berapakah harga akhir yang harus dibayar?",
+        langkah: ["Tahap 1 — diskon 30% (bayar 70%):", "f(400.000) = 0,7 × 400.000 = Rp280.000", "Tahap 2 — diskon tambahan 20% (bayar 80%):", "g(280.000) = 0,8 × 280.000 = Rp224.000", "(Bandingkan: kalau salah hitung 50% jadi Rp200.000 — salah!)"],
+        jawab: "Rp224.000" }
+    ],
+    latihan: [
+      { s: "Tahap I: f(x) = 3x − 2, Tahap II: g(x) = x² + 5. Jika bahan awal x = 4, berapa hasil akhir?", k: "105" },
+      { s: "Sepatu Rp500.000 didiskon 20% + 10%. Berapa harga yang harus dibayar?", k: "Rp360.000" },
+      { s: "Gaji awal Rp4.000.000 dipotong pajak 10%, lalu dapat bonus Rp300.000. Berapa gaji bersih?", k: "Rp3.900.000" },
+      { s: "Diskon ganda 40% + 50% setara dengan diskon tunggal berapa persen?", k: "70%" }
+    ],
+    tips: [
+      "Selalu perhatikan urutan kalimat soal (Mesin I → Mesin II).",
+      "Pada soal sekolah no. 6, jika salah urutan jadi f(g(12)) hasilnya 620 — SALAH!",
+      "Diskon a% berarti kita membayar (100 − a)%."
+    ],
+    trik: { j: "Cek urutan", isi: "Masuk f dulu lalu g: g(f(x)) = (g ∘ f)(x). Masuk g dulu lalu f: f(g(x)) = (f ∘ g)(x)." },
+    ingat: "Untuk soal cerita berangka, JANGAN cari rumus aljabar komposisinya — masukkan angka bertahap saja!"
+  },
+  {
+    id: "t09", bab: 2, judul: "Fungsi Invers (4 Jenis)",
+    penting: [
+      "f⁻¹(x) = tombol Undo (mengembalikan y ke x), BUKAN {1|f(x)}!",
+      "Syarat punya invers: fungsi satu-satu (lulus uji garis mendatar).",
+      "Sifat cermin: f⁻¹(p) = k ⇔ f(k) = p (super cepat!)."
+    ],
+    rumus: [
+      "Linear:  f(x) = ax + b  →  f⁻¹(x) = {x − b|a}",
+      "Pecahan:  f(x) = {ax + b|cx + d}  →  f⁻¹(x) = {−dx + b|cx − a}",
+      "Kuadrat:  y = a(x − p)² + q  →  f⁻¹(x) = p ± √({x − q|a})",
+      "Akar:  f(x) = √(ax + b) + c  →  f⁻¹(x) = {(x − c)² − b|a}"
+    ],
+    ket: [
+      "Linear: lawan tambah = kurang, lawan kali = bagi.",
+      "Pecahan: tukar & kali minus HANYA a dan d (b, c diam).",
+      "Kuadrat: lengkapi kuadrat sempurna; pilih + jika x ≥ p, − jika x ≤ p.",
+      "Akar: pindah c dulu, kuadratkan! Syarat domain: x ≥ c."
+    ],
+    contoh: [
+      { sekolah: 9, soal: "Diketahui f(x) = {3|2}(2x − 4). Jika f⁻¹(p) = 6, tentukan nilai p!", cara: "Sifat cermin 5 detik",
+        langkah: ["f⁻¹(p) = 6 ⇔ f(6) = p", "Masukkan x = 6 langsung ke f(x):", "p = {3|2}(2(6) − 4) = {3|2}(12 − 4) = {3|2}(8) = 12"],
+        jawab: "p = 12" },
+      { label: "Ranjau pecahan", soal: "Tentukan invers dari f(x) = {7 − 2x|5x + 3}!",
+        langkah: ["Rapikan posisi x ke depan dulu! f(x) = {−2x + 7|5x + 3}", "a = −2, b = 7, c = 5, d = 3", "Tukar & kali minus a dan d:", "f⁻¹(x) = {−3x + 7|5x − (−2)} = {−3x + 7|5x + 2}"],
+        jawab: "{−3x + 7|5x + 2}, x ≠ −{2|5}" },
+      { soal: "Tentukan invers f(x) = x² − 6x + 11 untuk x ≥ 3!", cara: "Kuadrat sempurna",
+        langkah: ["y = (x − 3)² − 9 + 11", "y = (x − 3)² + 2", "(x − 3)² = y − 2", "x − 3 = +√(y − 2)  (karena x ≥ 3)", "x = 3 + √(y − 2)"],
+        jawab: "f⁻¹(x) = 3 + √(x − 2)" }
+    ],
+    latihan: [
+      { s: "Invers dari f(x) = 4x − 12 adalah …", k: "{x + 12|4}" },
+      { s: "Invers dari f(x) = {3x + 5|2x − 7} adalah …", k: "{7x + 5|2x − 3}" },
+      { s: "Invers dari f(x) = {4 − 3x|x + 2} adalah …", k: "{−2x + 4|x + 3}" },
+      { s: "Jika f(x) = 5x − 3, hitung nilai f⁻¹(17)!", k: "4" },
+      { s: "Invers dari f(x) = √(2x − 4) + 3 (x ≥ 2) adalah …", k: "{(x − 3)² + 4|2}" },
+      { s: "Jika f(x) = {2x + 1|x − 3} dan f⁻¹(a) = 5, nilai a?", k: "a = {11|2}" }
+    ],
+    tips: [
+      "Ditanya f⁻¹(17)? Jangan cari rumus invers! Cukup selesaikan f(x) = 17!",
+      "Pada invers kuadrat: ambil +√ jika x ≥ p, ambil −√ jika x ≤ p.",
+      "Cek cepat invers: jika f(1) = 5, maka pasti f⁻¹(5) = 1!"
+    ],
+    trik: { j: "Sifat cermin", isi: "f⁻¹(b) = a ⇔ f(a) = b. Tukar isi kurung dengan hasil, tanda pangkat −1 langsung hilang!" },
+    ingat: "Pada invers pecahan, WAJIB rapikan posisi x sejajar atas-bawah dulu sebelum tukar & kali minus a dan d!"
+  },
+  {
+    id: "t10", bab: 2, judul: "Invers Komposisi & Soal Cerita",
+    konsep: "**Maju:** bahan x → mesin 1: g(x) (kaos kaki) → mesin 2: f(x) (sepatu) → hasil y. **Mundur:** mulai y → balik f⁻¹ (lepas sepatu dulu!) → balik g⁻¹ (lepas kaos kaki) → ketemu x.",
+    penting: [
+      "Hukum kaos kaki & sepatu: (f ∘ g)⁻¹(x) = (g⁻¹ ∘ f⁻¹)(x).",
+      "Urutan fungsi WAJIB DIBALIK saat di-inverskan!",
+      "Soal cerita mencari bahan awal = jalankan mesin MUNDUR!"
+    ],
+    rumus: ["(f ∘ g)⁻¹(x) = (g⁻¹ ∘ f⁻¹)(x)", "(g ∘ f)⁻¹(x) = (f⁻¹ ∘ g⁻¹)(x)"],
+    ket: [],
+    contoh: [
+      { sekolah: 10, soal: "Studio keramik 2 tahap: Tahap 1 cetak tanah liat g(x) = 3x − 4, Tahap 2 bakar f(x) = 2x + 6. Jika dihasilkan tepat 34 vas, berapa karung tanah liat awal?", cara: "Jalan mundur dari hasil akhir 34",
+        langkah: ["Balik Tahap 2 — f(mentah) = 34:", "2(mentah) + 6 = 34 → 2(mentah) = 28 → keramik mentah = 14 buah", "Balik Tahap 1 — g(x) = 14:", "3x − 4 = 14 → 3x = 18 → x = 6 karung", "(Cek maju: 6 → g(6) = 14 → f(14) = 34. Pas!)"],
+        jawab: "6 karung tanah liat" },
+      { label: "Contoh aljabar", soal: "Diketahui f(x) = 2x − 3 dan g(x) = {x + 1|x − 2}. Tentukan nilai (f ∘ g)⁻¹(5)!", cara: "Trik cermin — tanpa cari rumus",
+        langkah: ["Misal (f ∘ g)⁻¹(5) = k ⇔ f(g(k)) = 5", "Balik f: 2 · g(k) − 3 = 5 → 2 · g(k) = 8 → g(k) = 4", "Balik g: {k + 1|k − 2} = 4", "k + 1 = 4(k − 2) = 4k − 8", "9 = 3k → k = 3"],
+        jawab: "3" }
+    ],
+    latihan: [
+      { s: "Diketahui f(x) = x + 4 dan g(x) = 2x − 1. Tentukan rumus (f ∘ g)⁻¹(x)!", k: "{x − 3|2}" },
+      { s: "Diketahui f(x) = 3x − 2 dan g(x) = x + 5. Hitung nilai (f ∘ g)⁻¹(19)!", k: "2" },
+      { s: "Tahap 1: g(x) = 2x + 1, Tahap 2: f(x) = 5x − 3. Jika hasil akhir 32, berapa bahan awal x?", k: "3" },
+      { s: "Diketahui f⁻¹(x) = 2x + 1 dan g⁻¹(x) = x − 3. Hitung (f ∘ g)⁻¹(4)!", k: "6" }
+    ],
+    tips: [
+      "Jika ditanya angka (f ∘ g)⁻¹(k), langsung balik satu per satu dari f dulu lalu g!",
+      "Jika ditanya rumus (f ∘ g)⁻¹(x), cara paling aman: gabungkan (f ∘ g)(x) dulu baru inverskan.",
+      "Selalu uji jawaban soal cerita dengan alur maju agar yakin 100%."
+    ],
+    trik: { j: "Ingat", isi: "Invers komposisi: (f ∘ g)⁻¹ = g⁻¹ ∘ f⁻¹. Lepas sepatu (f) dulu, baru lepas kaos kaki (g)!" },
+    ingat: "Kalau takut lupa membalik urutan, kamu boleh cari rumus (f ∘ g)(x) dulu, lalu di-inverskan sekali!"
+  },
+
+  /* ============================ BAB 3 ============================ */
+  {
+    id: "t11", bab: 3, judul: "Sudut Pusat, Keliling, & Siklik",
+    penting: [
+      "Sudut pusat = 2 × sudut keliling yang menghadap busur sama.",
+      "Sudut keliling menghadap diameter = 90° (siku-siku).",
+      "Segi empat tali busur (siklik): sudut berhadapan = 180°."
+    ],
+    rumus: ["∠AOB = 2 × ∠ACB   (pusat & keliling)", "∠keliling menghadap diameter = 90°", "Segi empat tali busur:  ∠A + ∠C = 180°"],
+    ket: [],
+    contoh: [
+      { sekolah: 11, soal: "Lingkaran pusat P, garis lurus TPS. Jika ∠PRQ = 13° dan ∠PTQ = 30°, tentukan ∠RPS! (Gambar ada di PDF halaman 11.)", cara: "Tarik jari-jari bantu PQ",
+        langkah: ["ΔPQT sama kaki (PT = PQ) → ∠PQT = 30°", "ΔPQR sama kaki (PR = PQ) → ∠PQR = 13°", "Sudut keliling ∠TQR = 30° + 13° = 43°", "Sudut pusat ∠TPR = 2 × 43° = 86°", "Pelurus TPS: ∠RPS = 180° − 86° = 94°"],
+        jawab: "∠RPS = 94°" },
+      { label: "Contoh siklik", soal: "Pada segi empat tali busur ABCD, ∠B = (2x + 15)° dan ∠D = (3x − 10)°. Tentukan ∠B!",
+        langkah: ["Sudut berhadapan = 180°: ∠B + ∠D = 180°", "(2x + 15) + (3x − 10) = 180", "5x + 5 = 180 → 5x = 175 → x = 35", "∠B = 2(35°) + 15° = 85°"],
+        jawab: "∠B = 85°" }
+    ],
+    latihan: [
+      { s: "Sudut pusat ∠AOB = 110°. Berapa sudut keliling ∠ACB?", k: "55°" },
+      { s: "Sudut keliling ∠ACB = 38°. Berapa sudut pusat ∠AOB?", k: "76°" },
+      { s: "Segi empat siklik ABCD: ∠A = 72°. Tentukan ∠C!", k: "108°" },
+      { s: "AB diameter lingkaran, C di keliling. Jika ∠CAB = 35°, berapa ∠CBA?", k: "55°" },
+      { s: "Pada soal sekolah no. 11, jika ∠PTQ = 25° dan ∠PRQ = 15°, berapa ∠RPS?", k: "100°" },
+      { s: "Sudut keliling ∠ACB & ∠ADB menghadap busur sama. Jika ∠ACB = 47°, ∠ADB = ?", k: "47°" }
+    ],
+    tips: [
+      "Selalu cek apakah kedua sudut menghadap busur yang sama!",
+      "Segi empat tali busur: berhadapan dijumlahkan = 180° (BUKAN sama besar!).",
+      "Jika gambar ada 2 sudut di tepi & pusat P, coba tarik garis bantu jari-jari!"
+    ],
+    trik: { j: "Ingat", isi: "Pusat = 2 × keliling. Diameter = 90°. Siklik hadap = 180°. 2 jari-jari = sama kaki." },
+    ingat: "Semua jari-jari lingkaran sama panjang! Cari segitiga sama kaki (2 sisi jari-jari) untuk membongkar soal sudut!"
+  },
+  {
+    id: "t12", bab: 3, judul: "Sudut Dua Tali Busur",
+    penting: [
+      "Berpotongan di DALAM lingkaran → sudut pusat DITAMBAH ÷ 2.",
+      "Berpotongan di LUAR lingkaran → sudut pusat DIKURANG ÷ 2.",
+      "Sudut di sebelahnya selalu berpelurus (180° − sudut)."
+    ],
+    rumus: ["Potong dalam:  ∠APB = {1|2}(∠AOB + ∠COD)", "Potong luar:  ∠P = {1|2}(∠besar − ∠kecil)"],
+    ket: [
+      "Dalam: sudut pusat busur depan + busur belakang, lalu dibagi 2.",
+      "Luar: busur terjauh (besar) dikurangi busur terdekat (kecil), dibagi 2."
+    ],
+    contoh: [
+      { sekolah: 12, soal: "Tali busur AC & BD berpotongan di dalam di titik P. Jika ∠AOB = 64° dan ∠COD = 92°, tentukan ∠APB!", cara: "Potong dalam = tambah",
+        langkah: ["∠APB = {1|2} × (∠AOB + ∠COD)", "= {1|2} × (64° + 92°) = {1|2} × 156°", "= 78°", "(Pelurus ∠BPC = 180° − 78° = 102°)"],
+        jawab: "∠APB = 78°" },
+      { soal: "Perpanjangan tali busur AB & CD berpotongan di luar di titik P. Jika sudut pusat ∠AOD = 110° dan ∠BOC = 34°, tentukan ∠APD!", cara: "Potong luar = kurang",
+        langkah: ["∠APD = {1|2} × (∠AOD − ∠BOC)", "= {1|2} × (110° − 34°) = {1|2} × 76°", "= 38°"],
+        jawab: "∠APD = 38°" },
+      { soal: "Tali busur AC & BD berpotongan di dalam. Jika ∠APB = 70° dan ∠AOB = 52°, berapakah ∠COD?",
+        langkah: ["∠APB = {1|2}(∠AOB + ∠COD)", "70° = {1|2}(52° + ∠COD)", "140° = 52° + ∠COD", "∠COD = 140° − 52° = 88°"],
+        jawab: "∠COD = 88°" }
+    ],
+    latihan: [
+      { s: "Potong dalam: ∠AOB = 50° dan ∠COD = 80°. Tentukan ∠APB!", k: "65°" },
+      { s: "Potong dalam: ∠AOB = 72° dan ∠COD = 104°. Tentukan ∠BPC (pelurusnya)!", k: "92°" },
+      { s: "Potong luar: sudut pusat 120° dan 40°. Tentukan sudut potong luarnya!", k: "40°" },
+      { s: "Potong dalam: ∠APB = 65° dan ∠AOB = 46°. Tentukan ∠COD!", k: "84°" },
+      { s: "Potong luar: ∠P = 32° dan sudut pusat kecil 28°. Berapa sudut pusat besarnya?", k: "92°" },
+      { s: "Potong dalam: jika ∠AOB = 64° dan ∠COD = 92°, berapa ∠CPD (bertolak belakang)?", k: "78°" }
+    ],
+    tips: [
+      "Baca teliti apakah sudut yang ditanya menghadap busur yang diketahui atau pelurusnya!",
+      "Sudut bertolak belakang (seperti ∠APB dan ∠CPD) besarnya SELALU SAMA.",
+      "Kalau diketahui sudut potong lalu ditanya salah satu sudut pusat: kalikan 2 dulu!"
+    ],
+    trik: { j: "Jembatan keledai", isi: "DALAM → DITAMBAH: {1|2}(α + β).  LUAR → DIKURANG: {1|2}(α − β)." },
+    ingat: "DALAM = TAMBAH, LUAR = KURANG (lalu jangan lupa dibagi 2)!"
+  },
+  {
+    id: "t13", bab: 3, judul: "Juring, Tembereng, & Kelopak",
+    penting: [
+      "Tembereng = luas juring − luas segitiga.",
+      "Khusus sudut 90° (π = {22|7}): 1 tembereng = {2|7}r²!",
+      "Keliling arsiran = hanya garis lengkung tepi arsirannya!"
+    ],
+    rumus: ["L_{tembereng 90°} = {2|7}r²", "1 daun = 2 tembereng = {4|7}r²", "{L₁|L₂} = {α₁|α₂} × ({r₁|r₂})²"],
+    ket: [
+      "4 kelopak bunga di dalam persegi sisi s = 8 tembereng.",
+      "Luas arsiran 4 kelopak = 2 L_{lingkaran} − L_{persegi} = {4|7}s².",
+      "Keliling arsiran 4 kelopak = 8 busur {1|4} lingkaran = 2 × π × s."
+    ],
+    contoh: [
+      { sekolah: 14, soal: "Persegi bersisi 21 cm dengan arsiran 4 kelopak bunga di dalamnya. Tentukan luas dan keliling daerah yang diarsir!", cara: "s = 21 cm → d = 21 cm, r = {21|2} cm",
+        langkah: ["Luas arsiran — cara cepat: L = {4|7} × s² = {4|7} × 21 × 21 = 4 × 3 × 21 = 252 cm²", "Cek (2 lingkaran − persegi): 2 × {22|7} × {21|2} × {21|2} − 441 = 693 − 441 = 252 cm²", "Keliling arsiran (8 busur {1|4} lingkaran = 2 keliling lingkaran):", "K = 2 × π × d = 2 × {22|7} × 21 = 2 × 22 × 3 = 132 cm"],
+        jawab: "Luas = 252 cm² dan keliling = 132 cm" },
+      { label: "Contoh juring", soal: "Jari-jari lingkaran A : B = 2 : 3. Jika juring A (120°) luasnya 32 cm², berapa luas juring B (80°)?",
+        langkah: ["{L_B|L_A} = {α_B|α_A} × ({r_B|r_A})²", "{L_B|32} = {80°|120°} × ({3|2})²", "{L_B|32} = {2|3} × {9|4} = {3|2}", "L_B = {3|2} × 32 = 48 cm²"],
+        jawab: "48 cm²" }
+    ],
+    latihan: [
+      { s: "Hitung luas 1 tembereng 90° pada lingkaran berjari-jari r = 14 cm (π = {22|7})!", k: "56 cm²" },
+      { s: "Persegi bersisi 14 cm berisi 4 kelopak bunga. Hitung luas dan keliling arsirannya!", k: "L = 112 cm², K = 88 cm" },
+      { s: "Dua juring pada lingkaran sama bersudut 60° dan 150°. Jika juring kecil 20 cm², berapa yang besar?", k: "50 cm²" },
+      { s: "Persegi bersisi 7 cm berisi 1 daun besar dari pojok ke pojok (r = 7 cm). Hitung luas daun!", k: "28 cm²" }
+    ],
+    tips: [
+      "Keliling 4 kelopak bunga TIDAK ikut menjumlahkan sisi lurus persegi!",
+      "Perbandingan luas juring: rasio jari-jari wajib dikuadratkan!",
+      "Jika sudut pusat ≠ 90° (misal 60°/120°), pakai L_Δ = {1|2}r² sin α."
+    ],
+    trik: { j: "Trik 2/7", isi: "Khusus sudut 90°: 1 tembereng = {2|7}r², 1 daun = {4|7}r², 4 kelopak = {4|7}s²." },
+    ingat: "4 kelopak bunga di dalam persegi sisi s punya rumus kilat: luas = {4|7}s² dan keliling = 2πs!"
+  },
+  {
+    id: "t14", bab: 3, judul: "Garis Singgung & Rantai Gir",
+    penting: [
+      "Garis singgung selalu tegak lurus (90°) terhadap jari-jari.",
+      "Jembatan keledai: Da-Tam, Lu-Kur (Dalam Tambah, Luar Kurang).",
+      "Panjang rantai 2 gir = 2 × GSPL + busur besar + busur kecil."
+    ],
+    rumus: ["GSPL (luar = kurang):  l = √(p² − (R − r)²)", "GSPD (dalam = tambah):  d = √(p² − (R + r)²)", "Rantai = 2 · GSPL + busur₁ + busur₂"],
+    ket: [
+      "p = jarak kedua pusat lingkaran; R dan r = jari-jari.",
+      "Pada soal sekolah no. 13: R = 28, r = 8, p = 52 → GSPL = 48; busur lilitan gir besar 225°, gir kecil 135°."
+    ],
+    contoh: [
+      { sekolah: 13, soal: "Dua gir berjari-jari 28 cm & 8 cm, jarak pusat 52 cm. Sudut busur lilitan 225° & 135°. Panjang rantai minimal dalam bentuk (… + … π) cm?", cara: "Biarkan dalam π sesuai permintaan soal",
+        langkah: ["2 rantai lurus (GSPL): R − r = 28 − 8 = 20 cm, p = 52 cm", "Triple (5-12-13) × 4 = (20-48-52) → GSPL = 48 cm", "Atas + bawah = 2 × 48 = 96 cm", "Busur gir depan (225°): {225°|360°} × 2π(28) = {5|8} × 56π = 35π cm", "Busur gir belakang (135°): {135°|360°} × 2π(8) = {3|8} × 16π = 6π cm", "Total: 96 + 35π + 6π = (96 + 41π) cm"],
+        jawab: "(96 + 41π) cm" },
+      { label: "Contoh GSPD", soal: "Panjang GSPD dua lingkaran 24 cm, jarak pusat 26 cm, dan salah satu jari-jari 6 cm. Cari jari-jari lainnya!", cara: "Da-Tam: dalam tambah",
+        langkah: ["(R + r)² = p² − d²", "(R + r)² = 26² − 24² = 676 − 576 = 100", "R + r = √100 = 10 cm", "6 + r = 10 → r = 4 cm"],
+        jawab: "4 cm" }
+    ],
+    latihan: [
+      { s: "Dua lingkaran R = 11 cm, r = 3 cm, jarak pusat 17 cm. Tentukan panjang GSPL!", k: "15 cm" },
+      { s: "Dua lingkaran R = 9 cm, r = 6 cm, jarak pusat 25 cm. Tentukan panjang GSPD!", k: "20 cm" },
+      { s: "Tiga pipa sama besar (r = 7 cm) diikat tali membentuk segitiga. Panjang tali minimal? (3D + 2πr)", k: "86 cm" },
+      { s: "Dua lingkaran bersinggungan luar (R = 9 cm, r = 4 cm). Hitung panjang GSPL!", k: "12 cm" }
+    ],
+    tips: [
+      "Hafal triple Pythagoras: 3-4-5, 5-12-13, 7-24-25, 8-15-17!",
+      "Kode soal “bersinggungan luar” artinya jarak pusat p = R + r!",
+      "Cek format jawaban: apakah pakai π atau diganti {22|7}?"
+    ],
+    trik: { j: "Da-Tam, Lu-Kur", isi: "Dalam = tambah (R + r). Luar = kurang (R − r). Rantai = 2 · GSPL + busur." },
+    ingat: "Jangan lupa kalikan 2 pada GSPL saat menghitung rantai (karena ada bentangan atas DAN bawah)!"
+  }
+];
+
+/* ============ BONUS: Cheat sheet kebut 10 menit ============ */
+const CHEAT = [
+  { bab: "Bab 1 — Barisan & Deret", isi: [
+    "**Aritmetika (+b)**", "Uₙ = a + (n − 1)b", "b = {U_p − U_q|p − q}", "Sₙ = {n|2}(a + Uₙ)", "Uₜ = {Sₙ|n}  (n ganjil)", "Sₙ = pn² + qn ⇒ Uₙ = 2pn + (q − p)",
+    "**Geometri (×r) & S∞**", "Uₙ = a · r^{n−1}", "Sₙ = {a(r^n − 1)|r − 1}", "S∞ = {a|1 − r}  (−1 < r < 1)", "Bola jatuh: h₀ × {q + p|q − p}", "Bakteri: N = N₀ × r^k  (k = Δt/T)",
+    "**3 suku berurutan**", "2U₂ = U₁ + U₃  |  U₂² = U₁ · U₃" ] },
+  { bab: "Bab 2 — Fungsi & Invers", isi: [
+    "**Domain alami**", "Pecahan: penyebut ≠ 0", "Akar atas: isi ≥ 0", "Akar bawah: isi > 0", "Uji grafik: garis tegak ≤ 1 titik",
+    "**Komposisi**", "(f ∘ g)(x) = f(g(x))  (kanan dulu!)", "Diskon a% + b%: bayar = (1 − b%)(1 − a%)x",
+    "**Fungsi invers**", "Linear: ax + b ⇒ {x − b|a}", "Pecahan: {ax + b|cx + d} ⇒ {−dx + b|cx − a}", "Cermin: f⁻¹(p) = k ⇔ f(k) = p", "Komposisi: (f ∘ g)⁻¹ = g⁻¹ ∘ f⁻¹" ] },
+  { bab: "Bab 3 — Lingkaran", isi: [
+    "**Sudut lingkaran**", "∠pusat = 2 × ∠keliling", "Menghadap diameter = 90°", "Segi empat siklik: ∠A + ∠C = 180°", "Tali busur DALAM: {1|2}(α + β)", "Tali busur LUAR: {1|2}(α − β)",
+    "**Juring & tembereng**", "Tembereng 90° = {2|7}r²", "1 daun = {4|7}r²", "4 kelopak (sisi s): L = {4|7}s², K = 2πs",
+    "**Garis singgung & rantai**", "GSPL: √(p² − (R − r)²)", "GSPD: √(p² − (R + r)²)", "Rantai = 2 · GSPL + busur₁ + busur₂" ] }
+];
+
+/* ============ BONUS: Rekap 14 soal latihan resmi sekolah ============ */
+const REKAP = [
+  { no: 1,  t: "t05", soal: "Bakteri 2×/15 menit (09.00–11.00)", cara: "50 × 2⁸", jawab: "12.800 bakteri" },
+  { no: 2,  t: "t02", soal: "Ayah bagi Rp1.050.000 ke 7 anak", cara: "U₄ = 150rb → U₇ = U₄ + 3b", jawab: "Rp225.000" },
+  { no: 3,  t: "t03", soal: "Geometri U₃ = 12, U₆ = 96, cari U₉", cara: "Loncat ×8 → 96 × 8", jawab: "768" },
+  { no: 4,  t: "t04", soal: "Deret tak hingga S∞ = 30, a = 18", cara: "30 = 18/(1 − r)", jawab: "r = {2|5} (0,4)" },
+  { no: 5,  t: "t05", soal: "3 bilangan aritmetika jadi geometri", cara: "(5a − 4)² = 9a²", jawab: "a = 2 (atau {1|2})" },
+  { no: 6,  t: "t08", soal: "Pabrik kertas 2 mesin (12 ton)", cara: "f(12) = 20 → g(20)", jawab: "1.000 kuintal" },
+  { no: 7,  t: "t07", soal: "f(x) = 3x − 2, (f ∘ g)(x) = 6x² + 9x − 8", cara: "3g(x) − 2 = 6x² + 9x − 8", jawab: "2x² + 3x − 2" },
+  { no: 8,  t: "t07", soal: "f = 2x + 1, g = 4x/(x + 1), (g ∘ h) = x − 2", cara: "h = (x − 2)/(6 − x) → h(2x + 1)", jawab: "{2x − 1|5 − 2x}" },
+  { no: 9,  t: "t09", soal: "f(x) = {3|2}(2x − 4), f⁻¹(p) = 6", cara: "Cermin: p = f(6)", jawab: "p = 12" },
+  { no: 10, t: "t10", soal: "Studio keramik hasilkan 34 vas", cara: "Mundur: 34 → 14 → 6", jawab: "6 karung" },
+  { no: 11, t: "t11", soal: "Lingkaran pusat P, 13° & 30°", cara: "Garis bantu PQ: 180° − 86°", jawab: "94°" },
+  { no: 12, t: "t12", soal: "Potong 2 tali busur (64° & 92°)", cara: "{1|2}(64° + 92°)", jawab: "78°" },
+  { no: 13, t: "t14", soal: "Rantai 2 gir (R = 28, r = 8, p = 52)", cara: "2(48) + 35π + 6π", jawab: "(96 + 41π) cm" },
+  { no: 14, t: "t13", soal: "4 kelopak bunga, persegi 21 cm", cara: "L = {4|7} · 21², K = 2π · 21", jawab: "252 cm² & 132 cm" }
+];
+</script>
+<!-- ===================================================================== -->
+
+<style>
+  :root {
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --gap: 24px;
+    --pad: clamp(16px, 4vw, 48px);
+  }
+  html[data-theme="light"] {
+    --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
+    --a: var(--al); color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    --bg: #141416; --surface: #1B1B1E; --fg: #ECEAE5; --muted: #8E8D88; --line: #2C2C30; --strong: #ECEAE5;
+    --a: var(--ad); color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
+  }
+  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+  b { font-weight: 600; }
+
+  /* math */
+  .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: .88em; margin: 0 .12em; line-height: 1.15; }
+  .frac > span { padding: 0 .2em; }
+  .frac > span:first-child { border-bottom: 1px solid currentColor; }
+  sup, sub { font-size: .72em; line-height: 0; }
+
+  /* header */
+  header.top { border-bottom: 1px solid var(--strong); position: relative; }
+  header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .back:hover { color: var(--fg); }
+  .toggle {
+    display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
+    padding: 6px 10px 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .toggle:hover { border-color: var(--strong); }
+  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
+  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+  .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
+  .masthead .t { grid-column: span 8; }
+  .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .code i, .sq { width: 8px; height: 8px; background: var(--a); display: inline-block; flex: none; }
+  h1 { margin: 0; font-size: clamp(32px, 5.6vw, 64px); line-height: 1; letter-spacing: -.035em; font-weight: 700; }
+  .subtitle { margin-top: 10px; color: var(--muted); }
+  .meta { grid-column: span 4; display: grid; gap: 6px; }
+  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  /* layout */
+  .layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: 32px 0 64px; }
+  aside.side { grid-column: span 3; }
+  main.content { grid-column: span 9; min-width: 0; }
+  .side-inner { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding-right: 4px; }
+  details.toc > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--strong); padding: 10px 0; }
+  details.toc > summary::-webkit-details-marker { display: none; }
+  details.toc > summary .chev { font-family: var(--mono); color: var(--muted); }
+  details.toc[open] > summary .chev { transform: rotate(180deg); }
+  .toc-group { margin-top: 14px; }
+  .toc-group .label { display: block; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .toc a { display: grid; grid-template-columns: 26px 1fr 10px; gap: 8px; align-items: center; padding: 6px 0 6px 8px; border-left: 2px solid transparent; font-size: 14px; color: var(--muted); }
+  .toc a:hover { color: var(--fg); }
+  .toc a.active { color: var(--fg); border-left-color: var(--a); }
+  .toc a .n { font-family: var(--mono); font-size: 12px; }
+  .toc a .st { width: 8px; height: 8px; border: 1px solid var(--line); }
+  .toc a.mastered .st { background: var(--a); border-color: var(--a); }
+  .side-tools { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 12px; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .switch-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .switch-row .switch { flex: none; }
+  .switch-row input:checked + .switch::after { transform: translateX(14px); }
+  .switch-row input:focus-visible + .switch { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-align: left; }
+  .link-btn:hover { color: var(--fg); }
+
+  /* topic */
+  .topic { border-top: 1px solid var(--strong); padding: 14px 0 48px; }
+  .t-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .t-meta .label { display: inline-flex; align-items: center; gap: 8px; }
+  .t-title { margin: 14px 0 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.12; letter-spacing: -.025em; font-weight: 700; }
+  .master {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); padding: 5px 10px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: transparent;
+  }
+  .master:hover { border-color: var(--strong); }
+  .master .box { width: 12px; height: 12px; border: 1px solid var(--strong); display: inline-grid; place-items: center; }
+  .master[aria-pressed="true"] { border-color: var(--a); }
+  .master[aria-pressed="true"] .box { background: var(--a); border-color: var(--a); }
+  .konsep { margin: 16px 0 0; max-width: 72ch; }
+  .sub { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 12px; font-size: 13px; font-family: var(--mono); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sub .k { color: var(--fg); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .two > div { min-width: 0; }
+  ol.penting { margin: 0; padding: 0; list-style: none; counter-reset: p; }
+  ol.penting li { counter-increment: p; display: grid; grid-template-columns: 26px 1fr; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  ol.penting li::before { content: counter(p, decimal-leading-zero); font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 3px; }
+  .rumus { display: grid; gap: 8px; }
+  .rumus .f { border: 1px solid var(--line); border-left: 2px solid var(--a); padding: 10px 14px; font-size: 16px; overflow-x: auto; white-space: nowrap; }
+  ul.ket { margin: 12px 0 0; padding: 0; list-style: none; font-size: 14px; color: var(--muted); }
+  ul.ket li { padding: 3px 0 3px 14px; position: relative; }
+  ul.ket li::before { content: ""; position: absolute; left: 0; top: .8em; width: 6px; height: 1px; background: var(--muted); }
+
+  .ex-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .ex { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .ex-n { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 3px; }
+  .ex-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); padding: 2px 7px; color: var(--muted); }
+  .tag.school { color: var(--fg); border-color: var(--a); }
+  .ex-soal { font-weight: 500; }
+  .cara { margin-top: 10px; }
+  .steps { margin: 6px 0 0; padding: 10px 0 10px 14px; border-left: 1px solid var(--line); font-family: var(--mono); font-size: 13.5px; line-height: 1.9; overflow-x: auto; }
+  .steps div { white-space: pre-wrap; }
+  .jawab { margin-top: 10px; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .jawab .v { font-weight: 600; border-bottom: 2px solid var(--a); padding-bottom: 1px; }
+
+  ol.lat { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+  ol.lat li { display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  ol.lat .n { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 3px; }
+  .kbtn { border: 1px solid var(--line); background: transparent; padding: 3px 9px; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .kbtn:hover { border-color: var(--strong); }
+  .kunci { display: none; margin-top: 6px; font-family: var(--mono); font-size: 13.5px; }
+  .kunci .v { border-bottom: 2px solid var(--a); padding-bottom: 1px; }
+  .kunci .note { display: block; margin-top: 6px; font-family: var(--sans); font-size: 13px; color: var(--muted); border-left: 2px solid var(--muted); padding-left: 10px; }
+  li.open .kunci, body.show-keys .kunci { display: block; }
+  body.show-keys .kbtn { visibility: hidden; }
+
+  ul.tips { margin: 0; padding: 0; list-style: none; }
+  ul.tips li { padding: 8px 0 8px 18px; border-bottom: 1px solid var(--line); position: relative; }
+  ul.tips li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+  .trik { border: 1px solid var(--line); padding: 14px 16px; }
+  .trik .label { display: block; margin-bottom: 6px; color: var(--fg); }
+  .ingat { margin-top: 20px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; border-top: 1px solid var(--strong); border-bottom: 1px solid var(--strong); padding: 12px 0; }
+  .ingat .label { color: var(--fg); display: inline-flex; gap: 8px; align-items: center; }
+
+  /* bonus */
+  .cheat { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .cheat > div { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 16px; min-width: 0; }
+  .cheat h4 { margin: 0 0 8px; font-family: var(--mono); font-size: 12px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; display: flex; gap: 8px; align-items: center; }
+  .cheat .ln { font-size: 14px; padding: 3px 0; overflow-wrap: anywhere; }
+  .cheat .ln.h { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+  .cheat .ln.h:first-of-type { margin-top: 0; border-top: 0; padding-top: 0; }
+  table.rekap { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.rekap th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--strong); padding: 8px 10px 8px 0; }
+  table.rekap td { border-bottom: 1px solid var(--line); padding: 10px 10px 10px 0; vertical-align: top; }
+  table.rekap td.no { font-family: var(--mono); color: var(--muted); width: 40px; }
+  table.rekap td.cara { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  table.rekap td.ans { font-weight: 600; white-space: nowrap; }
+  table.rekap a.go { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  table.rekap a.go:hover { color: var(--fg); }
+  .table-wrap { overflow-x: auto; }
+
+  footer { border-top: 1px solid var(--strong); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    aside.side, main.content, .masthead .t, .meta { grid-column: 1 / -1; }
+    .side-inner { position: static; max-height: none; overflow: visible; }
+    .cheat { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    body { font-size: 14px; }
+    .two { grid-template-columns: 1fr; }
+    .ex { grid-template-columns: 1fr; gap: 4px; }
+    ol.lat li { grid-template-columns: 26px 1fr; }
+    ol.lat .kbtn { grid-column: 2; justify-self: start; }
+    table.rekap td.cara, table.rekap th.cara { display: none; }
+    .rumus .f { font-size: 15px; }
+  }
+  @media print {
+    aside.side, .bar, .kbtn, .master, footer { display: none !important; }
+    .kunci { display: block !important; }
+    main.content { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="back label" href="index.html">&larr; Indeks</a>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+      </button>
+    </div>
+    <div class="masthead">
+      <div class="t">
+        <div class="label code"><i></i><span id="m-code"></span></div>
+        <h1 id="m-name"></h1>
+        <div class="subtitle" id="m-sub"></div>
+      </div>
+      <div class="meta">
+        <div class="meta-row"><span class="label">Bab / topik</span><span id="m-count">—</span></div>
+        <div class="meta-row"><span class="label">Topik dikuasai</span><span id="m-done">0/0</span></div>
+        <div class="meta-row"><span class="label">Soal sekolah</span><span id="m-school">—</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="layout">
+    <aside class="side">
+      <div class="side-inner">
+        <details class="toc" id="toc-box">
+          <summary><span class="label">Daftar isi</span><span class="chev">&darr;</span></summary>
+          <nav class="toc" id="toc" aria-label="Daftar topik"></nav>
+        </details>
+        <div class="side-tools">
+          <label class="switch-row">
+            <span class="label">Tampilkan semua kunci</span>
+            <input type="checkbox" id="show-keys"><span class="switch" aria-hidden="true"></span>
+          </label>
+          <button class="link-btn" id="reset" type="button">Reset tanda dikuasai</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="content"></main>
+  </div>
+
+  <footer>
+    <span class="label">Portal Belajar ASAS / <span id="f-code"></span></span>
+    <a class="label" href="#top">Ke atas &uarr;</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  root.style.setProperty('--al', MAPEL.al);
+  root.style.setProperty('--ad', MAPEL.ad);
+  var $ = function (id) { return document.getElementById(id); };
+
+  $('m-code').textContent = MAPEL.num + ' / ' + MAPEL.code;
+  $('f-code').textContent = MAPEL.code;
+  $('m-name').textContent = MAPEL.name;
+  $('m-sub').textContent = MAPEL.sub;
+
+  /* ---------- formatter ---------- */
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function fmt(s) {
+    var h = esc(s);
+    h = h.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+    h = h.replace(/\^\{([^{}]+)\}/g, '<sup>$1</sup>').replace(/\^([0-9a-zA-Z]+)/g, '<sup>$1</sup>');
+    h = h.replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>').replace(/_([0-9a-zA-Z]+)/g, '<sub>$1</sub>');
+    h = h.replace(/\{([^{}|]+)\|([^{}|]+)\}/g, '<span class="frac"><span>$1</span><span>$2</span></span>');
+    return h;
+  }
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  /* ---------- state ---------- */
+  var KEY = 'asas.kisi.' + MAPEL.id;
+  var mastered = {};
+  try { mastered = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  if (typeof mastered !== 'object' || Array.isArray(mastered)) mastered = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(mastered)); } catch (e) {} }
+
+  /* ---------- render content ---------- */
+  var html = [];
+  TOPIK.forEach(function (t, i) {
+    var h = '<section class="topic" id="' + t.id + '">';
+    h += '<div class="t-meta"><span class="label"><span class="sq"></span>' + pad(i + 1) + ' &middot; Bab ' + t.bab + ' — ' + esc(BAB[t.bab]) + '</span>';
+    h += '<button type="button" class="master" data-id="' + t.id + '" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button></div>';
+    h += '<h2 class="t-title">' + fmt(t.judul) + '</h2>';
+    if (t.konsep) h += '<p class="konsep">' + fmt(t.konsep) + '</p>';
+
+    h += '<div class="two">';
+    h += '<div><h3 class="sub"><span class="k">A</span> Catatan penting</h3><ol class="penting">' +
+      t.penting.map(function (p) { return '<li><span>' + fmt(p) + '</span></li>'; }).join('') + '</ol></div>';
+    h += '<div><h3 class="sub"><span class="k">B</span> Rumus inti</h3><div class="rumus">' +
+      t.rumus.map(function (r) { return '<div class="f">' + fmt(r) + '</div>'; }).join('') + '</div>';
+    if (t.ket && t.ket.length) h += '<ul class="ket">' + t.ket.map(function (k) { return '<li>' + fmt(k) + '</li>'; }).join('') + '</ul>';
+    h += '</div></div>';
+
+    h += '<h3 class="sub"><span class="k">C</span> Contoh &amp; pembahasan</h3><div class="ex-list">';
+    t.contoh.forEach(function (c, j) {
+      h += '<div class="ex"><div class="ex-n">C' + (j + 1) + '</div><div>';
+      var tags = '';
+      if (c.sekolah) tags += '<span class="tag school"><span class="sq"></span>Soal sekolah No. ' + c.sekolah + '</span>';
+      if (c.label) tags += '<span class="tag">' + esc(c.label) + '</span>';
+      if (tags) h += '<div class="ex-tags">' + tags + '</div>';
+      h += '<div class="ex-soal">' + fmt(c.soal) + '</div>';
+      h += '<div class="cara label">Jawab' + (c.cara ? ' — ' + fmt(c.cara) : '') + '</div>';
+      h += '<div class="steps">' + c.langkah.map(function (l) { return '<div>' + fmt(l) + '</div>'; }).join('') + '</div>';
+      h += '<div class="jawab"><span class="label">Jawaban</span><span class="v">' + fmt(c.jawab) + '</span></div>';
+      h += '</div></div>';
+    });
+    h += '</div>';
+
+    h += '<h3 class="sub"><span class="k">D</span> Latihan soal</h3><ol class="lat">';
+    t.latihan.forEach(function (l, j) {
+      h += '<li><span class="n">' + pad(j + 1) + '</span><div><div>' + fmt(l.s) + '</div>' +
+        '<div class="kunci"><span class="label">Kunci&nbsp;</span> <span class="v">' + fmt(l.k) + '</span>' +
+        (l.note ? '<span class="note">' + fmt(l.note) + '</span>' : '') + '</div></div>' +
+        '<button type="button" class="kbtn">Kunci</button></li>';
+    });
+    h += '</ol>';
+
+    h += '<div class="two">';
+    h += '<div><h3 class="sub"><span class="k">E</span> Tips cepat</h3><ul class="tips">' +
+      t.tips.map(function (p) { return '<li>' + fmt(p) + '</li>'; }).join('') + '</ul></div>';
+    h += '<div><h3 class="sub"><span class="k">F</span> ' + esc(t.trik.j) + '</h3><div class="trik">' + fmt(t.trik.isi) + '</div></div>';
+    h += '</div>';
+    h += '<div class="ingat"><span class="label"><span class="sq"></span>Ingat</span><span>' + fmt(t.ingat) + '</span></div>';
+    h += '</section>';
+    html.push(h);
+  });
+
+  // bonus
+  var b = '<section class="topic" id="bonus">';
+  b += '<div class="t-meta"><span class="label"><span class="sq"></span>Bonus — Rangkuman pamungkas</span></div>';
+  b += '<h2 class="t-title">Cheat Sheet Kebut 10 Menit</h2>';
+  b += '<p class="konsep">Baca halaman ini 10 menit sebelum masuk ruang ujian. Semua rumus inti 3 bab dan kunci 14 soal sekolah ada di sini.</p>';
+  b += '<h3 class="sub"><span class="k">A</span> Ringkasan rumus wajib hafal</h3><div class="cheat">';
+  CHEAT.forEach(function (c) {
+    b += '<div><h4><span class="sq"></span>' + esc(c.bab) + '</h4>' + c.isi.map(function (l) {
+      var head = /^\*\*.*\*\*$/.test(l);
+      return '<div class="ln' + (head ? ' h' : '') + '">' + fmt(l) + '</div>';
+    }).join('') + '</div>';
+  });
+  b += '</div>';
+  b += '<h3 class="sub"><span class="k">B</span> Rekap kunci 14 soal latihan resmi sekolah</h3><div class="table-wrap"><table class="rekap"><thead><tr><th>No</th><th>Soal</th><th class="cara">Cara</th><th>Jawaban</th><th></th></tr></thead><tbody>';
+  REKAP.forEach(function (r) {
+    b += '<tr><td class="no">' + pad(r.no) + '</td><td>' + fmt(r.soal) + '</td><td class="cara">' + fmt(r.cara) + '</td><td class="ans">' + fmt(r.jawab) + '</td><td><a class="go" href="#' + r.t + '">Topik</a></td></tr>';
+  });
+  b += '</tbody></table></div></section>';
+  html.push(b);
+  $('content').innerHTML = html.join('');
+
+  /* ---------- TOC ---------- */
+  var toc = '';
+  Object.keys(BAB).forEach(function (k) {
+    toc += '<div class="toc-group"><span class="label">Bab ' + k + ' — ' + esc(BAB[k]) + '</span>';
+    TOPIK.forEach(function (t, i) {
+      if (String(t.bab) !== k) return;
+      toc += '<a href="#' + t.id + '" data-id="' + t.id + '"><span class="n">' + pad(i + 1) + '</span><span>' + fmt(t.judul) + '</span><span class="st"></span></a>';
+    });
+    toc += '</div>';
+  });
+  toc += '<div class="toc-group"><span class="label">Bonus</span><a href="#bonus" data-id="bonus"><span class="n">++</span><span>Cheat sheet &amp; rekap</span><span></span></a></div>';
+  $('toc').innerHTML = toc;
+  var tocBox = $('toc-box');
+  if (window.matchMedia('(min-width: 961px)').matches) tocBox.open = true;
+  $('toc').addEventListener('click', function (e) {
+    if (e.target.closest('a') && !window.matchMedia('(min-width: 961px)').matches) tocBox.open = false;
+  });
+
+  /* ---------- meta ---------- */
+  var schoolCount = 0;
+  TOPIK.forEach(function (t) { t.contoh.forEach(function (c) { if (c.sekolah) schoolCount++; }); });
+  $('m-count').textContent = pad(Object.keys(BAB).length) + ' / ' + pad(TOPIK.length);
+  $('m-school').textContent = pad(schoolCount);
+
+  function refresh() {
+    var n = 0;
+    TOPIK.forEach(function (t) {
+      var on = !!mastered[t.id];
+      if (on) n++;
+      var btn = document.querySelector('.master[data-id="' + t.id + '"]');
+      btn.setAttribute('aria-pressed', String(on));
+      var a = document.querySelector('.toc a[data-id="' + t.id + '"]');
+      if (a) a.classList.toggle('mastered', on);
+    });
+    $('m-done').textContent = n + '/' + TOPIK.length;
+    $('top').style.setProperty('--p', (TOPIK.length ? n / TOPIK.length * 100 : 0) + '%');
+  }
+
+  /* ---------- events ---------- */
+  $('content').addEventListener('click', function (e) {
+    var m = e.target.closest('.master');
+    if (m) {
+      var id = m.getAttribute('data-id');
+      if (mastered[id]) delete mastered[id]; else mastered[id] = 1;
+      save(); refresh(); return;
+    }
+    var k = e.target.closest('.kbtn');
+    if (k) {
+      var li = k.closest('li');
+      li.classList.toggle('open');
+      k.textContent = li.classList.contains('open') ? 'Tutup' : 'Kunci';
+    }
+  });
+
+  var showKeys = $('show-keys');
+  try { showKeys.checked = localStorage.getItem('asas.showKeys') === '1'; } catch (e) {}
+  function applyKeys() { document.body.classList.toggle('show-keys', showKeys.checked); }
+  showKeys.addEventListener('change', function () {
+    try { localStorage.setItem('asas.showKeys', showKeys.checked ? '1' : '0'); } catch (e) {}
+    applyKeys();
+  });
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua tanda "dikuasai" untuk ' + MAPEL.name + '?')) { mastered = {}; save(); refresh(); }
+  });
+
+  /* ---------- active section ---------- */
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+          var a = links[en.target.id]; if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('section.topic').forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- theme ---------- */
+  function themeLabel() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
+  }
+  $('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('asas.theme', next); } catch (e) {}
+    themeLabel();
+  });
+
+  applyKeys();
+  themeLabel();
+  refresh();
+})();
+</script>
+</body>
+</html>
