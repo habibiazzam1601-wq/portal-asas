@@ -8,10 +8,6 @@
 <!-- =====================================================================
      KISI-KISI — EDIT DI SINI SAJA
      Setiap bab = satu objek { bab, poin, catatan }.
-       bab     : judul bab / materi
-       poin    : daftar indikator kisi-kisi (tiap item bisa dicentang)
-       catatan : (opsional) ringkasan, rumus, atau hal yang perlu diingat
-     Tambah bab baru = salin satu blok { ... }, lalu beri koma di antaranya.
      ===================================================================== -->
 <script>
 const KISI = [
@@ -45,127 +41,109 @@ const KISI = [
     } catch (e) {}
   })();
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
-    --gap: 24px;
-    --pad: clamp(16px, 4vw, 48px);
+    --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    --pad: clamp(14px, 4vw, 32px);
   }
   html[data-theme="light"] {
-    --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
-    --a: var(--al); color-scheme: light;
+    --bg: #F3F5FA; --paper: #FFFFFF; --surface: #F6F7FB; --fg: #171B2E; --muted: #5B6278; --line: #DFE3EE;
+    --a: var(--al); --tip: #13865A; color-scheme: light;
   }
   html[data-theme="dark"] {
-    --bg: #141416; --surface: #1B1B1E; --fg: #ECEAE5; --muted: #8E8D88; --line: #2C2C30; --strong: #ECEAE5;
-    --a: var(--ad); color-scheme: dark;
+    --bg: #0E111B; --paper: #171B28; --surface: #1D2232; --fg: #E8EBF4; --muted: #A0A7BA; --line: #2A3042;
+    --a: var(--ad); --tip: #5FD69C; color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body {
-    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55;
-    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
-  }
-  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease; }
   a { color: inherit; text-decoration: none; }
   button, input { font: inherit; color: inherit; }
-  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
-  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--pad); }
+  :focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
+  .label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--pad); }
 
-  header.top { border-bottom: 1px solid var(--strong); position: relative; }
-  header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  .back { display: inline-flex; align-items: center; gap: 8px; }
-  .back:hover { color: var(--fg); }
-  .toggle {
-    display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
-    padding: 6px 10px 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
-  }
-  .toggle:hover { border-color: var(--strong); }
-  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
-  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
-  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+  .topnav { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1.5px solid var(--line); }
+  .topnav::after { content: ""; position: absolute; left: 0; bottom: -1.5px; height: 3px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
+  .nav-in { max-width: 860px; margin: 0 auto; padding: 10px var(--pad); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); font-size: 13px; font-weight: 700; }
+  .pill:hover { border-color: var(--a); }
+  .toggle { display: inline-flex; align-items: center; gap: 8px; background: var(--paper); border: 1.5px solid var(--line); padding: 5px 10px 5px 6px; border-radius: 999px; cursor: pointer; font-size: 12.5px; font-weight: 700; }
+  .switch { position: relative; width: 30px; height: 18px; border-radius: 999px; background: var(--line); flex: none; }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform .25s ease; }
+  html[data-theme="dark"] .toggle .switch { background: var(--a); }
+  html[data-theme="dark"] .toggle .switch::after { transform: translateX(12px); }
 
-  .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
-  .masthead .t { grid-column: span 8; }
-  .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-  .code i { width: 8px; height: 8px; background: var(--a); display: inline-block; }
-  h1 { margin: 0; font-size: clamp(32px, 5.6vw, 64px); line-height: 1; letter-spacing: -.035em; font-weight: 700; }
-  .meta { grid-column: span 4; display: grid; gap: 6px; }
-  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
-  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .hero { position: relative; overflow: hidden; margin-top: 22px; border-radius: 22px; background: var(--paper); border: 1.5px solid var(--line); padding: clamp(22px, 4vw, 34px); }
+  .hero::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: var(--a); }
+  .code { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--a) 13%, var(--paper)); color: var(--a); font-family: var(--mono); font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+  h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.06; letter-spacing: -.03em; font-weight: 800; }
+  .hero-stats { margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; padding-top: 14px; border-top: 1.5px solid var(--line); font-size: 13.5px; color: var(--muted); font-weight: 600; }
+  .hero-stats b { color: var(--fg); }
 
-  .tools { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 24px 0 12px; border-bottom: 1px solid var(--strong); flex-wrap: wrap; }
-  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
-  .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.25; flex: none; }
-  .search input { border: 0; background: transparent; padding: 9px 0; outline: none; width: 100%; }
+  .tools { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 20px 0 16px; flex-wrap: wrap; }
+  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--paper); padding: 0 12px; }
+  .search svg { width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 1.5; flex: none; }
+  .search input { border: 0; background: transparent; padding: 10px 0; outline: none; width: 100%; }
   .search input::placeholder { color: var(--muted); }
-  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
   .link-btn:hover { color: var(--fg); }
 
-  .bab { display: grid; grid-template-columns: 72px 1fr; gap: var(--gap); padding: 28px 0; border-bottom: 1px solid var(--line); }
-  .bab-num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; }
-  .bab-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 14px; }
-  .bab h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
-  .bab-prog { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .bab.complete .bab-num { color: var(--a); }
-  ul.poin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  ul.poin li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
-  .chk { appearance: none; -webkit-appearance: none; margin: 3px 0 0; width: 16px; height: 16px; border: 1px solid var(--strong); background: transparent; cursor: pointer; display: grid; place-items: center; }
-  .chk::after { content: ""; width: 8px; height: 4px; border-left: 1.5px solid var(--bg); border-bottom: 1.5px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
-  .chk:checked { background: var(--strong); }
+  .bab { border-radius: 20px; background: var(--paper); border: 1.5px solid var(--line); border-top: 5px solid var(--a); padding: 20px; margin-bottom: 16px; }
+  .bab-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+  .bab h2 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -.015em; }
+  .bab-prog { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--a); white-space: nowrap; }
+  ul.poin { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  ul.poin li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface); }
+  .chk { appearance: none; -webkit-appearance: none; margin: 2px 0 0; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--muted); background: var(--paper); cursor: pointer; display: grid; place-items: center; }
+  .chk::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+  .chk:checked { background: var(--tip); border-color: var(--tip); }
   .chk:checked::after { opacity: 1; }
   ul.poin label { cursor: pointer; overflow-wrap: anywhere; }
-  li.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-  .catatan { margin-top: 14px; padding: 12px 14px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; white-space: pre-line; }
-  .catatan .label { display: block; margin-bottom: 4px; }
-  .empty { padding: 32px 0; color: var(--muted); }
+  li.done label { color: var(--muted); text-decoration: line-through; }
+  .catatan { margin-top: 12px; padding: 12px 14px; border-radius: 12px; border-left: 4px solid var(--a); background: color-mix(in srgb, var(--a) 8%, var(--paper)); font-size: 14px; white-space: pre-line; }
+  .catatan .label { display: block; margin-bottom: 4px; color: var(--a); font-weight: 700; }
+  .empty { padding: 28px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 18px; background: var(--paper); }
 
-  footer { border-top: 1px solid var(--strong); margin-top: 40px; padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-
-  @media (max-width: 760px) {
-    .masthead .t, .meta { grid-column: 1 / -1; }
-    .bab { grid-template-columns: 1fr; gap: 6px; }
-  }
+  footer { border-top: 1.5px solid var(--line); margin-top: 32px; padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 </style>
 </head>
 <body>
-<header class="top" id="top">
-  <div class="wrap">
-    <div class="bar">
-      <a class="back label" href="index.html">&larr; Indeks</a>
-      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
-        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
-      </button>
-    </div>
-    <div class="masthead">
-      <div class="t">
-        <div class="label code"><i></i><span id="m-code"></span></div>
-        <h1 id="m-name"></h1>
-      </div>
-      <div class="meta">
-        <div class="meta-row"><span class="label">Bab</span><span id="m-bab">0</span></div>
-        <div class="meta-row"><span class="label">Indikator dikuasai</span><span id="m-done">0/0</span></div>
-        <div class="meta-row"><span class="label">Progres</span><span id="m-pct">0%</span></div>
-      </div>
-    </div>
+<nav class="topnav" id="top">
+  <div class="nav-in">
+    <a class="pill" href="index.html">&larr; Indeks</a>
+    <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+      <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+    </button>
   </div>
-</header>
-
-<main class="wrap">
-  <div class="tools">
-    <label class="search">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-      <input id="q" type="search" placeholder="Cari bab atau indikator" aria-label="Cari">
-    </label>
-    <button class="link-btn" id="reset" type="button">Reset centang mapel ini</button>
-  </div>
-  <div id="list"></div>
-</main>
+</nav>
 
 <div class="wrap">
+  <header class="hero">
+    <div class="code"><span id="m-code"></span></div>
+    <h1 id="m-name"></h1>
+    <div class="hero-stats">
+      <span>Bab: <b id="m-bab">0</b></span>
+      <span>Dikuasai: <b id="m-done">0/0</b> (<b id="m-pct">0%</b>)</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="tools">
+      <label class="search">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+        <input id="q" type="search" placeholder="Cari bab atau indikator" aria-label="Cari">
+      </label>
+      <button class="link-btn" id="reset" type="button">Reset centang mapel ini</button>
+    </div>
+    <div id="list"></div>
+  </main>
+
   <footer>
     <span class="label">Portal Belajar ASAS / <span id="f-code"></span></span>
     <a class="label" href="#top">Ke atas &uarr;</a>
@@ -186,8 +164,6 @@ const KISI = [
   var done = {};
   try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
-
-  // ID poin dibuat dari teks bab + teks poin, jadi urutan boleh diubah tanpa merusak centang
   function pid(bab, poin) { return bab + '::' + poin; }
 
   var list = document.getElementById('list');
@@ -207,16 +183,12 @@ const KISI = [
 
       var d = poin.filter(function (p) { return done[pid(b.bab, p)]; }).length;
       var sec = document.createElement('section');
-      sec.className = 'bab' + (poin.length && d === poin.length ? ' complete' : '');
+      sec.className = 'bab';
 
-      var num = document.createElement('div');
-      num.className = 'bab-num'; num.textContent = String(i + 1).padStart(2, '0');
-
-      var body = document.createElement('div');
       var head = document.createElement('div'); head.className = 'bab-head';
-      var h2 = document.createElement('h2'); h2.textContent = b.bab;
+      var h2 = document.createElement('h2'); h2.textContent = String(i + 1).padStart(2, '0') + '. ' + b.bab;
       var pr = document.createElement('span'); pr.className = 'bab-prog'; pr.textContent = d + '/' + poin.length;
-      head.appendChild(h2); head.appendChild(pr); body.appendChild(head);
+      head.appendChild(h2); head.appendChild(pr); sec.appendChild(head);
 
       var ul = document.createElement('ul'); ul.className = 'poin';
       visible.forEach(function (p, j) {
@@ -231,21 +203,20 @@ const KISI = [
         var lb = document.createElement('label'); lb.htmlFor = cb.id; lb.textContent = p;
         li.appendChild(cb); li.appendChild(lb); ul.appendChild(li);
       });
-      body.appendChild(ul);
+      sec.appendChild(ul);
 
       if (b.catatan) {
         var c = document.createElement('div'); c.className = 'catatan';
         var cl = document.createElement('span'); cl.className = 'label'; cl.textContent = 'Catatan';
         c.appendChild(cl); c.appendChild(document.createTextNode(b.catatan));
-        body.appendChild(c);
+        sec.appendChild(c);
       }
-
-      sec.appendChild(num); sec.appendChild(body); list.appendChild(sec);
+      list.appendChild(sec);
     });
 
     if (!shown) {
       var e = document.createElement('div'); e.className = 'empty';
-      e.textContent = KISI.length ? 'Tidak ada hasil untuk "' + q.value + '".' : 'Belum ada kisi-kisi. Tambahkan di bagian KISI pada file ini.';
+      e.textContent = KISI.length ? 'Tidak ada hasil untuk "' + q.value + '".' : 'Belum ada kisi-kisi.';
       list.appendChild(e);
     }
     summary();
