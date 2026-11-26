@@ -4,39 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bahasa Indonesia — Portal Belajar ASAS</title>
-
-<!-- =====================================================================
-     KISI-KISI — EDIT DI SINI SAJA
-     Setiap bab = satu objek { bab, poin, catatan }.
-       bab     : judul bab / materi
-       poin    : daftar indikator kisi-kisi (tiap item bisa dicentang)
-       catatan : (opsional) ringkasan, rumus, atau hal yang perlu diingat
-     Tambah bab baru = salin satu blok { ... }, lalu beri koma di antaranya.
-     ===================================================================== -->
 <script>
-const KISI = [
-  {
-    bab: "Contoh: Judul Bab 1",
-    poin: [
-      "Contoh indikator: menjelaskan konsep ...",
-      "Contoh indikator: menghitung / menganalisis ..."
-    ],
-    catatan: "Opsional. Tulis rumus atau poin penting di sini."
-  },
-  {
-    bab: "Contoh: Judul Bab 2",
-    poin: [
-      "Indikator pertama",
-      "Indikator kedua",
-      "Indikator ketiga"
-    ]
-  }
-];
-</script>
-<!-- ===================================================================== -->
-
-<script>
-  const MAPEL = { id: "bin", code: "B.IND", num: "08", name: "Bahasa Indonesia", al: "#982D57", ad: "#D886A6" };
   (function () {
     try {
       var t = localStorage.getItem('asas.theme');
@@ -51,6 +19,8 @@ const KISI = [
     --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
     --gap: 24px;
     --pad: clamp(16px, 4vw, 48px);
+    --al: #982D57;
+    --ad: #D886A6;
   }
   html[data-theme="light"] {
     --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
@@ -62,21 +32,23 @@ const KISI = [
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
   body {
-    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.6;
     -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
   }
   *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
   a { color: inherit; text-decoration: none; }
-  button, input { font: inherit; color: inherit; }
+  button, input, select { font: inherit; color: inherit; }
   :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
   .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--pad); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+  b, strong { font-weight: 600; }
 
+  /* header */
   header.top { border-bottom: 1px solid var(--strong); position: relative; }
   header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  .back { display: inline-flex; align-items: center; gap: 8px; }
   .back:hover { color: var(--fg); }
   .toggle {
     display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
@@ -86,49 +58,152 @@ const KISI = [
   .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
   .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
   html[data-theme="dark"] .switch::after { transform: translateX(14px); }
-
   .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
   .masthead .t { grid-column: span 8; }
   .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-  .code i { width: 8px; height: 8px; background: var(--a); display: inline-block; }
-  h1 { margin: 0; font-size: clamp(32px, 5.6vw, 64px); line-height: 1; letter-spacing: -.035em; font-weight: 700; }
+  .code i, .sq { width: 8px; height: 8px; background: var(--a); display: inline-block; flex: none; }
+  h1 { margin: 0; font-size: clamp(32px, 5.4vw, 60px); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; }
+  .subtitle { margin-top: 10px; color: var(--muted); }
   .meta { grid-column: span 4; display: grid; gap: 6px; }
   .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
   .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
 
-  .tools { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 24px 0 12px; border-bottom: 1px solid var(--strong); flex-wrap: wrap; }
-  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
+  /* layout */
+  .layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: 32px 0 64px; }
+  aside.side { grid-column: span 3; }
+  main.content { grid-column: span 9; min-width: 0; }
+  .side-inner { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding-right: 4px; }
+  details.toc > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--strong); padding: 10px 0; }
+  details.toc > summary::-webkit-details-marker { display: none; }
+  details.toc > summary .chev { font-family: var(--mono); color: var(--muted); }
+  details.toc[open] > summary .chev { transform: rotate(180deg); }
+  .toc-group { margin-top: 12px; }
+  .toc-group .label { display: block; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .toc a { display: grid; grid-template-columns: 26px 1fr 10px; gap: 8px; align-items: center; padding: 7px 0 7px 8px; border-left: 2px solid transparent; font-size: 14px; color: var(--muted); }
+  .toc a:hover { color: var(--fg); }
+  .toc a.active { color: var(--fg); border-left-color: var(--a); }
+  .toc a .n { font-family: var(--mono); font-size: 12px; }
+  .toc a .st { width: 8px; height: 8px; border: 1px solid var(--line); }
+  .toc a.mastered .st { background: var(--a); border-color: var(--a); }
+  .side-tools { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 12px; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; }
+  .switch-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .switch-row .switch { flex: none; }
+  .switch-row input:checked + .switch::after { transform: translateX(14px); }
+  .switch-row input:focus-visible + .switch { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-align: left; }
+  .link-btn:hover { color: var(--fg); }
+
+  /* guide */
+  .guide { border: 1px solid var(--line); border-left: 2px solid var(--a); padding: 16px 18px; margin-bottom: 28px; background: var(--surface); }
+  .guide .label { display: block; margin-bottom: 8px; color: var(--fg); }
+  .guide ul { margin: 0; padding: 0 0 0 18px; font-size: 14px; }
+  .guide li { margin-bottom: 4px; }
+  .guide .note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+
+  /* sections */
+  .sec { border-top: 1px solid var(--strong); padding: 16px 0 48px; }
+  .sec-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sec-meta .label { display: inline-flex; align-items: center; gap: 8px; }
+  .sec-title { margin: 14px 0 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 700; }
+  .sec-intro { margin: 12px 0 0; max-width: 72ch; color: var(--muted); }
+  .master {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); padding: 5px 10px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: transparent;
+  }
+  .master:hover { border-color: var(--strong); }
+  .master .box { width: 12px; height: 12px; border: 1px solid var(--strong); display: inline-grid; place-items: center; }
+  .master[aria-pressed="true"] { border-color: var(--a); }
+  .master[aria-pressed="true"] .box { background: var(--a); border-color: var(--a); }
+
+  .sub { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 14px; font-size: 13px; font-family: var(--mono); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sub .k { color: var(--fg); }
+
+  .callout { border: 1px solid var(--line); background: var(--surface); padding: 12px 16px; margin: 14px 0; font-size: 14px; }
+  .callout.warn { border-left: 2px solid var(--a); }
+  .callout .label { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); margin-right: 8px; }
+  .ingat { margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; border-top: 1px solid var(--strong); border-bottom: 1px solid var(--strong); padding: 12px 0; font-size: 14.5px; }
+  .ingat .label { color: var(--fg); display: inline-flex; gap: 8px; align-items: center; }
+
+  ul.clean { margin: 8px 0; padding: 0; list-style: none; }
+  ul.clean li { padding: 6px 0 6px 16px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.clean li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+  ol.num { margin: 8px 0; padding: 0; list-style: none; counter-reset: n; }
+  ol.num li { counter-increment: n; display: grid; grid-template-columns: 28px 1fr; padding: 7px 0; border-bottom: 1px solid var(--line); }
+  ol.num li::before { content: counter(n, decimal-leading-zero); font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 3px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .two > div { min-width: 0; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; margin: 12px 0; border-top: 1px solid var(--strong); }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.tbl th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--strong); padding: 10px 12px 10px 0; white-space: nowrap; }
+  table.tbl td { border-bottom: 1px solid var(--line); padding: 10px 12px 10px 0; vertical-align: top; }
+  table.tbl td.mono { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  /* search / filter bars */
+  .tools-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 16px 0; flex-wrap: wrap; }
+  .search { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
   .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.25; flex: none; }
   .search input { border: 0; background: transparent; padding: 9px 0; outline: none; width: 100%; }
   .search input::placeholder { color: var(--muted); }
-  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-  .link-btn:hover { color: var(--fg); }
+  .sel { border: 1px solid var(--line); background: transparent; padding: 8px 10px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
+  .sel option { background: var(--bg); color: var(--fg); }
 
-  .bab { display: grid; grid-template-columns: 72px 1fr; gap: var(--gap); padding: 28px 0; border-bottom: 1px solid var(--line); }
-  .bab-num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 4px; }
-  .bab-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 14px; }
-  .bab h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
-  .bab-prog { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .bab.complete .bab-num { color: var(--a); }
-  ul.poin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  ul.poin li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  /* pemetaan 1-26 */
+  .map-list { border-top: 1px solid var(--line); }
+  .map-item { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .map-n { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+  .map-title { font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+  .map-grid { display: grid; gap: 4px; font-size: 14px; }
+  .map-grid div span.k { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-right: 8px; }
+  .map-ingat { margin-top: 6px; padding-left: 10px; border-left: 2px solid var(--a); font-size: 13.5px; }
+
+  /* 50 soal */
+  .soal-list { border-top: 1px solid var(--line); }
+  .soal { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .soal-n { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+  .soal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; border: 1px solid var(--line); padding: 1px 6px; color: var(--muted); }
+  .soal-q { font-weight: 500; }
+  .opts { margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; color: var(--muted); display: grid; gap: 3px; }
+  .opts li b { color: var(--fg); font-family: var(--mono); font-size: 12.5px; margin-right: 6px; }
+  .kunci-box { display: none; margin-top: 10px; padding: 10px 12px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; }
+  .kunci-box .ans { font-family: var(--mono); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .soal.open .kunci-box, body.show-keys .kunci-box { display: block; }
+  body.show-keys .kbtn { visibility: hidden; }
+  .kbtn { border: 1px solid var(--line); background: transparent; padding: 4px 10px; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .kbtn:hover { border-color: var(--strong); }
+  .empty-search { padding: 20px 0; color: var(--muted); display: none; }
+
+  /* checklist */
+  ul.chklist { list-style: none; margin: 8px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  ul.chklist li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--line); }
   .chk { appearance: none; -webkit-appearance: none; margin: 3px 0 0; width: 16px; height: 16px; border: 1px solid var(--strong); background: transparent; cursor: pointer; display: grid; place-items: center; }
   .chk::after { content: ""; width: 8px; height: 4px; border-left: 1.5px solid var(--bg); border-bottom: 1.5px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
   .chk:checked { background: var(--strong); }
   .chk:checked::after { opacity: 1; }
-  ul.poin label { cursor: pointer; overflow-wrap: anywhere; }
-  li.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-  .catatan { margin-top: 14px; padding: 12px 14px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; white-space: pre-line; }
-  .catatan .label { display: block; margin-bottom: 4px; }
-  .empty { padding: 32px 0; color: var(--muted); }
+  ul.chklist label { cursor: pointer; }
+  ul.chklist li.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
 
-  footer { border-top: 1px solid var(--strong); margin-top: 40px; padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  footer { border-top: 1px solid var(--strong); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
-  @media (max-width: 760px) {
-    .masthead .t, .meta { grid-column: 1 / -1; }
-    .bab { grid-template-columns: 1fr; gap: 6px; }
+  @media (max-width: 960px) {
+    aside.side, main.content, .masthead .t, .meta { grid-column: 1 / -1; }
+    .side-inner { position: static; max-height: none; overflow: visible; }
   }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  @media (max-width: 680px) {
+    body { font-size: 14px; }
+    .two { grid-template-columns: 1fr; }
+    .soal { grid-template-columns: 32px 1fr; }
+    .kbtn { grid-column: 2; justify-self: start; }
+  }
+  @media print {
+    aside.side, .bar, .kbtn, .master, .tools-bar, footer { display: none !important; }
+    .kunci-box { display: block !important; }
+    main.content { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
 </style>
 </head>
 <body>
@@ -142,136 +217,755 @@ const KISI = [
     </div>
     <div class="masthead">
       <div class="t">
-        <div class="label code"><i></i><span id="m-code"></span></div>
-        <h1 id="m-name"></h1>
+        <div class="label code"><i></i>08 / B.IND</div>
+        <h1>Bahasa Indonesia</h1>
+        <div class="subtitle">Kelas XI &middot; Materi Lengkap, Pemetaan Kisi-Kisi 1–26 &amp; 50 Soal Simulasi</div>
       </div>
       <div class="meta">
-        <div class="meta-row"><span class="label">Bab</span><span id="m-bab">0</span></div>
-        <div class="meta-row"><span class="label">Indikator dikuasai</span><span id="m-done">0/0</span></div>
-        <div class="meta-row"><span class="label">Progres</span><span id="m-pct">0%</span></div>
+        <div class="meta-row"><span class="label">Bab / Bagian</span><span>03 Bab + 03 Bonus</span></div>
+        <div class="meta-row"><span class="label">Bagian dikuasai</span><span id="m-done">0/6</span></div>
+        <div class="meta-row"><span class="label">Soal simulasi</span><span>50</span></div>
       </div>
     </div>
   </div>
 </header>
 
-<main class="wrap">
-  <div class="tools">
-    <label class="search">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-      <input id="q" type="search" placeholder="Cari bab atau indikator" aria-label="Cari">
-    </label>
-    <button class="link-btn" id="reset" type="button">Reset centang mapel ini</button>
-  </div>
-  <div id="list"></div>
-</main>
-
 <div class="wrap">
+  <div class="layout">
+    <aside class="side">
+      <div class="side-inner">
+        <details class="toc" id="toc-box">
+          <summary><span class="label">Daftar isi</span><span class="chev">&darr;</span></summary>
+          <nav class="toc" id="toc" aria-label="Daftar bagian">
+            <div class="toc-group">
+              <span class="label">Materi Utama</span>
+              <a href="#bab-1" data-id="bab-1"><span class="n">01</span><span>Teks Argumentasi (1–7)</span><span class="st"></span></a>
+              <a href="#bab-2" data-id="bab-2"><span class="n">02</span><span>Teks Berita (8–15)</span><span class="st"></span></a>
+              <a href="#bab-3" data-id="bab-3"><span class="n">03</span><span>Cerpen Sejarah (16–26)</span><span class="st"></span></a>
+            </div>
+            <div class="toc-group">
+              <span class="label">Latihan &amp; Ringkasan</span>
+              <a href="#pemetaan" data-id="pemetaan"><span class="n">04</span><span>Pemetaan Kisi-Kisi 1–26</span><span class="st"></span></a>
+              <a href="#simulasi" data-id="simulasi"><span class="n">05</span><span>Strategi &amp; 50 Soal</span><span class="st"></span></a>
+              <a href="#ringkasan" data-id="ringkasan"><span class="n">06</span><span>Ringkasan &amp; Checklist</span><span class="st"></span></a>
+            </div>
+          </nav>
+        </details>
+        <div class="side-tools">
+          <label class="switch-row">
+            <span class="label">Tampilkan semua kunci</span>
+            <input type="checkbox" id="show-keys"><span class="switch" aria-hidden="true"></span>
+          </label>
+          <button class="link-btn" id="reset" type="button">Reset tanda dikuasai</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="guide">
+        <span class="label">Panduan Menggunakan Modul</span>
+        <ul>
+          <li><b>Cara membaca soal berbasis teks:</b> baca pertanyaan lebih dulu untuk tahu informasi yang dicari, lalu baca teks utuh, tandai bukti, dan eliminasi opsi yang terlalu luas, terlalu sempit, bertentangan, atau menambah info di luar teks.</li>
+          <li><b>Simulasi:</b> kerjakan 50 soal latihan dalam 75–100 menit sebelum membuka kunci jawaban, lalu catat alasan kesalahan (salah konsep, terburu-buru, atau tidak menemukan bukti).</li>
+        </ul>
+        <div class="note"><b>Catatan:</b> Penomoran 1–26 mengikuti urutan submateri pada kisi-kisi (Bab 1: 1–7, Bab 2: 8–15, Bab 3: 16–26), bukan nomor soal ujian.</div>
+      </div>
+
+      <!-- ===================== BAB 1 ===================== -->
+      <section class="sec" id="bab-1">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 1 &middot; Kompetensi 1–7</span>
+          <button type="button" class="master" data-id="bab-1" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Teks Argumentasi</h2>
+        <p class="sec-intro">Menyampaikan pendapat atau sikap terhadap suatu persoalan dengan alasan logis dan bukti relevan yang dapat diperiksa dasar pemikirannya.</p>
+        <div class="callout warn"><span class="label"><span class="sq"></span>Gagasan Utama Bab</span> Pendapat adalah posisi yang dikemukakan; argumen adalah alasan yang menjelaskan posisi itu; bukti adalah data/contoh penopang alasan; simpulan merangkum hasil penalaran.</div>
+
+        <h3 class="sub"><span class="k">01</span> Struktur &amp; Pengembangan Paragraf: Ide Pokok dan Pola</h3>
+        <p>Ide pokok adalah inti pembahasan paragraf (dinyatakan kalimat utama, bukan sekadar kata yang sering muncul). Kalimat penjelas menguraikan, memberi alasan, data, atau contoh.</p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Pola</th><th>Letak Kalimat Utama</th><th>Cara Mengenali</th><th>Contoh Singkat</th></tr></thead>
+            <tbody>
+              <tr><td><b>Deduktif</b></td><td>Awal paragraf</td><td>Pernyataan umum diikuti penjelasan khusus.</td><td>Membaca rutin meningkatkan kosakata. Kebiasaan ini…</td></tr>
+              <tr><td><b>Induktif</b></td><td>Akhir paragraf</td><td>Rangkaian contoh/fakta mengarah ke pernyataan umum.</td><td>Perpustakaan ramai, peminjaman naik… Jadi, budaya baca…</td></tr>
+              <tr><td><b>Campuran</b></td><td>Awal dan ditegaskan kembali di akhir</td><td>Gagasan utama di awal diuraikan, lalu ditegaskan dengan rumusan sejalan.</td><td>Olahraga menjaga kesehatan… Karena itu, olahraga perlu…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="clean">
+          <li><b>Cara menemukan ide pokok:</b> tentukan topik &rarr; cari kalimat paling umum &rarr; uji dengan menghapus satu kalimat &rarr; rumuskan ringkas.</li>
+          <li><b>Jebakan ujian:</b> topik hanya menyebut pokok bahasan (mis. <i>transportasi umum</i>), sedangkan ide pokok menyatakan hal yang dibahas tentang topik itu (mis. <i>perlunya peningkatan penggunaan transportasi umum</i>).</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">02</span> Fakta dan Opini</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Aspek</th><th>Fakta</th><th>Opini</th></tr></thead>
+            <tbody>
+              <tr><td><b>Sifat</b></td><td>Dapat diverifikasi benar atau salah.</td><td>Memuat penilaian, dugaan, atau pandangan.</td></tr>
+              <tr><td><b>Penanda umum</b></td><td>Angka, waktu, tempat, hasil ukur, sumber, kejadian teramati.</td><td><i>Menurut saya, sebaiknya, paling baik, memprihatinkan, mungkin, perlu.</i></td></tr>
+              <tr><td><b>Contoh</b></td><td>“Perpustakaan sekolah buka pukul 07.00–15.00.”</td><td>“Perpustakaan sekolah seharusnya buka lebih lama.”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="clean">
+          <li><b>Kesalahan umum:</b> menganggap kalimat tanpa angka pasti opini (padahal “hujan turun sejak pukul enam” adalah fakta); menganggap kalimat berangka selalu fakta (angka butuh survei/sumber sahih); mengira opini pasti salah.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">03</span> Argumentasi dan Bukti Pendukung</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Komponen</th><th>Fungsi</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Klaim / tesis</b></td><td>Pernyataan posisi penulis.</td><td>Sekolah perlu menyediakan lebih banyak tempat minum isi ulang.</td></tr>
+              <tr><td><b>Alasan</b></td><td>Menjelaskan hubungan logis dengan klaim.</td><td>Fasilitas isi ulang mengurangi ketergantungan botol sekali pakai.</td></tr>
+              <tr><td><b>Bukti</b></td><td>Data, penelitian, dokumen, observasi terukur.</td><td>Audit sampah 4 minggu mencatat 430 botol plastik sekali pakai.</td></tr>
+              <tr><td><b>Penjelasan bukti</b></td><td>Menautkan bukti dengan klaim.</td><td>Data itu menunjukkan botol sekali pakai perlu ditangani.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;"><b>Syarat bukti kuat:</b> relevan, dapat dipercaya, cukup, mutakhir, dan representatif. Hindari generalisasi tergesa-gesa, sebab-akibat palsu, serangan pribadi, dan memilih data sepihak.</p>
+
+        <h3 class="sub"><span class="k">04</span> Penalaran, Tanggapan Kritis, dan Simpulan</h3>
+        <p><b>Tanggapan kritis</b> menyebut bagian yang dinilai, dasar penilaian, dan perbaikan/sudut pandang alternatif (bukan sekadar setuju/tidak setuju).</p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Jenis Simpulan</th><th>Ciri</th><th>Penilaian</th></tr></thead>
+            <tbody>
+              <tr><td><b>Sesuai</b></td><td>Merangkum inti dan didukung teks.</td><td><b>Dapat dipilih.</b></td></tr>
+              <tr><td><b>Terlalu luas</b></td><td>Memakai kata <i>semua/selalu/pasti</i> padahal contoh terbatas.</td><td>Tidak tepat.</td></tr>
+              <tr><td><b>Tidak relevan / Bertentangan</b></td><td>Membahas topik lain atau berlawanan dengan isi teks.</td><td>Tidak tepat.</td></tr>
+              <tr><td><b>Menambah informasi</b></td><td>Memuat sebab, angka, atau akibat yang tidak disebut di teks.</td><td>Tidak tepat.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">05</span> Kohesi dan Koherensi</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>Kohesi:</b> keterkaitan bentuk bahasa antarkalimat (kata rujukan <i>ini, itu, tersebut, ia, mereka</i>, pengulangan, sinonim, konjungsi).</li>
+              <li><b>Koherensi:</b> keterkaitan makna atau alur gagasan yang logis.</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Kalimat tidak padu:</b> menyimpang dari ide pokok paragraf.</li>
+              <li><b>Paragraf rumpang:</b> cek hubungan logis sebelum-sesudah (sebab, akibat, pertentangan, contoh, simpulan) dan kejelasan rujukan.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">06</span> Kaidah Kebahasaan: Sinonim, Antonim, dan Konjungsi</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Hubungan</th><th>Contoh Konjungsi</th><th>Contoh Penggunaan</th></tr></thead>
+            <tbody>
+              <tr><td>Penambahan</td><td class="mono">dan, serta, juga</td><td>Sekolah menyediakan buku dan majalah.</td></tr>
+              <tr><td>Pertentangan</td><td class="mono">tetapi, namun, sedangkan</td><td>Biaya rendah, tetapi kualitas tetap dijaga.</td></tr>
+              <tr><td>Sebab</td><td class="mono">karena, sebab</td><td>Kegiatan ditunda karena hujan.</td></tr>
+              <tr><td>Akibat</td><td class="mono">sehingga, akibatnya</td><td>Jalan tergenang sehingga kendaraan melambat.</td></tr>
+              <tr><td>Tujuan</td><td class="mono">agar, supaya, untuk</td><td>Lampu dipadamkan agar hemat energi.</td></tr>
+              <tr><td>Syarat</td><td class="mono">jika, apabila</td><td>Jika hujan berhenti, pertandingan dilanjutkan.</td></tr>
+              <tr><td>Konsesi</td><td class="mono">meskipun, walaupun</td><td>Meskipun lelah, ia tetap berlatih.</td></tr>
+              <tr><td>Urutan / waktu</td><td class="mono">kemudian, setelah itu, sebelum</td><td>Data dikumpulkan, kemudian dianalisis.</td></tr>
+              <tr><td>Pilihan</td><td class="mono">atau</td><td>Siswa dapat membaca buku atau artikel.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;color:var(--muted);">Sinonim bergantung konteks (<i>cermat–teliti</i>, <i>dampak–akibat</i>). Contoh antonim: <i>meningkat–menurun</i>, <i>hemat–boros</i>, <i>stabil–bergejolak</i>.</p>
+
+        <h3 class="sub"><span class="k">07</span> Poster Persuasif</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Unsur</th><th>Fungsi</th><th>Pertanyaan Evaluasi</th></tr></thead>
+            <tbody>
+              <tr><td><b>Judul / slogan</b></td><td>Menarik perhatian &amp; merangkum pesan.</td><td>Singkat, kuat, mudah diingat?</td></tr>
+              <tr><td><b>Pesan / ajakan</b></td><td>Mengarahkan tindakan (<i>ayo, mari, gunakan, kurangi</i>).</td><td>Jelas dan dapat dilakukan?</td></tr>
+              <tr><td><b>Visual</b></td><td>Memudahkan pemahaman dan ingatan.</td><td>Relevan, terbaca, tidak menyesatkan?</td></tr>
+              <tr><td><b>Sasaran &amp; Info</b></td><td>Kelompok tujuan + waktu/tempat/penyelenggara.</td><td>Cocok dengan audiens dan lengkap?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAB 2 ===================== -->
+      <section class="sec" id="bab-2">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 2 &middot; Kompetensi 8–15</span>
+          <button type="button" class="master" data-id="bab-2" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Teks Berita</h2>
+        <p class="sec-intro">Menyampaikan peristiwa faktual dengan mengutamakan ketepatan, kejelasan, relevansi, dan verifikasi — kecepatan tidak boleh mengalahkan akurasi.</p>
+
+        <h3 class="sub"><span class="k">08</span> Karakteristik dan Kelayakan Berita</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Nilai Berita</th><th>Makna</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Aktualitas</b></td><td>Kebaruan atau kedekatan waktu peristiwa.</td><td>Pengumuman hasil seleksi yang baru dirilis hari ini.</td></tr>
+              <tr><td><b>Kedekatan</b></td><td>Kedekatan geografis, sosial, atau emosional.</td><td>Perbaikan jembatan di wilayah pembaca tinggal.</td></tr>
+              <tr><td><b>Kepentingan / dampak</b></td><td>Pengaruh terhadap banyak orang / urusan publik.</td><td>Perubahan jadwal transportasi pekerja &amp; pelajar.</td></tr>
+              <tr><td><b>Sisi kemanusiaan</b></td><td>Kisah yang menyentuh empati manusia.</td><td>Warga bergotong royong membantu korban banjir.</td></tr>
+              <tr><td><b>Tokoh / ketokohan</b></td><td>Keterlibatan orang/lembaga berpengaruh.</td><td>Keputusan pejabat tentang kebijakan publik.</td></tr>
+              <tr><td><b>Konflik</b></td><td>Pertentangan kepentingan atau sengketa.</td><td>Perselisihan warga dan pengelola soal lahan.</td></tr>
+              <tr><td><b>Keunikan</b></td><td>Peristiwa tidak biasa / mengejutkan.</td><td>Penemuan spesies baru di daerah tersebut.</td></tr>
+              <tr><td><b>Besaran</b></td><td>Skala atau jumlah pihak terdampak.</td><td>Gangguan layanan yang memengaruhi ribuan pelanggan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">09</span> Unsur-Unsur Berita: ADIKSIMBA</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Unsur</th><th>Yang Dicari</th><th>Contoh (Tim Kebersihan Sungai Lestari)</th></tr></thead>
+            <tbody>
+              <tr><td><b>Apa</b></td><td>Peristiwa utama</td><td>Pengangkutan 12 ton sampah dari Sungai Lestari.</td></tr>
+              <tr><td><b>Di mana</b></td><td>Tempat kejadian</td><td>Sungai Lestari, sepanjang bantaran sungai.</td></tr>
+              <tr><td><b>Kapan</b></td><td>Waktu kejadian</td><td>Senin pagi.</td></tr>
+              <tr><td><b>Siapa</b></td><td>Pelaku, korban, saksi, narasumber</td><td>Tim kebersihan, 80 petugas &amp; relawan; kepala dinas.</td></tr>
+              <tr><td><b>Mengapa</b></td><td>Sebab terverifikasi (jangan mengarang jika tak ada)</td><td>Hujan deras membawa sampah dari saluran permukiman.</td></tr>
+              <tr><td><b>Bagaimana</b></td><td>Proses, kronologi, kondisi, dampak</td><td>Pembersihan bersama; pemantauan dilanjutkan sepekan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">10</span> Struktur Teks Berita (Piramida Terbalik)</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Bagian</th><th>Isi dan Fungsi</th><th>Ciri</th></tr></thead>
+            <tbody>
+              <tr><td><b>Judul / headline</b></td><td>Menarik perhatian &amp; merangkum inti peristiwa.</td><td>Ringkas, spesifik, tidak menyesatkan.</td></tr>
+              <tr><td><b>Kepala berita / teras (lead)</b></td><td>Paragraf pembuka memuat inti berita paling penting.</td><td>Menjawab sebagian besar ADIKSIMBA utama.</td></tr>
+              <tr><td><b>Tubuh berita</b></td><td>Mengembangkan lead dengan rincian, kronologi, kutipan, data, konteks.</td><td>Detail bertambah; sumber jelas.</td></tr>
+              <tr><td><b>Ekor berita</b></td><td>Informasi tambahan yang kepentingannya lebih rendah.</td><td>Dapat dipangkas tanpa menghilangkan inti.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">11</span> Isi Berita &amp; <span class="k">12</span> Verifikasi Keakuratan</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>Tersurat:</b> disebutkan langsung dalam teks.</li>
+              <li><b>Tersirat:</b> disimpulkan wajar dari petunjuk teks (tanpa menambah sebab-akibat baru).</li>
+              <li><b>Viral &ne; benar:</b> jumlah pengikut, centang akun, atau pesan “sebarkan segera” tidak membuktikan kebenaran.</li>
+            </ul>
+          </div>
+          <div>
+            <ol class="num">
+              <li>Telusuri sumber pertama &amp; periksa dokumen/data primer.</li>
+              <li>Konfirmasi ke lebih dari satu sumber independen.</li>
+              <li>Cocokkan waktu, lokasi, nama, angka, dan foto/video (cek gambar lama/dipotong).</li>
+              <li>Minta tanggapan pihak terdampak (hak jawab) &amp; koreksi terbuka jika keliru.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">13</span> Kaidah Kebahasaan Berita</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tidak Baku</th><th>Baku</th><th>Aturan Ejaan yang Sering Diuji</th></tr></thead>
+            <tbody>
+              <tr><td>aktifitas, ijin, resiko, praktek</td><td><b>aktivitas, izin, risiko, praktik</b></td><td>Nama hari &amp; bulan kapital (<i>Senin, November</i>).</td></tr>
+              <tr><td>analisa, sekedar, apotik, kwalitas</td><td><b>analisis, sekadar, apotek, kualitas</b></td><td>Kata depan <i>di/ke</i> tempat dipisah (<i>di sekolah</i>); imbuhan <i>di-</i> serangkai (<i>diterjunkan</i>).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><span class="label"><span class="sq"></span>Contoh Perbaikan</span> Tidak tepat: “Pada hari senin, petugas di terjunkan ke lokasi.” &rarr; Tepat: “Pada hari <b>Senin</b>, petugas <b>diterjunkan</b> ke lokasi.”</div>
+
+        <h3 class="sub"><span class="k">14</span> Menyusun Kepala Berita &amp; <span class="k">15</span> Vlog Berita</h3>
+        <p><b>Menyusun kepala berita:</b> pilih peristiwa utama &rarr; pastikan siapa–apa–di mana–kapan &rarr; letakkan info terpenting di awal &rarr; pakai kalimat aktif tanpa kata bombastis &rarr; verifikasi angka/nama. Jika angka belum dikonfirmasi, beri atribusi (mis. <i>“panitia memperkirakan”</i>).</p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Aspek Vlog Berita</th><th>Kriteria Baik</th><th>Masalah yang Dihindari</th></tr></thead>
+            <tbody>
+              <tr><td><b>Pembuka</b></td><td>Sebut lokasi, peristiwa, inti info, dan alasan penting.</td><td>Terlalu panjang atau hanya sapaan.</td></tr>
+              <tr><td><b>Audio &amp; Visual</b></td><td>Suara jelas, stabil, gambar fokus &amp; relevan.</td><td>Musik menutupi narasi, gambar buram/goyang.</td></tr>
+              <tr><td><b>Penyampaian &amp; Akurasi</b></td><td>Runtut, tempo wajar, nama/angka/sumber terverifikasi.</td><td>Dramatis tanpa dasar, spekulasi jadi fakta.</td></tr>
+              <tr><td><b>Etika</b></td><td>Hormati privasi/korban, caption tepat, wawancara utuh.</td><td>Eksploitasi korban, memotong konteks wawancara.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAB 3 ===================== -->
+      <section class="sec" id="bab-3">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 3 &middot; Kompetensi 16–26</span>
+          <button type="button" class="master" data-id="bab-3" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Cerpen Berlatar Sejarah</h2>
+        <p class="sec-intro">Karya prosa fiksi yang berpusat pada satu rangkaian konflik dengan latar waktu, peristiwa, atau konteks sejarah nyata, namun tetap menghadirkan tokoh dan dialog rekaan.</p>
+        <div class="callout warn"><span class="label"><span class="sq"></span>Kunci Membaca</span> Pisahkan fakta sejarah yang menjadi latar dari unsur fiksi pengarang. Jangan menyimpulkan semua tokoh atau dialog rekaan benar-benar pernah ada.</div>
+
+        <h3 class="sub"><span class="k">16</span> Peristiwa Sejarah &amp; <span class="k">17</span> Tema Cerpen</h3>
+        <ul class="clean">
+          <li><b>Identifikasi latar sejarah:</b> cari penanda waktu (tahun, periode), nama tokoh/lembaga, tempat, kebijakan, atau peristiwa besar (mis. <i>siaran Proklamasi 17 Agustus 1945</i>).</li>
+          <li><b>Tema vs Topik vs Amanat:</b> topik = pokok bahasan (<i>perang kemerdekaan</i>); tema = gagasan dasar abstrak (<i>keberanian dan pengorbanan dalam perjuangan</i>); amanat = pesan/pelajaran cerita.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">18</span> Tokoh dan Penokohan</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Teknik</th><th>Penjelasan</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Langsung / analitik</b></td><td>Pengarang menyebut watak secara langsung.</td><td>“Mira dikenal sebagai gadis yang teguh.”</td></tr>
+              <tr><td><b>Tidak langsung / dramatik</b></td><td>Disimpulkan dari tindakan, pikiran, atau reaksi.</td><td>Membagikan makanan meski persediaan sedikit &rarr; peduli.</td></tr>
+              <tr><td><b>Melalui dialog</b></td><td>Pilihan kata &amp; cara berbicara menunjukkan sikap.</td><td>“Ambil bagian saya. Anak-anak itu lebih membutuhkan.”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;"><b>Protagonis</b> = pusat simpati/perjuangan cerita (tidak harus sempurna); <b>antagonis</b> = penghambat tujuan tokoh utama; <b>tokoh campuran</b> = memiliki sifat beragam (mis. tegas/keras tetapi peduli).</p>
+
+        <h3 class="sub"><span class="k">19</span> Alur, Konflik, &amp; Penyelesaian Logis</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tahap Alur</th><th>Fungsi</th><th>Petunjuk Umum</th></tr></thead>
+            <tbody>
+              <tr><td><b>Orientasi</b></td><td>Mengenalkan tokoh, latar, situasi awal.</td><td>Keadaan sebelum masalah membesar.</td></tr>
+              <tr><td><b>Pemunculan konflik</b></td><td>Masalah mulai muncul.</td><td>Ancaman, perbedaan tujuan, rahasia, hambatan.</td></tr>
+              <tr><td><b>Komplikasi</b></td><td>Ketegangan bertambah &amp; pilihan makin sulit.</td><td>Masalah berlapis, risiko meningkat.</td></tr>
+              <tr><td><b>Klimaks</b></td><td>Puncak ketegangan atau keputusan penting.</td><td>Konfrontasi / keputusan penentu arah.</td></tr>
+              <tr><td><b>Resolusi</b></td><td>Konflik mereda atau memperoleh akhir.</td><td>Akibat keputusan dan keadaan akhir tokoh.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;"><b>Penyelesaian logis:</b> keputusan tokoh &rarr; akibat langsung &rarr; reaksi pihak lain &rarr; konflik memuncak &rarr; tindakan penyelesaian &rarr; konsekuensi. Tidak harus bahagia, asal masuk akal dengan sebab konflik.</p>
+
+        <h3 class="sub"><span class="k">20</span> Latar Suasana &amp; <span class="k">21</span> Sudut Pandang</h3>
+        <div class="two">
+          <div>
+            <p><b>Latar suasana:</b> atmosfer emosional (tegang, mencekam, haru, sunyi). Buktikan lewat diksi, tindakan, dialog, dan reaksi — bukan sekadar lokasi (“ruang gelap” bisa mencekam atau sunyi).</p>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Orang pertama pelaku utama:</b> narator “aku” adalah tokoh utama.</li>
+              <li><b>Orang pertama sampingan:</b> “aku” hanya saksi cerita tokoh lain.</li>
+              <li><b>Orang ketiga serba tahu:</b> menyebut “ia/dia/nama” dan tahu pikiran beberapa tokoh.</li>
+              <li><b>Orang ketiga terbatas:</b> menyebut “ia/dia”, terbatas pada yang terlihat/satu tokoh.</li>
+            </ul>
+            <p style="font-size:13.5px;color:var(--muted);">Kata “aku” di dalam dialog tidak otomatis menjadikan sudut pandang orang pertama.</p>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">22</span> Gaya Bahasa (Majas) &amp; <span class="k">23</span> Amanat</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Majas</th><th>Makna / Ciri</th><th>Contoh &amp; Fungsi</th></tr></thead>
+            <tbody>
+              <tr><td><b>Personifikasi</b></td><td>Benda/alam diberi sifat manusia.</td><td>“Angin malam mengetuk jendela.” (menghidupkan suasana)</td></tr>
+              <tr><td><b>Metafora</b></td><td>Perbandingan langsung tanpa kata pembanding.</td><td>“Ia tulang punggung keluarga.” (menegaskan penopang)</td></tr>
+              <tr><td><b>Simile</b></td><td>Perbandingan memakai <i>seperti, bagai, laksana, bak</i>.</td><td>“Wajahnya pucat seperti kertas.” (memperjelas gambaran)</td></tr>
+              <tr><td><b>Hiperbola</b></td><td>Pernyataan dilebih-lebihkan.</td><td>“Tangisnya membelah malam.” (menekankan intensitas)</td></tr>
+              <tr><td><b>Ironi</b></td><td>Sindiran bermakna berlawanan.</td><td>“Rajin sekali kamu,” kepada yang tidak mengerjakan tugas.</td></tr>
+              <tr><td><b>Repetisi</b></td><td>Pengulangan kata/frasa untuk penekanan.</td><td>“Kita bertahan, kita berjuang, kita pulang.”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:14px;"><b>Amanat:</b> pesan yang ditarik dari konflik, pilihan tokoh, dan akibatnya (bukan ringkasan alur dan bukan nasihat umum tanpa dasar cerita).</p>
+
+        <h3 class="sub"><span class="k">24</span> Nilai Kehidupan &amp; <span class="k">25–26</span> Resensi Cerpen</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>Nilai politik:</b> kekuasaan, hak warga, perjuangan kemerdekaan, kebijakan.</li>
+              <li><b>Nilai moral:</b> baik-buruk perilaku dan tanggung jawab pribadi.</li>
+              <li><b>Nilai agama:</b> keyakinan, ibadah, doa, hubungan dengan Tuhan.</li>
+              <li><b>Nilai sosial:</b> solidaritas, gotong royong, kepedulian masyarakat.</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Struktur resensi:</b> Judul resensi &rarr; Identitas karya &rarr; Orientasi &rarr; <b>Sinopsis</b> (ringkas isi) &rarr; <b>Analisis/Evaluasi</b> (kelebihan &amp; kelemahan) &rarr; Rekomendasi.</li>
+              <li><b>Penilaian objektif:</b> bertumpu pada pola <b>aspek + bukti cerita + dampak + saran</b> (bukan sekadar “cerpen ini jelek/bagus”).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PEMETAAN 1-26 ===================== -->
+      <section class="sec" id="pemetaan">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian 04</span>
+          <button type="button" class="master" data-id="pemetaan" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Pemetaan Kisi-Kisi Nomor 1–26</h2>
+        <p class="sec-intro">Ringkasan materi yang diuji, contoh penerapan, analisis soal, dan hal wajib diingat untuk setiap kelompok kompetensi.</p>
+
+        <div class="tools-bar">
+          <label class="search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+            <input id="q-map" type="search" placeholder="Cari kompetensi (misal: deduktif, ADIKSIMBA, majas, resensi)" aria-label="Cari pemetaan">
+          </label>
+          <span class="label" id="map-count">26 kompetensi</span>
+        </div>
+        <div class="map-list" id="map-list"></div>
+        <div class="empty-search" id="empty-map">Tidak ada kompetensi yang cocok.</div>
+      </section>
+
+      <!-- ===================== STRATEGI & 50 SOAL ===================== -->
+      <section class="sec" id="simulasi">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian 05</span>
+          <button type="button" class="master" data-id="simulasi" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Strategi &amp; 50 Soal Simulasi SAS</h2>
+        <p class="sec-intro">Kerjakan soal di bawah sebelum membuka kunci. Gunakan filter jenis soal atau kotak pencarian jika ingin fokus latihan tertentu.</p>
+
+        <h3 class="sub"><span class="k">A</span> Strategi Mengerjakan Tipe Soal</h3>
+        <div class="two" style="font-size:14px;">
+          <div>
+            <ul class="clean">
+              <li><b>PG biasa:</b> baca kata tanya (<i>paling tepat, kecuali, tidak sesuai</i>), tandai bukti, eliminasi opsi ekstrem.</li>
+              <li><b>PG kompleks:</b> nilai tiap pernyataan B/S satu per satu; periksa kedua klaim jika pernyataan majemuk.</li>
+              <li><b>Benar/Salah:</b> waspadai kata mutlak (<i>semua, selalu, pasti</i>); bedakan “tidak disebut” dari “salah”.</li>
+              <li><b>Analisis teks:</b> petakan klaim–bukti (argumentasi), ADIKSIMBA–teras (berita), atau tokoh–konflik–alur (cerpen).</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Simpulan:</b> gabungkan inti tanpa menambah data luar, sebab baru, atau generalisasi.</li>
+              <li><b>Makna kata:</b> cek kata sebelum-sesudah &amp; uji dengan sinonim sesuai konteks kalimat.</li>
+              <li><b>Perbaikan kalimat:</b> cek pemborosan kata, S-P, paralelisme, konjungsi, rujukan, ejaan (di/ke).</li>
+              <li><b>Ketepatan struktur:</b> jangan tukar sinopsis dengan evaluasi; jangan tukar lead berita dengan opini tanpa atribusi.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">B</span> Latihan Simulasi SAS — 50 Soal</h3>
+        <div class="tools-bar">
+          <label class="search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+            <input id="q-soal" type="search" placeholder="Cari soal atau nomor..." aria-label="Cari soal">
+          </label>
+          <select class="sel" id="f-soal" aria-label="Filter tipe soal">
+            <option value="all">Semua Tipe (50)</option>
+            <option value="pg">Pilihan Ganda (1–30, 48–50)</option>
+            <option value="pgk">PG Kompleks (31–35)</option>
+            <option value="bs">Benar / Salah (36–40)</option>
+            <option value="uraian">Analisis / Uraian (41–47)</option>
+          </select>
+          <span class="label" id="soal-count">50 soal</span>
+        </div>
+        <div class="soal-list" id="soal-list"></div>
+        <div class="empty-search" id="empty-soal">Tidak ada soal yang cocok.</div>
+      </section>
+
+      <!-- ===================== RINGKASAN & CHECKLIST ===================== -->
+      <section class="sec" id="ringkasan">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian 06</span>
+          <button type="button" class="master" data-id="ringkasan" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Ringkasan Akhir &amp; Checklist Ujian</h2>
+        <p class="sec-intro">Perbandingan konsep yang sering tertukar, pola identifikasi cepat, kesalahan yang harus dihindari, serta checklist kesiapan ujian.</p>
+
+        <h3 class="sub"><span class="k">A</span> Perbandingan Konsep yang Sering Tertukar</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Konsep A</th><th>Konsep B</th><th>Pembeda Cepat</th></tr></thead>
+            <tbody>
+              <tr><td><b>Topik</b></td><td><b>Ide pokok</b></td><td>Topik = pokok bahasan; ide pokok = hal yang dinyatakan tentang topik.</td></tr>
+              <tr><td><b>Kalimat utama</b></td><td><b>Kalimat penjelas</b></td><td>Kalimat utama memuat inti; penjelas memberi alasan, data, contoh.</td></tr>
+              <tr><td><b>Fakta</b></td><td><b>Opini</b></td><td>Fakta diverifikasi; opini memuat penilaian/saran.</td></tr>
+              <tr><td><b>Klaim</b></td><td><b>Bukti</b></td><td>Klaim adalah pendapat; bukti adalah dasar pendukung.</td></tr>
+              <tr><td><b>Ide pokok</b></td><td><b>Simpulan</b></td><td>Ide pokok inti paragraf; simpulan hasil rangkuman/penalaran informasi.</td></tr>
+              <tr><td><b>Kohesi</b></td><td><b>Koherensi</b></td><td>Kohesi hubungan bentuk; koherensi hubungan makna.</td></tr>
+              <tr><td><b>Judul berita</b></td><td><b>Teras berita</b></td><td>Judul merangkum/menarik; teras menyampaikan inti dalam paragraf.</td></tr>
+              <tr><td><b>Teras berita</b></td><td><b>Tubuh berita</b></td><td>Teras memuat inti; tubuh mengembangkan rincian.</td></tr>
+              <tr><td><b>Tema</b></td><td><b>Amanat</b></td><td>Tema = gagasan dasar; amanat = pesan yang ditarik.</td></tr>
+              <tr><td><b>Tokoh</b></td><td><b>Penokohan</b></td><td>Tokoh = pelaku; penokohan = penggambaran watak.</td></tr>
+              <tr><td><b>Alur</b></td><td><b>Konflik</b></td><td>Alur = rangkaian peristiwa; konflik = pertentangan penggerak cerita.</td></tr>
+              <tr><td><b>Sinopsis</b></td><td><b>Evaluasi resensi</b></td><td>Sinopsis meringkas isi; evaluasi menilai kualitas dengan alasan.</td></tr>
+              <tr><td><b>Kritik</b></td><td><b>Hinaan</b></td><td>Kritik spesifik dan berbukti; hinaan menyerang tanpa alasan.</td></tr>
+              <tr><td><b>Kata depan di</b></td><td><b>Imbuhan di-</b></td><td><i>di rumah</i> (terpisah); <i>ditulis</i> (serangkai).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">B</span> Kesalahan Umum yang Harus Dihindari</h3>
+        <ul class="clean">
+          <li>Memilih jawaban karena “terasa benar”, bukan karena didukung bukti teks; atau menyamakan topik, ide pokok, dan simpulan.</li>
+          <li>Menganggap angka tanpa sumber pasti fakta; mengambil bukti menarik tapi tidak relevan; menyimpulkan sebab yang belum disebut.</li>
+          <li>Menganggap berita viral otomatis layak dan benar; atau mengarang unsur ADIKSIMBA yang tidak tersedia di teks.</li>
+          <li>Menentukan suasana cerpen hanya dari latar tempat; menganggap protagonis selalu sempurna; menulis kritik “bagus/buruk” tanpa bukti.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">C</span> Checklist Sebelum Ujian</h3>
+        <ul class="chklist" id="chklist"></ul>
+
+        <div class="ingat"><span class="label"><span class="sq"></span>Prinsip Paling Penting</span><span>Jawaban terbaik bukan yang paling panjang atau terdengar paling meyakinkan, melainkan yang paling tepat dan paling kuat didukung oleh teks.</span></div>
+      </section>
+    </main>
+  </div>
+
   <footer>
-    <span class="label">Portal Belajar ASAS / <span id="f-code"></span></span>
+    <span class="label">Portal Belajar ASAS / B.IND</span>
     <a class="label" href="#top">Ke atas &uarr;</a>
   </footer>
 </div>
 
 <script>
+const PEMETAAN = [
+  { n: 1, j: "Struktur dan pengembangan paragraf", m: "Ide pokok serta pola deduktif, induktif, dan campuran.", p: "Kuasai perbedaan topik, kalimat utama, kalimat penjelas, dan ide pokok.", c: "Kalimat pertama menyatakan manfaat membaca, dua kalimat berikut memberi alasan = deduktif.", a: "“Paragraf diawali pernyataan umum lalu contoh. Polanya?” → Deduktif.", i: "Letak dan fungsi kalimat utama, bukan panjang kalimat, menentukan pola." },
+  { n: 2, j: "Fakta dan opini", m: "Membedakan fakta dan opini dalam teks argumentasi.", p: "Periksa apakah pernyataan dapat diverifikasi; kata 'terbaik', 'harus', 'memprihatinkan' cenderung opini.", c: "“Rapat dimulai pukul 09.00” (fakta) vs “Rapat sebaiknya lebih pagi” (opini).", a: "“Kualitas kantin sangat buruk.” → Opini (memuat penilaian).", i: "Angka saja tidak menjamin fakta; opini tidak otomatis salah." },
+  { n: 3, j: "Argumentasi dan bukti pendukung", m: "Memilih data/bukti relevan untuk memperkuat pendapat.", p: "Pisahkan klaim, alasan, bukti; pilih bukti tepercaya yang langsung terkait klaim.", c: "Klaim perlu ruang hijau → gunakan data suhu/luas ruang hijau, bukan jumlah kendaraan dinas.", a: "Bukti klaim jam olahraga ditambah adalah data kebugaran siswa.", i: "Relevansi dan mutu sumber lebih penting daripada banyaknya angka." },
+  { n: 4, j: "Penalaran dan simpulan", m: "Tanggapan kritis serta kesesuaian simpulan dengan teks.", p: "Nilai kecukupan alasan, generalisasi berlebihan, dan dukungan informasi penting.", c: "Data satu kelas tidak cukup menyimpulkan kebiasaan seluruh siswa sekolah.", a: "Pilih simpulan yang merangkum data tanpa menambah klaim baru.", i: "Simpulan bukan pendapat pribadi dan tidak boleh lebih luas daripada bukti." },
+  { n: 5, j: "Kohesi dan koherensi", m: "Kalimat tidak padu, paragraf rumpang, kata/frasa rujukan.", p: "Temukan topik, cek kelogisan urutan, fungsi konjungsi, dan anteceden rujukan.", c: "“Rina membeli atlas. Buku itu…” → 'itu' merujuk jelas ke atlas.", a: "Kalimat jadwal sepak bola dalam paragraf pola makan sehat = tidak padu.", i: "Kohesi = hubungan bentuk; koherensi = hubungan makna." },
+  { n: 6, j: "Kaidah kebahasaan argumentasi", m: "Sinonim, antonim, konjungsi sesuai hubungan gagasan.", p: "Kenali hubungan penambahan, pertentangan, sebab, akibat, tujuan, syarat, waktu.", c: "“Jalan ditutup karena banjir” (sebab); “Jalan banjir sehingga ditutup” (akibat).", a: "Konjungsi pertentangan ialah tetapi/namun, bukan sehingga.", i: "Uji hubungan logisnya, jangan andalkan hafalan kata saja." },
+  { n: 7, j: "Poster persuasif", m: "Pesan ajakan, sasaran, efektivitas visual-verbal, slogan.", p: "Baca kata ajakan, identifikasi audiens, nilai kecocokan gambar & keterbacaan.", c: "“Matikan Lampu Saat Tak Dipakai!” dengan visual sakelar/lampu.", a: "Poster hemat energi di kelas → sasaran utamanya warga sekolah.", i: "Poster efektif itu jelas, terbaca, relevan, dan mengajak tindakan konkret." },
+  { n: 8, j: "Karakteristik dan kelayakan berita", m: "Aktualitas, kedekatan, kepentingan, sisi kemanusiaan.", p: "Nilai kebaruan, relevansi audiens, dampak publik, dan verifiabilitas.", c: "Perubahan rute bus hari ini → aktualitas dan dampak bagi warga.", a: "Berita penutupan jembatan lokal memiliki kedekatan dan kepentingan.", i: "Viral belum tentu layak; kaitkan dengan kepentingan publik." },
+  { n: 9, j: "Unsur-unsur berita", m: "Kelengkapan ADIKSIMBA.", p: "Tanyakan apa, di mana, kapan, siapa, mengapa, bagaimana; tandai yang belum ada.", c: "Siapa = petugas & relawan; bagaimana = membersihkan sungai bersama.", a: "Sebab belum dinyatakan → jawaban benar: belum diketahui/tidak disebutkan.", i: "Enam pertanyaan harus dijawab berdasarkan teks, jangan mengarang." },
+  { n: 10, j: "Struktur teks berita", m: "Kepala berita, tubuh berita, fungsi paragraf.", p: "Temukan paragraf inti peristiwa (teras), lalu rincian/konteks (tubuh).", c: "Lead: kebakaran, lokasi, waktu, dampak; tubuh: kronologi & kutipan.", a: "Paragraf kedua berisi keterangan saksi → fungsinya mengembangkan berita.", i: "Kepala berita/teras berisi inti; tubuh berita memberi detail & konteks." },
+  { n: 11, j: "Isi dan informasi berita", m: "Simpulan, relevansi informasi, kelayakan peristiwa.", p: "Pilah info pokok & pelengkap; bedakan tersurat & tersirat.", c: "3 ruas jalan tergenang → jangan simpulkan seluruh kota lumpuh.", a: "Informasi jalur alternatif relevan untuk berita penutupan jalan.", i: "Simpulan harus proporsional dan relevan." },
+  { n: 12, j: "Keakuratan informasi", m: "Langkah verifikasi.", p: "Periksa sumber primer, konfirmasi silang, tanggal/lokasi, foto/video, hak jawab.", c: "Cocokkan foto banjir dengan lokasi & tanggal melalui sumber asli.", a: "Langkah terbaik sebelum terbit: konfirmasi ke sumber kompeten & cek bukti.", i: "Jangan menyebarkan klaim hanya karena viral." },
+  { n: 13, j: "Kaidah kebahasaan berita", m: "Kata baku, ejaan, kapital, tanda baca.", p: "Cek kata baku, kata depan di/ke vs imbuhan di-/ke-, nama diri, tanggal.", c: "“aktifitas” → “aktivitas”; “di lakukan” → “dilakukan”.", a: "“Pada hari senin…” diperbaiki menjadi “Pada hari Senin…”.", i: "Berita harus lugas, tepat, dan sesuai kaidah." },
+  { n: 14, j: "Penyusunan teks berita", m: "Menyusun kepala berita dari catatan liputan.", p: "Ambil inti peristiwa (siapa-apa-di mana-kapan) dan dampak penting.", c: "Catatan donor darah → lead menonjolkan jumlah peserta & hasil.", a: "Pilih judul/lead paling informatif dan tidak sensasional.", i: "Jangan menambah data yang tidak ada di catatan." },
+  { n: 15, j: "Vlog berita", m: "Pembuka informatif, audio, visual, penyampaian, prinsip jurnalistik.", p: "Evaluasi kejelasan suara/gambar, runtutnya info, akurasi, dan etika.", c: "Pembuka: sebut lokasi, peristiwa, waktu, dan dampak utama.", a: "Musik terlalu keras menutupi narasi = kelemahan audio.", i: "Kemasan menarik tidak boleh mengorbankan akurasi." },
+  { n: 16, j: "Cerpen dan sejarah", m: "Peristiwa sejarah sebagai latar cerita.", p: "Cari penanda waktu, tempat, tokoh/lembaga, dan peristiwa sejarah.", c: "Siaran Proklamasi 17 Agustus 1945 → latar Proklamasi Kemerdekaan.", a: "Identifikasi peristiwa dari petunjuk historis eksplisit.", i: "Cerpen berlatar sejarah tetap dapat memuat unsur fiksi." },
+  { n: 17, j: "Tema", m: "Menentukan tema dari isi dan konflik.", p: "Perhatikan masalah dominan, tindakan tokoh, dan akhir cerita.", c: "Konflik menyelamatkan surat perjuangan → tema keberanian/pengorbanan.", a: "Tema bukan nama tokoh/lokasi, melainkan gagasan dasar cerita.", i: "Tema = gagasan sentral; amanat = pesan yang ditarik." },
+  { n: 18, j: "Tokoh dan penokohan", m: "Watak, penggambaran melalui tindakan/dialog, tokoh campuran.", p: "Kumpulkan bukti dari tindakan, dialog, pikiran, deskripsi, reaksi.", c: "Tegas ke penjaga tetapi menolong anak kecil = sifat beragam.", a: "Watak peduli disimpulkan dari tindakan memberi makanan.", i: "Tokoh adalah pelaku; penokohan adalah penggambaran watak." },
+  { n: 19, j: "Alur dan konflik", m: "Tahap alur, sebab-akibat, penyelesaian logis.", p: "Susun urutan peristiwa & pemicu: orientasi–konflik–komplikasi–klimaks–resolusi.", c: "Surat hilang → dituduh → cari bukti → pelaku ketemu → nama pulih.", a: "Konflik memuncak pada keputusan tokoh mempertaruhkan keselamatan = klimaks.", i: "Tahap alur ditentukan fungsi peristiwa, bukan sekadar urutan paragraf." },
+  { n: 20, j: "Latar", m: "Suasana dan bukti pendukung.", p: "Cari diksi, tindakan, dialog, kondisi lingkungan, dan reaksi tokoh.", c: "Langkah mendekat, napas tertahan, pintu berderit → suasana tegang.", a: "Sebut suasana dan kutip bukti tekstualnya.", i: "Jawaban harus menyertakan bukti, bukan hanya label suasana." },
+  { n: 21, j: "Sudut pandang", m: "Menentukan posisi pencerita.", p: "Amati kata ganti dalam narasi dan batas pengetahuan narator.", c: "“Aku melihat Sari…” dapat menjadi orang pertama pelaku sampingan.", a: "Narator tahu pikiran semua tokoh = orang ketiga serba tahu.", i: "Kata 'aku' di dialog tidak otomatis menentukan sudut pandang." },
+  { n: 22, j: "Gaya bahasa", m: "Makna dan fungsi gaya bahasa (majas).", p: "Kenali personifikasi, metafora, simile, hiperbola, ironi, repetisi beserta efeknya.", c: "“Angin berbisik” = personifikasi (suasana lembut/misterius).", a: "Makna kias “tulang punggung” = penopang utama.", i: "Jelaskan makna dan fungsi, bukan hanya nama majas." },
+  { n: 23, j: "Amanat", m: "Pesan berdasarkan konflik dan penyelesaian.", p: "Hubungkan masalah, pilihan tokoh, dan akibatnya.", c: "Tokoh memulihkan kepercayaan dengan jujur → pentingnya kejujuran.", a: "Pilih nasihat yang sejalan dengan akibat tindakan tokoh.", i: "Amanat bukan ringkasan alur." },
+  { n: 24, j: "Nilai-nilai kehidupan", m: "Politik, moral, agama, sosial serta penerapannya.", p: "Identifikasi fokus: kekuasaan/hak (politik), baik-buruk (moral), spiritual (agama), solidaritas (sosial).", c: "Warga gotong royong menolong pengungsi = nilai sosial.", a: "Tuntutan hak rakyat terhadap penguasa = nilai politik.", i: "Satu peristiwa bisa memuat beberapa nilai; pilih yang paling dominan." },
+  { n: 25, j: "Struktur resensi", m: "Sinopsis, kelebihan, kelemahan cerpen.", p: "Bedakan ringkasan cerita dari penilaian (identitas, orientasi, sinopsis, evaluasi, rekomendasi).", c: "Paragraf yang meringkas tokoh mengirim pesan = sinopsis.", a: "“Dialognya alami dan mendukung karakter” = evaluasi kelebihan.", i: "Sinopsis menceritakan isi; evaluasi menilai mutu." },
+  { n: 26, j: "Penilaian dalam resensi", m: "Kritik objektif dan kesesuaian penilaian dengan cerita.", p: "Cari alasan dan bukti spesifik unsur cerita; hindari selera tanpa dukungan.", c: "Kritik alur melompat harus tunjukkan bagian dan dampaknya.", a: "Evaluasi terkuat mengutip kejadian spesifik sebagai dasar penilaian.", i: "Kritik yang baik spesifik, adil, dan berbukti." }
+];
+
+const SOAL = [
+  { n: 1, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Bacalah paragraf berikut. “Membawa botol minum sendiri merupakan kebiasaan sederhana yang bermanfaat. Siswa dapat mengurangi pembelian minuman kemasan. Sampah plastik di lingkungan sekolah pun dapat ditekan.” Ide pokok paragraf tersebut adalah ...", o: ["Siswa membeli minuman kemasan setiap hari.", "Manfaat membawa botol minum sendiri.", "Sampah plastik hanya berasal dari sekolah.", "Botol minum memiliki berbagai bentuk."], k: "B", b: "Kalimat pertama merangkum dua kalimat penjelas. Ide pokoknya ialah manfaat membawa botol sendiri." },
+  { n: 2, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "“Perpustakaan sekolah buka pukul 07.00 sampai 15.00 pada hari kerja.” Pernyataan tersebut termasuk ...", o: ["Opini", "Saran", "Fakta yang dapat diverifikasi", "Ajakan"], k: "C", b: "Jam operasional dapat diperiksa melalui pengumuman atau pengelola perpustakaan." },
+  { n: 3, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Klaim: “Sekolah perlu menambah tempat sampah terpilah.” Bukti paling relevan untuk mendukung klaim itu adalah ...", o: ["Data audit sampah yang menunjukkan banyak sampah tercampur.", "Jumlah siswa yang mengikuti klub musik.", "Warna gedung sekolah yang baru dicat.", "Daftar juara lomba olahraga."], k: "A", b: "Audit sampah berkaitan langsung dengan kebutuhan pemilahan." },
+  { n: 4, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Sebuah paragraf dimulai dengan tiga contoh perilaku hemat air dan diakhiri pernyataan “Karena itu, kebiasaan hemat air perlu diterapkan setiap hari.” Pola paragraf tersebut adalah ...", o: ["Deduktif", "Induktif", "Campuran", "Deskriptif"], k: "B", b: "Gagasan umum muncul di akhir setelah contoh-contoh pendukung." },
+  { n: 5, g: "pg", t: "Pilihan ganda", l: "Sulit", q: "Teks menyebut survei pada 30 siswa di satu kelas menunjukkan 25 siswa suka membaca komik. Simpulan “Semua siswa di sekolah itu gemar membaca komik” tidak tepat karena ...", o: ["Komik bukan bahan bacaan.", "Survei tidak memiliki angka.", "Sampel terbatas tidak mewakili seluruh siswa secara otomatis.", "Simpulan harus selalu berisi opini."], k: "C", b: "Generalisasi seluruh sekolah tidak dapat didasarkan pada satu kelas saja." },
+  { n: 6, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Kalimat yang mengandung opini adalah ...", o: ["Rapat dimulai pukul 10.00.", "Jembatan itu diresmikan pada 2024.", "Menurut saya, taman sekolah perlu diperluas.", "Peserta lomba berjumlah 48 orang."], k: "C", b: "“Menurut saya” dan “perlu” menunjukkan pendapat/rekomendasi." },
+  { n: 7, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Konjungsi yang tepat: “Jalan utama tergenang banjir, ... kendaraan dialihkan ke jalan alternatif.”", o: ["sehingga", "meskipun", "agar", "atau"], k: "A", b: "Klausa kedua menyatakan akibat dari jalan tergenang." },
+  { n: 8, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Dalam kalimat “Program tersebut berhasil karena dukungan warga”, frasa “program tersebut” merupakan ...", o: ["Kata seru", "Rujukan pada program yang telah disebut", "Antonim", "Kalimat utama"], k: "B", b: "“Tersebut” menunjuk unsur yang sudah disebut dalam konteks sebelumnya." },
+  { n: 9, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Poster bertuliskan “Ayo Matikan Lampu Saat Ruangan Kosong!” terutama ditujukan untuk ...", o: ["Warga yang menggunakan ruangan", "Petugas pemadam kebakaran saja", "Pengunjung museum saja", "Pengemudi kendaraan umum"], k: "A", b: "Ajakan terkait penggunaan lampu di ruangan; sasaran utamanya pengguna ruangan." },
+  { n: 10, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Poster hemat energi dipenuhi gambar dekoratif yang tidak berhubungan dan teks kecil sulit dibaca. Penilaian paling tepat adalah ...", o: ["Poster efektif karena penuh warna.", "Poster kurang efektif karena visual dan keterbacaan tidak mendukung pesan.", "Poster pasti benar karena ada slogan.", "Poster tidak memerlukan sasaran."], k: "B", b: "Visual harus relevan dan teks mudah dibaca agar pesan tersampaikan." },
+  { n: 11, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Berita tentang penutupan jalan di sekitar sekolah karena perbaikan jembatan memiliki nilai berita ...", o: ["Kedekatan dan kepentingan", "Hanya hiburan", "Tidak memiliki nilai berita", "Hanya keunikan"], k: "A", b: "Informasi dekat dengan siswa dan berdampak pada perjalanan mereka." },
+  { n: 12, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Unsur ADIKSIMBA yang menjawab pertanyaan “siapa” adalah ...", o: ["Tempat kejadian", "Pihak yang terlibat", "Penyebab peristiwa", "Proses kejadian"], k: "B", b: "Siapa mengidentifikasi pelaku, korban, saksi, atau pihak terkait." },
+  { n: 13, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Dalam berita, paragraf yang merangkum inti peristiwa dan memuat informasi terpenting disebut ...", o: ["Sinopsis", "Kepala berita/teras", "Catatan kaki", "Resensi"], k: "B", b: "Teras atau lead menyajikan inti peristiwa di bagian awal." },
+  { n: 14, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Informasi paling relevan dalam berita tentang gangguan layanan kereta adalah ...", o: ["Warna seragam petugas tahun lalu.", "Rute dan jadwal alternatif bagi penumpang.", "Hobi penulis berita.", "Sejarah semua stasiun di dunia."], k: "B", b: "Rute dan jadwal alternatif membantu pembaca memahami dampak dan tindakan yang diperlukan." },
+  { n: 15, g: "pg", t: "Pilihan ganda", l: "Sulit", q: "Sebuah unggahan menyebut bendungan jebol, tetapi tidak mencantumkan sumber. Langkah paling tepat bagi reporter adalah ...", o: ["Segera menyiarkan agar menjadi yang pertama.", "Mengubah judul agar lebih menarik.", "Memeriksa sumber primer dan mengonfirmasi kepada pihak berwenang serta saksi tepercaya.", "Menyalin unggahan lain yang sama."], k: "C", b: "Klaim berisiko harus diverifikasi melalui sumber kompeten dan bukti silang." },
+  { n: 16, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Bentuk baku yang tepat adalah ...", o: ["Resiko", "Aktifitas", "Ijin", "Risiko"], k: "D", b: "Bentuk baku: risiko." },
+  { n: 17, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Kalimat dengan ejaan yang tepat adalah ...", o: ["Pada hari senin, petugas di terjunkan.", "Pada hari Senin, petugas diterjunkan.", "Pada Hari senin petugas diterjunkan", "Pada hari Senin petugas diTerjunkan."], k: "B", b: "Nama hari kapital; imbuhan di- pada kata kerja ditulis serangkai; tanda titik mengakhiri kalimat." },
+  { n: 18, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Catatan liputan: “Kamis, aula sekolah, 200 siswa, pelatihan kesiapsiagaan gempa, BPBD, simulasi evakuasi.” Kepala berita terbaik adalah ...", o: ["“Kegiatan Seru Digelar di Sekolah!”", "“Sebanyak 200 Siswa Mengikuti Pelatihan Kesiapsiagaan Gempa Bersama BPBD di Aula Sekolah, Kamis.”", "“Gempa Besar Mengguncang Sekolah pada Kamis.”", "“BPBD Pasti Menyelamatkan Semua Siswa.”"], k: "B", b: "Pilihan B memuat inti peristiwa, peserta, mitra, lokasi, dan waktu tanpa menambah fakta." },
+  { n: 19, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Pembuka vlog berita yang paling informatif adalah ...", o: ["“Hai semuanya, jangan lupa like dan subscribe!”", "“Kali ini saya akan membahas sesuatu yang menarik.”", "“Banjir menggenangi dua ruas Jalan Melati sejak pukul enam pagi; petugas mengalihkan kendaraan ke jalur alternatif.”", "“Kalian tidak akan percaya apa yang terjadi!”"], k: "C", b: "Pembuka menyampaikan peristiwa, lokasi, waktu, dan dampak secara langsung." },
+  { n: 20, g: "pg", t: "Pilihan ganda", l: "Sulit", q: "Dalam vlog berita, narasi reporter tidak terdengar karena musik latar terlalu keras. Aspek utama yang perlu diperbaiki adalah ...", o: ["Akurasi angka", "Kualitas audio dan kejelasan informasi", "Sudut pandang cerpen", "Nilai moral tokoh"], k: "B", b: "Audio menghambat penerimaan informasi; musik seharusnya tidak menutupi narasi." },
+  { n: 21, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Cerpen menyebut siaran Proklamasi Kemerdekaan pada 17 Agustus 1945. Peristiwa sejarah yang menjadi latar adalah ...", o: ["Sumpah Pemuda", "Proklamasi Kemerdekaan Indonesia", "Konferensi Asia Afrika", "Reformasi 1998"], k: "B", b: "Tanggal dan peristiwa disebut langsung dalam kutipan." },
+  { n: 22, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "Tema cerita tentang seorang kurir yang mempertaruhkan keselamatan untuk mengirim pesan perjuangan adalah ...", o: ["Warna pakaian kurir", "Keberanian dan pengorbanan dalam perjuangan", "Nama desa tokoh", "Jumlah surat"], k: "B", b: "Tema merumuskan gagasan sentral yang dibangun konflik." },
+  { n: 23, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "“Meskipun persediaan makanannya sedikit, Lila membaginya kepada anak-anak pengungsi.” Watak Lila yang paling kuat ditunjukkan adalah ...", o: ["Egois", "Peduli dan suka menolong", "Ceroboh", "Pemarah"], k: "B", b: "Tindakannya menunjukkan kepedulian dan kemurahan hati." },
+  { n: 24, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Tokoh yang memiliki sifat tegas tetapi juga penyayang dapat disebut memiliki ...", o: ["Watak satu sisi yang tidak berubah", "Sifat yang beragam/kompleks", "Tidak memiliki karakter", "Sudut pandang campuran"], k: "B", b: "Dua sifat berbeda menunjukkan karakter yang tidak sederhana." },
+  { n: 25, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Bagian cerita ketika ketegangan mencapai puncak dan tokoh harus mengambil keputusan penting disebut ...", o: ["Orientasi", "Klimaks", "Pengenalan tokoh", "Ekor berita"], k: "B", b: "Klimaks merupakan puncak konflik/ketegangan." },
+  { n: 26, g: "pg", t: "Pilihan ganda", l: "Sulit", q: "Konflik muncul karena tokoh dituduh menyembunyikan surat. Ia mencari saksi, menemukan bukti, lalu namanya dipulihkan. Penyelesaian ini logis karena ...", o: ["Tidak berkaitan dengan konflik.", "Ada tindakan dan bukti yang menjawab tuduhan.", "Tokoh tiba-tiba menjadi raja.", "Semua masalah hilang tanpa alasan."], k: "B", b: "Resolusi menjawab sebab konflik melalui pencarian bukti." },
+  { n: 27, g: "pg", t: "Pilihan ganda", l: "Mudah", q: "“Dari kejauhan terdengar dentuman. Para warga berlari mencari perlindungan; seorang anak menangis memanggil ibunya.” Suasana kutipan adalah ...", o: ["Riang", "Mencekam", "Santai", "Romantis"], k: "B", b: "Dentuman, kepanikan, dan tangisan menunjukkan suasana mencekam." },
+  { n: 28, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Narator berkata, “Aku melihat Sari menyembunyikan surat itu, tetapi aku tidak tahu apa yang ia pikirkan.” Sudut pandang yang paling tepat adalah ...", o: ["Orang pertama sebagai saksi/pelaku sampingan", "Orang ketiga serba tahu", "Orang ketiga terbatas", "Orang kedua"], k: "A", b: "Narator “aku” hadir sebagai saksi atas tindakan tokoh lain." },
+  { n: 29, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Majas pada kalimat “Angin malam berbisik di sela pepohonan” adalah ...", o: ["Hiperbola", "Personifikasi", "Ironi", "Repetisi"], k: "B", b: "Angin diberi tindakan manusia, yaitu berbisik." },
+  { n: 30, g: "pg", t: "Pilihan ganda", l: "Sedang", q: "Cerita menunjukkan tokoh berbohong untuk menghindari tanggung jawab, lalu kehilangan kepercayaan teman-temannya. Amanat yang paling sesuai adalah ...", o: ["Kebohongan selalu menguntungkan.", "Kejujuran penting untuk menjaga kepercayaan.", "Persahabatan tidak penting.", "Hindari semua keputusan."], k: "B", b: "Pesan ditarik dari tindakan dan akibat yang digambarkan." },
+  { n: 31, g: "pgk", t: "PG kompleks", l: "Sedang", q: "Tentukan setiap pernyataan BENAR atau SALAH tentang paragraf argumentasi: I. Ide pokok selalu berupa kalimat terpanjang. II. Paragraf deduktif umumnya menempatkan kalimat utama di awal. III. Kalimat penjelas dapat berupa alasan atau bukti. IV. Paragraf induktif menempatkan gagasan umum di akhir.", o: null, k: "I = Salah; II = Benar; III = Benar; IV = Benar", b: "I salah: panjang kalimat tidak menentukan ide pokok. II, III, dan IV benar sesuai ciri pola paragraf." },
+  { n: 32, g: "pgk", t: "PG kompleks", l: "Sedang", q: "Pilih pernyataan BENAR atau SALAH tentang fakta dan opini: I. Fakta dapat diperiksa melalui sumber. II. Opini selalu keliru. III. Rekomendasi “sebaiknya” termasuk opini. IV. Angka tanpa sumber pasti merupakan fakta.", o: null, k: "I = Benar; II = Salah; III = Benar; IV = Salah", b: "Fakta dapat diverifikasi; opini adalah pandangan dan tidak otomatis salah; rekomendasi adalah opini; angka tetap perlu sumber." },
+  { n: 33, g: "pgk", t: "PG kompleks", l: "Sedang", q: "Nilai pernyataan tentang berita (BENAR / SALAH): I. Aktual artinya baru atau dekat dengan waktu kejadian. II. ADIKSIMBA meliputi apa, di mana, kapan, siapa, mengapa, bagaimana. III. Teras berita berisi inti peristiwa. IV. Informasi viral tidak perlu diverifikasi.", o: null, k: "I = Benar; II = Benar; III = Benar; IV = Salah", b: "Tiga pernyataan pertama benar; berita viral tetap wajib diverifikasi." },
+  { n: 34, g: "pgk", t: "PG kompleks", l: "Sulit", q: "Pilih pernyataan BENAR atau SALAH tentang cerpen: I. Tema adalah gagasan dasar cerita. II. Amanat identik dengan ringkasan alur. III. Watak dapat digambarkan melalui dialog. IV. Konflik dapat bersifat batin.", o: null, k: "I = Benar; II = Salah; III = Benar; IV = Benar", b: "Tema, dialog sebagai teknik penokohan, dan konflik batin benar. Amanat adalah pesan, bukan ringkasan alur." },
+  { n: 35, g: "pgk", t: "PG kompleks", l: "Sulit", q: "Nilai pernyataan tentang resensi (BENAR / SALAH): I. Sinopsis merangkum isi karya. II. Kritik objektif memerlukan bukti. III. Semua bagian resensi harus berupa pujian. IV. Kelemahan dapat dibahas secara santun dan spesifik.", o: null, k: "I = Benar; II = Benar; III = Salah; IV = Benar", b: "Resensi dapat memuat kelebihan maupun kelemahan; penilaian harus disertai alasan." },
+  { n: 36, g: "bs", t: "Benar/Salah", l: "Mudah", q: "“Simpulan boleh menambahkan data baru yang tidak disebutkan dalam teks asalkan masuk akal.”", o: null, k: "Salah", b: "Simpulan harus berdasarkan informasi dan penalaran dalam teks; data baru tidak boleh ditambahkan tanpa dasar." },
+  { n: 37, g: "bs", t: "Benar/Salah", l: "Sedang", q: "“Kata ‘sehingga’ umumnya menandai hubungan akibat.”", o: null, k: "Benar", b: "“Sehingga” lazim menghubungkan sebab dengan akibat." },
+  { n: 38, g: "bs", t: "Benar/Salah", l: "Sedang", q: "“Dalam berita, unsur penyebab boleh dipastikan oleh reporter tanpa konfirmasi jika dugaan itu tampak kuat.”", o: null, k: "Salah", b: "Penyebab harus diverifikasi; dugaan tidak boleh dinyatakan sebagai fakta." },
+  { n: 39, g: "bs", t: "Benar/Salah", l: "Sedang", q: "“Tokoh protagonis selalu sempurna dan tidak pernah melakukan kesalahan.”", o: null, k: "Salah", b: "Protagonis adalah tokoh pusat/yang diikuti perjuangannya, bukan tokoh yang harus sempurna." },
+  { n: 40, g: "bs", t: "Benar/Salah", l: "Mudah", q: "“Latar suasana dapat dibuktikan melalui diksi, tindakan, dan reaksi tokoh.”", o: null, k: "Benar", b: "Unsur-unsur tersebut membantu membangun atmosfer cerita." },
+  { n: 41, g: "uraian", t: "Analisis teks", l: "Sedang", q: "Bacalah: “Sekolah menyediakan 15 unit tempat sampah terpilah. Namun, sebagian siswa masih mencampur sampah organik dan anorganik. Karena itu, sekolah perlu mengadakan edukasi pemilahan.” Tentukan satu fakta, satu opini, dan hubungan konjungsi “namun” serta “karena itu”.", o: null, k: "Fakta: sekolah menyediakan 15 unit tempat sampah terpilah. Opini: sekolah perlu mengadakan edukasi pemilahan. “Namun” = pertentangan; “karena itu” = akibat/simpulan.", b: "Data jumlah unit dapat diperiksa; “perlu” adalah rekomendasi. Konjungsi menghubungkan pertentangan dan konsekuensi." },
+  { n: 42, g: "uraian", t: "Analisis teks", l: "Sedang", q: "Bacalah: “Pada Selasa pagi, petugas pemadam memadamkan kebakaran di Pasar Baru. Api diduga berasal dari korsleting, tetapi penyebab masih diselidiki. Tidak ada korban jiwa; 12 kios mengalami kerusakan.” Tuliskan ADIKSIMBA yang dapat ditemukan dan satu informasi yang belum pasti.", o: null, k: "Apa: kebakaran dipadamkan. Di mana: Pasar Baru. Kapan: Selasa pagi. Siapa: petugas pemadam (pemilik kios tidak disebut). Mengapa: dugaan korsleting (belum pasti). Bagaimana: petugas memadamkan; 12 kios rusak; tidak ada korban jiwa.", b: "Kata “diduga” dan “masih diselidiki” menandai penyebab belum dipastikan. Jangan mengubah dugaan menjadi fakta." },
+  { n: 43, g: "uraian", t: "Analisis teks", l: "Sulit", q: "Bacalah: “Aku mengikuti ayah menyusuri jalan yang lengang. Dari rumah-rumah terdengar tangis tertahan. Ayah menggenggam tanganku erat, lalu berbisik, ‘Jangan menoleh.’” Tentukan sudut pandang dan suasana disertai bukti.", o: null, k: "Sudut pandang orang pertama (narator “aku” sebagai tokoh yang mengalami peristiwa). Suasana tegang/mencekam; bukti: jalan lengang, tangis tertahan, ayah menggenggam tangan dan berbisik “Jangan menoleh”.", b: "Kata “aku” dipakai sebagai narator, dan detail lingkungan serta tindakan membangun ketegangan." },
+  { n: 44, g: "uraian", t: "Analisis teks", l: "Sedang", q: "Bacalah: “Warga kampung mengumpulkan beras dan pakaian untuk keluarga yang kehilangan rumah. Ketua kampung memastikan bantuan dibagi sesuai kebutuhan.” Identifikasi nilai kehidupan paling dominan dan hubungkan dengan contoh kehidupan sehari-hari.", o: null, k: "Nilai sosial: kepedulian, solidaritas, dan gotong royong. Penerapan: menggalang bantuan bagi korban bencana atau membantu tetangga yang membutuhkan.", b: "Tindakan dilakukan bersama untuk membantu orang lain; itu menunjukkan relasi sosial dan solidaritas." },
+  { n: 45, g: "uraian", t: "Analisis resensi", l: "Sulit", q: "Perhatikan kalimat resensi: “Tokoh utama terasa kurang berkembang karena setelah konflik besar ia berubah sikap tanpa dialog atau peristiwa yang menjelaskan perubahan tersebut.” Apakah penilaian ini objektif? Jelaskan.", o: null, k: "Relatif objektif karena menyebut aspek yang dinilai (perkembangan tokoh), bukti/masalah spesifik (perubahan tanpa penjelasan), dan dampaknya terhadap kewajaran karakter.", b: "Kritik memiliki alasan yang dapat diperiksa dalam teks, bukan sekadar menyebut cerpen buruk." },
+  { n: 46, g: "uraian", t: "Memperbaiki kalimat", l: "Mudah", q: "Perbaiki kalimat berikut: “Pada hari senin para siswa di kumpulkan di aula.”", o: null, k: "Pada hari Senin, para siswa dikumpulkan di aula.", b: "Nama hari memakai huruf kapital; imbuhan di- pada kata kerja “dikumpulkan” ditulis serangkai; koma memisahkan keterangan awal." },
+  { n: 47, g: "uraian", t: "Memperbaiki paragraf", l: "Sulit", q: "Perhatikan paragraf: “Membaca membantu siswa memperluas wawasan. Buku sejarah mengenalkan peristiwa masa lalu. Harga cabai di pasar naik pada pekan ini. Dengan membaca, siswa dapat memahami sudut pandang yang beragam.” Kalimat mana yang tidak padu? Jelaskan.", o: null, k: "“Harga cabai di pasar naik pada pekan ini.”", b: "Kalimat itu tidak mendukung topik manfaat membaca; kalimat lainnya menjelaskan manfaat membaca dan buku sejarah." },
+  { n: 48, g: "pg", t: "Makna kata", l: "Sedang", q: "Dalam kalimat “Pemerintah melakukan evakuasi untuk mengurangi risiko korban”, makna kata “evakuasi” paling tepat adalah ...", o: ["Pemindahan orang dari tempat berbahaya ke tempat aman", "Pengumpulan barang dagangan", "Pembangunan gedung baru", "Penutupan jalan sementara"], k: "A", b: "Konteks risiko korban menunjukkan tindakan memindahkan orang dari lokasi berbahaya." },
+  { n: 49, g: "pg", t: "Menentukan struktur", l: "Sedang", q: "Sebuah resensi diawali identitas cerpen, lalu merangkum tokoh dan konflik, kemudian menilai dialog dan alurnya. Bagian yang merangkum tokoh dan konflik disebut ...", o: ["Sinopsis", "Identitas", "Rekomendasi", "Judul resensi"], k: "A", b: "Sinopsis merangkum isi/konflik cerita." },
+  { n: 50, g: "pg", t: "Simpulan", l: "Sulit", q: "Bacalah: “Sejak jalur sepeda dibuka, sekolah mencatat lebih banyak siswa datang dengan sepeda. Pihak sekolah juga menyediakan tempat parkir sepeda dan kampanye keselamatan. Program akan dievaluasi pada akhir semester.” Simpulan paling tepat adalah ...", o: ["Semua siswa kini selalu bersepeda.", "Jalur sepeda dan dukungan fasilitas berkaitan dengan meningkatnya penggunaan sepeda di kalangan siswa, dan program masih akan dievaluasi.", "Program pasti berhasil untuk seluruh sekolah lain.", "Sepeda merupakan satu-satunya kendaraan yang aman."], k: "B", b: "B merangkum informasi yang dinyatakan tanpa generalisasi atau klaim tambahan." }
+];
+
+const CHECKS = [
+  "Saya dapat menentukan ide pokok dan pola deduktif, induktif, campuran.",
+  "Saya dapat membedakan fakta, opini, klaim, alasan, bukti, dan simpulan.",
+  "Saya dapat menemukan kalimat tidak padu, konjungsi, sinonim, antonim, dan rujukan.",
+  "Saya dapat menilai poster berdasarkan pesan, sasaran, visual, dan slogan.",
+  "Saya dapat menentukan nilai berita dan menjawab ADIKSIMBA dari teks.",
+  "Saya dapat membedakan teras dan tubuh berita, serta menyusun kepala berita.",
+  "Saya tahu cara memverifikasi sumber, angka, kutipan, foto, dan video.",
+  "Saya dapat memperbaiki kata baku, huruf kapital, kata depan/imbuhan, dan tanda baca.",
+  "Saya dapat mengevaluasi vlog berita dari aspek audio, visual, penyampaian, akurasi, dan etika.",
+  "Saya dapat mengidentifikasi latar sejarah, tema, tokoh, penokohan, alur, konflik, latar suasana, sudut pandang, majas, amanat.",
+  "Saya dapat membedakan nilai politik, moral, agama, sosial.",
+  "Saya dapat mengidentifikasi sinopsis, kelebihan, kelemahan, serta menilai kritik resensi dengan bukti."
+];
+
 (function () {
   'use strict';
   var root = document.documentElement;
-  root.style.setProperty('--al', MAPEL.al);
-  root.style.setProperty('--ad', MAPEL.ad);
-  document.getElementById('m-code').textContent = MAPEL.num + ' / ' + MAPEL.code;
-  document.getElementById('f-code').textContent = MAPEL.code;
-  document.getElementById('m-name').textContent = MAPEL.name;
+  var $ = function (id) { return document.getElementById(id); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
 
-  var KEY = 'asas.kisi.' + MAPEL.id;
-  var done = {};
-  try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
+  /* ---------- render pemetaan 1-26 ---------- */
+  var mapList = $('map-list'), qMap = $('q-map'), emptyMap = $('empty-map'), mapCnt = $('map-count');
+  mapList.innerHTML = PEMETAAN.map(function (it) {
+    return '<div class="map-item" data-search="' + esc((it.n + ' ' + it.j + ' ' + it.m + ' ' + it.p + ' ' + it.c + ' ' + it.a + ' ' + it.i).toLowerCase()) + '">' +
+      '<div class="map-n">' + pad(it.n) + '</div>' +
+      '<div><div class="map-title">' + esc(it.j) + '</div>' +
+        '<div class="map-grid">' +
+          '<div><span class="k">Diuji</span>' + esc(it.m) + '</div>' +
+          '<div><span class="k">Penjelasan</span>' + esc(it.p) + '</div>' +
+          '<div><span class="k">Contoh</span>' + esc(it.c) + '</div>' +
+          '<div><span class="k">Analisis</span>' + esc(it.a) + '</div>' +
+        '</div>' +
+        '<div class="map-ingat"><b>Ingat:</b> ' + esc(it.i) + '</div>' +
+      '</div></div>';
+  }).join('');
 
-  // ID poin dibuat dari teks bab + teks poin, jadi urutan boleh diubah tanpa merusak centang
-  function pid(bab, poin) { return bab + '::' + poin; }
-
-  var list = document.getElementById('list');
-  var q = document.getElementById('q');
-
-  function render() {
-    var term = q.value.trim().toLowerCase();
-    list.innerHTML = '';
-    var shown = 0;
-
-    KISI.forEach(function (b, i) {
-      var poin = b.poin || [];
-      var matchBab = !term || b.bab.toLowerCase().indexOf(term) !== -1;
-      var visible = matchBab ? poin : poin.filter(function (p) { return p.toLowerCase().indexOf(term) !== -1; });
-      if (!matchBab && !visible.length) return;
-      shown++;
-
-      var d = poin.filter(function (p) { return done[pid(b.bab, p)]; }).length;
-      var sec = document.createElement('section');
-      sec.className = 'bab' + (poin.length && d === poin.length ? ' complete' : '');
-
-      var num = document.createElement('div');
-      num.className = 'bab-num'; num.textContent = String(i + 1).padStart(2, '0');
-
-      var body = document.createElement('div');
-      var head = document.createElement('div'); head.className = 'bab-head';
-      var h2 = document.createElement('h2'); h2.textContent = b.bab;
-      var pr = document.createElement('span'); pr.className = 'bab-prog'; pr.textContent = d + '/' + poin.length;
-      head.appendChild(h2); head.appendChild(pr); body.appendChild(head);
-
-      var ul = document.createElement('ul'); ul.className = 'poin';
-      visible.forEach(function (p, j) {
-        var id = pid(b.bab, p);
-        var li = document.createElement('li'); if (done[id]) li.className = 'done';
-        var cb = document.createElement('input');
-        cb.type = 'checkbox'; cb.className = 'chk'; cb.id = 'p' + i + '-' + j; cb.checked = !!done[id];
-        cb.addEventListener('change', function () {
-          if (cb.checked) done[id] = 1; else delete done[id];
-          save(); render();
-        });
-        var lb = document.createElement('label'); lb.htmlFor = cb.id; lb.textContent = p;
-        li.appendChild(cb); li.appendChild(lb); ul.appendChild(li);
-      });
-      body.appendChild(ul);
-
-      if (b.catatan) {
-        var c = document.createElement('div'); c.className = 'catatan';
-        var cl = document.createElement('span'); cl.className = 'label'; cl.textContent = 'Catatan';
-        c.appendChild(cl); c.appendChild(document.createTextNode(b.catatan));
-        body.appendChild(c);
-      }
-
-      sec.appendChild(num); sec.appendChild(body); list.appendChild(sec);
+  qMap.addEventListener('input', function () {
+    var t = qMap.value.trim().toLowerCase(), n = 0;
+    mapList.querySelectorAll('.map-item').forEach(function (el) {
+      var ok = !t || el.getAttribute('data-search').indexOf(t) !== -1;
+      el.style.display = ok ? '' : 'none';
+      if (ok) n++;
     });
-
-    if (!shown) {
-      var e = document.createElement('div'); e.className = 'empty';
-      e.textContent = KISI.length ? 'Tidak ada hasil untuk "' + q.value + '".' : 'Belum ada kisi-kisi. Tambahkan di bagian KISI pada file ini.';
-      list.appendChild(e);
-    }
-    summary();
-  }
-
-  function summary() {
-    var total = 0, d = 0;
-    KISI.forEach(function (b) { (b.poin || []).forEach(function (p) { total++; if (done[pid(b.bab, p)]) d++; }); });
-    var pct = total ? Math.round(d / total * 100) : 0;
-    document.getElementById('m-bab').textContent = String(KISI.length).padStart(2, '0');
-    document.getElementById('m-done').textContent = d + '/' + total;
-    document.getElementById('m-pct').textContent = pct + '%';
-    document.getElementById('top').style.setProperty('--p', pct + '%');
-  }
-
-  q.addEventListener('input', render);
-  document.getElementById('reset').addEventListener('click', function () {
-    if (confirm('Hapus semua centang untuk ' + MAPEL.name + '?')) { done = {}; save(); render(); }
+    mapCnt.textContent = n + '/' + PEMETAAN.length + ' kompetensi';
+    emptyMap.style.display = n ? 'none' : 'block';
   });
 
+  /* ---------- render 50 soal ---------- */
+  var sList = $('soal-list'), qSoal = $('q-soal'), fSoal = $('f-soal'), emptySoal = $('empty-soal'), sCnt = $('soal-count');
+  var LBL = ['A', 'B', 'C', 'D'];
+  sList.innerHTML = SOAL.map(function (s) {
+    var opts = s.o ? '<ul class="opts">' + s.o.map(function (o, i) { return '<li><b>' + LBL[i] + '.</b>' + esc(o) + '</li>'; }).join('') + '</ul>' : '';
+    return '<div class="soal" data-g="' + s.g + '" data-search="' + esc((s.n + ' ' + s.t + ' ' + s.q + ' ' + (s.o ? s.o.join(' ') : '') + ' ' + s.k + ' ' + s.b).toLowerCase()) + '">' +
+      '<div class="soal-n">' + pad(s.n) + '</div>' +
+      '<div>' +
+        '<div class="soal-tags"><span class="tag">' + esc(s.t) + '</span><span class="tag">' + esc(s.l) + '</span></div>' +
+        '<div class="soal-q">' + esc(s.q) + '</div>' + opts +
+        '<div class="kunci-box"><div class="ans">Kunci: ' + esc(s.k) + '</div><div>' + esc(s.b) + '</div></div>' +
+      '</div>' +
+      '<button type="button" class="kbtn">Kunci</button>' +
+    '</div>';
+  }).join('');
+
+  sList.addEventListener('click', function (e) {
+    var b = e.target.closest('.kbtn');
+    if (!b) return;
+    var row = b.closest('.soal');
+    row.classList.toggle('open');
+    b.textContent = row.classList.contains('open') ? 'Tutup' : 'Kunci';
+  });
+
+  function filterSoal() {
+    var t = qSoal.value.trim().toLowerCase(), g = fSoal.value, n = 0;
+    sList.querySelectorAll('.soal').forEach(function (el) {
+      var ok = (g === 'all' || el.getAttribute('data-g') === g) && (!t || el.getAttribute('data-search').indexOf(t) !== -1);
+      el.style.display = ok ? '' : 'none';
+      if (ok) n++;
+    });
+    sCnt.textContent = n + '/' + SOAL.length + ' soal';
+    emptySoal.style.display = n ? 'none' : 'block';
+  }
+  qSoal.addEventListener('input', filterSoal);
+  fSoal.addEventListener('change', filterSoal);
+
+  /* ---------- show all keys ---------- */
+  var showKeys = $('show-keys');
+  try { showKeys.checked = localStorage.getItem('asas.bin.showKeys') === '1'; } catch (e) {}
+  function applyKeys() { document.body.classList.toggle('show-keys', showKeys.checked); }
+  showKeys.addEventListener('change', function () {
+    try { localStorage.setItem('asas.bin.showKeys', showKeys.checked ? '1' : '0'); } catch (e) {}
+    applyKeys();
+  });
+  applyKeys();
+
+  /* ---------- checklist ujian ---------- */
+  var CHK_KEY = 'asas.bin.chk';
+  var chkState = {};
+  try { chkState = JSON.parse(localStorage.getItem(CHK_KEY)) || {}; } catch (e) {}
+  var chkList = $('chklist');
+  chkList.innerHTML = CHECKS.map(function (c, i) {
+    var on = !!chkState[i];
+    return '<li class="' + (on ? 'done' : '') + '"><input type="checkbox" class="chk" id="ck-' + i + '" data-i="' + i + '" ' + (on ? 'checked' : '') + '><label for="ck-' + i + '">' + esc(c) + '</label></li>';
+  }).join('');
+  chkList.addEventListener('change', function (e) {
+    var cb = e.target.closest('.chk');
+    if (!cb) return;
+    var i = cb.getAttribute('data-i');
+    if (cb.checked) chkState[i] = 1; else delete chkState[i];
+    cb.closest('li').classList.toggle('done', cb.checked);
+    try { localStorage.setItem(CHK_KEY, JSON.stringify(chkState)); } catch (err) {}
+  });
+
+  /* ---------- mastered state ---------- */
+  var KEY = 'asas.kisi.bin';
+  var SECS = ['bab-1', 'bab-2', 'bab-3', 'pemetaan', 'simulasi', 'ringkasan'];
+  var mastered = {};
+  try { mastered = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  if (typeof mastered !== 'object' || Array.isArray(mastered)) mastered = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(mastered)); } catch (e) {} }
+
+  function refresh() {
+    var n = 0;
+    SECS.forEach(function (id) {
+      var on = !!mastered[id];
+      if (on) n++;
+      var btn = document.querySelector('.master[data-id="' + id + '"]');
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+      var a = document.querySelector('.toc a[data-id="' + id + '"]');
+      if (a) a.classList.toggle('mastered', on);
+    });
+    $('m-done').textContent = n + '/' + SECS.length;
+    $('top').style.setProperty('--p', (n / SECS.length * 100) + '%');
+  }
+
+  $('content').addEventListener('click', function (e) {
+    var m = e.target.closest('.master');
+    if (!m) return;
+    var id = m.getAttribute('data-id');
+    if (mastered[id]) delete mastered[id]; else mastered[id] = 1;
+    save(); refresh();
+  });
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua tanda "dikuasai" untuk Bahasa Indonesia?')) { mastered = {}; save(); refresh(); }
+  });
+
+  /* ---------- TOC ---------- */
+  var tocBox = $('toc-box');
+  if (window.matchMedia('(min-width: 961px)').matches) tocBox.open = true;
+  $('toc').addEventListener('click', function (e) {
+    if (e.target.closest('a') && !window.matchMedia('(min-width: 961px)').matches) tocBox.open = false;
+  });
+
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+          var a = links[en.target.id]; if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('section.sec').forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- theme ---------- */
   function themeLabel() {
     var dark = root.getAttribute('data-theme') === 'dark';
-    document.getElementById('theme-text').textContent = dark ? 'Gelap' : 'Terang';
-    document.getElementById('theme-toggle').setAttribute('aria-pressed', String(dark));
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
   }
-  document.getElementById('theme-toggle').addEventListener('click', function () {
+  $('theme-toggle').addEventListener('click', function () {
     var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('asas.theme', next); } catch (e) {}
@@ -279,7 +973,7 @@ const KISI = [
   });
 
   themeLabel();
-  render();
+  refresh();
 })();
 </script>
 </body>
