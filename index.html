@@ -240,7 +240,7 @@
     <div class="masthead">
       <h1>Portal Belajar<br>ASAS</h1>
       <div class="meta">
-        <div class="meta-row"><span class="label">Mata pelajaran</span><span>09</span></div>
+        <div class="meta-row"><span class="label">Mata pelajaran</span><span>10</span></div>
         <div class="meta-row"><span class="label">Target hari ini</span><span id="meta-target">0/0</span></div>
         <div class="meta-row"><span class="label">Penyimpanan</span><span>localStorage</span></div>
       </div>
@@ -312,7 +312,8 @@
     kim:  '<path d="M9 3h6M10 3v6.5L4.6 18.6A1.6 1.6 0 0 0 6 21h12a1.6 1.6 0 0 0 1.4-2.4L14 9.5V3"/><path d="M7.2 15h9.6"/>',
     sej:  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     bin:  '<path d="M3 5h6a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H21z"/>',
-    big:  '<path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M9 13l3-6 3 6M10 11h4"/>'
+    big:  '<path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M9 13l3-6 3 6M10 11h4"/>',
+    sbd:  '<rect x="3" y="4" width="18" height="16"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-5 4 4 3-3 6 4"/>'
   };
 
   var SUBJECTS = [
@@ -324,7 +325,8 @@
     { id: 'kim',  code: 'KIM',   name: 'Kimia',             file: 'kimia.html',            al: '#A12E28', ad: '#E07E74' },
     { id: 'sej',  code: 'SEJ',   name: 'Sejarah',           file: 'sejarah.html',          al: '#86561A', ad: '#CFA062' },
     { id: 'bin',  code: 'B.IND', name: 'Bahasa Indonesia',  file: 'bindonesia.html',       al: '#982D57', ad: '#D886A6' },
-    { id: 'big',  code: 'B.ING', name: 'Bahasa Inggris',    file: 'binggris.html',         al: '#3B4859', ad: '#9DAABD' }
+    { id: 'big',  code: 'B.ING', name: 'Bahasa Inggris',    file: 'binggris.html',         al: '#3B4859', ad: '#9DAABD' },
+    { id: 'sbd',  code: 'SBD',   name: 'Seni Budaya',       file: 'senibudaya.html',       al: '#734B6D', ad: '#C99BC2' }
   ];
   var BY_ID = {};
   SUBJECTS.forEach(function (s) { BY_ID[s.id] = s; });

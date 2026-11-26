@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seni Budaya — Portal Belajar ASAS</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --sans: "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --gap: 24px;
+    --pad: clamp(16px, 4vw, 48px);
+    --al: #734B6D;
+    --ad: #C99BC2;
+  }
+  html[data-theme="light"] {
+    --bg: #FAF9F6; --surface: #F2F0EA; --fg: #141416; --muted: #6B6A65; --line: #DEDBD3; --strong: #141416;
+    --a: var(--al); color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    --bg: #141416; --surface: #1B1B1E; --fg: #ECEAE5; --muted: #8E8D88; --line: #2C2C30; --strong: #ECEAE5;
+    --a: var(--ad); color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
+  }
+  *, *::before, *::after { transition: border-color .25s ease, background-color .25s ease; }
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 var(--pad); }
+  b, strong { font-weight: 600; }
+
+  /* header */
+  header.top { border-bottom: 1px solid var(--strong); position: relative; }
+  header.top::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .back:hover { color: var(--fg); }
+  .toggle {
+    display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--line);
+    padding: 6px 10px 6px 8px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .toggle:hover { border-color: var(--strong); }
+  .switch { position: relative; width: 30px; height: 16px; border: 1px solid var(--strong); }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 10px; height: 10px; background: var(--strong); transition: transform .25s ease; }
+  html[data-theme="dark"] .switch::after { transform: translateX(14px); }
+  .masthead { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: clamp(28px, 5vw, 56px) 0 clamp(20px, 3vw, 32px); align-items: end; }
+  .masthead .t { grid-column: span 8; }
+  .code { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .code i, .sq { width: 8px; height: 8px; background: var(--a); display: inline-block; flex: none; }
+  h1 { margin: 0; font-size: clamp(32px, 5.4vw, 60px); line-height: 1.02; letter-spacing: -.035em; font-weight: 700; }
+  .subtitle { margin-top: 10px; color: var(--muted); }
+  .meta { grid-column: span 4; display: grid; gap: 6px; }
+  .meta-row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 6px; }
+  .meta-row span:last-child { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  /* layout */
+  .layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); padding: 32px 0 64px; }
+  aside.side { grid-column: span 3; }
+  main.content { grid-column: span 9; min-width: 0; }
+  .side-inner { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding-right: 4px; }
+  details.toc > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--strong); padding: 10px 0; }
+  details.toc > summary::-webkit-details-marker { display: none; }
+  details.toc > summary .chev { font-family: var(--mono); color: var(--muted); }
+  details.toc[open] > summary .chev { transform: rotate(180deg); }
+  .toc-group { margin-top: 12px; }
+  .toc-group .label { display: block; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .toc a { display: grid; grid-template-columns: 26px 1fr 10px; gap: 8px; align-items: center; padding: 7px 0 7px 8px; border-left: 2px solid transparent; font-size: 14px; color: var(--muted); }
+  .toc a:hover { color: var(--fg); }
+  .toc a.active { color: var(--fg); border-left-color: var(--a); }
+  .toc a .n { font-family: var(--mono); font-size: 12px; }
+  .toc a .st { width: 8px; height: 8px; border: 1px solid var(--line); }
+  .toc a.mastered .st { background: var(--a); border-color: var(--a); }
+  .side-tools { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 12px; }
+  .switch-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; }
+  .switch-row input { position: absolute; opacity: 0; pointer-events: none; }
+  .switch-row .switch { flex: none; }
+  .switch-row input:checked + .switch::after { transform: translateX(14px); }
+  .switch-row input:focus-visible + .switch { outline: 1px solid var(--strong); outline-offset: 2px; }
+  .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-align: left; }
+  .link-btn:hover { color: var(--fg); }
+
+  /* guide */
+  .guide { border: 1px solid var(--line); border-left: 2px solid var(--a); padding: 16px 18px; margin-bottom: 28px; background: var(--surface); }
+  .guide .label { display: block; margin-bottom: 8px; color: var(--fg); }
+  .guide ul { margin: 0; padding: 0 0 0 18px; font-size: 14px; }
+  .guide li { margin-bottom: 4px; }
+  .guide .note { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
+
+  /* sections */
+  .sec { border-top: 1px solid var(--strong); padding: 16px 0 48px; }
+  .sec-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sec-meta .label { display: inline-flex; align-items: center; gap: 8px; }
+  .sec-title { margin: 14px 0 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 700; }
+  .sec-intro { margin: 12px 0 0; max-width: 72ch; color: var(--muted); }
+  .master {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--line); padding: 5px 10px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: transparent;
+  }
+  .master:hover { border-color: var(--strong); }
+  .master .box { width: 12px; height: 12px; border: 1px solid var(--strong); display: inline-grid; place-items: center; }
+  .master[aria-pressed="true"] { border-color: var(--a); }
+  .master[aria-pressed="true"] .box { background: var(--a); border-color: var(--a); }
+
+  .sub { display: flex; align-items: baseline; gap: 10px; margin: 32px 0 14px; font-size: 13px; font-family: var(--mono); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sub .k { color: var(--fg); }
+
+  .callout { border: 1px solid var(--line); background: var(--surface); padding: 12px 16px; margin: 14px 0; font-size: 14px; }
+  .callout.warn { border-left: 2px solid var(--a); }
+  .callout .label { display: inline-flex; align-items: center; gap: 8px; color: var(--fg); margin-right: 8px; }
+  .ingat { margin-top: 18px; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; border-top: 1px solid var(--strong); border-bottom: 1px solid var(--strong); padding: 12px 0; font-size: 14.5px; }
+  .ingat .label { color: var(--fg); display: inline-flex; gap: 8px; align-items: center; }
+
+  ul.clean { margin: 8px 0; padding: 0; list-style: none; }
+  ul.clean li { padding: 6px 0 6px 16px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.clean li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+  ol.num { margin: 8px 0; padding: 0; list-style: none; counter-reset: n; }
+  ol.num li { counter-increment: n; padding: 7px 0 7px 28px; position: relative; border-bottom: 1px solid var(--line); }
+  ol.num li::before { content: counter(n, decimal-leading-zero); position: absolute; left: 0; top: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .two > div { min-width: 0; }
+
+  /* tables */
+  .table-wrap { overflow-x: auto; margin: 12px 0; border-top: 1px solid var(--strong); }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.tbl th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--strong); padding: 10px 12px 10px 0; white-space: nowrap; }
+  table.tbl td { border-bottom: 1px solid var(--line); padding: 10px 12px 10px 0; vertical-align: top; }
+  table.tbl td.mono { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  /* search / filter bars */
+  .tools-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 16px 0; flex-wrap: wrap; }
+  .search { flex: 1 1 220px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); padding: 0 10px; }
+  .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.25; flex: none; }
+  .search input { border: 0; background: transparent; padding: 9px 0; outline: none; width: 100%; }
+  .search input::placeholder { color: var(--muted); }
+  .sel { border: 1px solid var(--line); background: transparent; padding: 8px 10px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
+  .sel option { background: var(--bg); color: var(--fg); }
+
+  /* indikator 1-40 */
+  .ind-list { border-top: 1px solid var(--line); }
+  .ind { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .ind-n { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+  .ind-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .ind-meta { font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+  .ind-mat { font-size: 14px; }
+  .ind-ingat { margin-top: 8px; padding-left: 10px; border-left: 2px solid var(--a); font-size: 13.5px; }
+  .ind-ex { display: none; margin-top: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; }
+  .ind-ex .q { font-weight: 500; margin-bottom: 6px; }
+  .ind.open .ind-ex, body.show-keys .ind-ex { display: block; }
+  body.show-keys .kbtn { visibility: hidden; }
+
+  /* 20 soal tambahan */
+  .soal-list { border-top: 1px solid var(--line); }
+  .soal { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .soal-n { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+  .soal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; border: 1px solid var(--line); padding: 1px 6px; color: var(--muted); }
+  .soal-q { font-weight: 500; }
+  .opts { margin: 8px 0 0; padding: 0; list-style: none; font-size: 14px; color: var(--muted); display: grid; gap: 3px; }
+  .opts li b { color: var(--fg); font-family: var(--mono); font-size: 12.5px; margin-right: 6px; }
+  .kunci-box { display: none; margin-top: 10px; padding: 10px 12px; border-left: 2px solid var(--a); background: var(--surface); font-size: 14px; }
+  .kunci-box .ans { font-family: var(--mono); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .soal.open .kunci-box, body.show-keys .kunci-box { display: block; }
+  .kbtn { border: 1px solid var(--line); background: transparent; padding: 4px 10px; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .kbtn:hover { border-color: var(--strong); }
+  .empty-search { padding: 20px 0; color: var(--muted); display: none; }
+
+  /* checklist */
+  ul.chklist { list-style: none; margin: 8px 0 0; padding: 0; border-top: 1px solid var(--line); }
+  ul.chklist li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .chk { appearance: none; -webkit-appearance: none; margin: 3px 0 0; width: 16px; height: 16px; border: 1px solid var(--strong); background: transparent; cursor: pointer; display: grid; place-items: center; }
+  .chk::after { content: ""; width: 8px; height: 4px; border-left: 1.5px solid var(--bg); border-bottom: 1.5px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+  .chk:checked { background: var(--strong); }
+  .chk:checked::after { opacity: 1; }
+  ul.chklist label { cursor: pointer; }
+  ul.chklist li.done label { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  footer { border-top: 1px solid var(--strong); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    aside.side, main.content, .masthead .t, .meta { grid-column: 1 / -1; }
+    .side-inner { position: static; max-height: none; overflow: visible; }
+  }
+  @media (max-width: 680px) {
+    body { font-size: 14px; }
+    .two { grid-template-columns: 1fr; }
+    .ind, .soal { grid-template-columns: 32px 1fr; }
+    .kbtn { grid-column: 2; justify-self: start; }
+  }
+  @media print {
+    aside.side, .bar, .kbtn, .master, .tools-bar, footer { display: none !important; }
+    .ind-ex, .kunci-box { display: block !important; }
+    main.content { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="back label" href="index.html">&larr; Indeks</a>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+      </button>
+    </div>
+    <div class="masthead">
+      <div class="t">
+        <div class="label code"><i></i>10 / SBD</div>
+        <h1>Seni Budaya</h1>
+        <div class="subtitle">Seni Rupa Kelas XI &middot; Materi Lengkap, Pembahasan 1–40 &amp; 20 Soal Latihan</div>
+      </div>
+      <div class="meta">
+        <div class="meta-row"><span class="label">Bab / Bagian</span><span>05 Bab + 03 Bonus</span></div>
+        <div class="meta-row"><span class="label">Bagian dikuasai</span><span id="m-done">0/8</span></div>
+        <div class="meta-row"><span class="label">Indikator / Latihan</span><span>40 / 20</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="layout">
+    <aside class="side">
+      <div class="side-inner">
+        <details class="toc" id="toc-box">
+          <summary><span class="label">Daftar isi</span><span class="chev">&darr;</span></summary>
+          <nav class="toc" id="toc" aria-label="Daftar bagian">
+            <div class="toc-group">
+              <span class="label">Bagian I — Materi Inti</span>
+              <a href="#bab-1" data-id="bab-1"><span class="n">01</span><span>Teknik Seni Rupa 2D</span><span class="st"></span></a>
+              <a href="#bab-2" data-id="bab-2"><span class="n">02</span><span>Teknik &amp; Proses Batik</span><span class="st"></span></a>
+              <a href="#bab-3" data-id="bab-3"><span class="n">03</span><span>Motif Batik Daerah</span><span class="st"></span></a>
+              <a href="#bab-4" data-id="bab-4"><span class="n">04</span><span>Unsur, Warna &amp; Prinsip</span><span class="st"></span></a>
+              <a href="#bab-5" data-id="bab-5"><span class="n">05</span><span>Tokoh &amp; Aliran Lukis</span><span class="st"></span></a>
+            </div>
+            <div class="toc-group">
+              <span class="label">Bagian II–IV — Evaluasi</span>
+              <a href="#indikator" data-id="indikator"><span class="n">II</span><span>Pembahasan 1–40</span><span class="st"></span></a>
+              <a href="#latihan" data-id="latihan"><span class="n">III</span><span>20 Soal Latihan</span><span class="st"></span></a>
+              <a href="#ringkasan" data-id="ringkasan"><span class="n">IV</span><span>Ringkasan &amp; Checklist</span><span class="st"></span></a>
+            </div>
+          </nav>
+        </details>
+        <div class="side-tools">
+          <label class="switch-row">
+            <span class="label">Buka semua contoh &amp; kunci</span>
+            <input type="checkbox" id="show-keys"><span class="switch" aria-hidden="true"></span>
+          </label>
+          <button class="link-btn" id="reset" type="button">Reset tanda dikuasai</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="guide">
+        <span class="label">Panduan Penggunaan Modul</span>
+        <ul>
+          <li><b>Teknik gambar:</b> latih mengenali jejak visual — titik (pointilis), garis (arsir/linear), gosokan (dusel), bidang warna rata (blok), sapuan transparan (aquarel), atau pekat (plakat).</li>
+          <li><b>Batik:</b> hafalkan hubungan alat, bahan, proses, dan hasil motif; jangan tertukar antara <i>colet, celup ikat, cap, tulis,</i> dan <i>nglorod</i>.</li>
+        </ul>
+        <div class="note"><b>Catatan nomor kisi-kisi:</b> Pada baris indikator No. 12 (batik teknik colet), dokumen sumber tertulis nomor 11. Di sini urutan 1–40 dipertahankan lengkap agar tidak ada indikator yang hilang.</div>
+      </div>
+
+      <!-- ===================== BAB 1 ===================== -->
+      <section class="sec" id="bab-1">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 1 &middot; Teknik Berkarya</span>
+          <button type="button" class="master" data-id="bab-1" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Teknik Berkarya Seni Rupa Dua Dimensi</h2>
+        <p class="sec-intro">Karya visual berdimensi panjang dan lebar pada bidang permukaan (kertas, kanvas, kain). Kenali teknik dari jejak visualnya, bukan hanya nama medianya.</p>
+
+        <h3 class="sub"><span class="k">1.2</span> Tujuh Teknik Utama</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Teknik</th><th>Cara Kerja</th><th>Tanda Visual / Hasil</th><th>Kunci Identifikasi</th></tr></thead>
+            <tbody>
+              <tr><td><b>Linear</b></td><td>Membangun objek dengan garis lurus atau lengkung.</td><td>Kontur, detail, dan bentuk terlihat melalui garis.</td><td>Garis menjadi unsur dominan.</td></tr>
+              <tr><td><b>Arsir</b></td><td>Mengulang garis sejajar, menyilang, atau bertumpuk.</td><td>Terang-gelap muncul dari jarak, arah, &amp; kerapatan garis.</td><td>Terlihat jejak garis teratur.</td></tr>
+              <tr><td><b>Dusel</b></td><td>Menggores pensil lunak lalu menggosoknya (alat/tisu/jari).</td><td>Peralihan gelap-terang lembut; batas goresan melebur.</td><td>Efek kabur/halus akibat gosokan.</td></tr>
+              <tr><td><b>Blok</b></td><td>Menutup bidang dengan satu warna/bidang warna rata.</td><td>Siluet atau bentuk global tegas, minim gradasi.</td><td>Area rata dan tegas.</td></tr>
+              <tr><td><b>Pointilis</b></td><td>Menyusun titik-titik dengan jarak/kerapatan tertentu.</td><td>Objek dari kumpulan titik; titik rapat tampak lebih gelap.</td><td>Titik (bukan garis/sapuan rata).</td></tr>
+              <tr><td><b>Aquarel</b></td><td>Cat air dengan sapuan tipis dan transparan.</td><td>Warna ringan; kertas/lapisan bawah masih tampak.</td><td>Sapuan tembus pandang.</td></tr>
+              <tr><td><b>Plakat</b></td><td>Cat pekat dengan sapuan tebal/menutup.</td><td>Warna kuat, padat, menutup lapisan bawah.</td><td>Sapuan opak/pekat.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn"><span class="label"><span class="sq"></span>Cara Cepat Menghindari Pengecoh</span> Arsir = garis. Pointilis = titik. Dusel = gosok. Blok = bidang rata/siluet. Aquarel = transparan. Plakat = pekat. Jangan menyebut semua teknik gelap-terang sebagai arsir.</div>
+      </section>
+
+      <!-- ===================== BAB 2 ===================== -->
+      <section class="sec" id="bab-2">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 2 &middot; Tekstil Tradisional</span>
+          <button type="button" class="master" data-id="bab-2" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Teknik, Alat, Bahan, dan Proses Membatik</h2>
+        <p class="sec-intro">Batik adalah karya tekstil bermotif dengan prinsip <b>perintangan warna</b>: bagian kain ditutup malam/lilin agar zat warna tidak masuk ke serat, sehingga membentuk motif.</p>
+
+        <h3 class="sub"><span class="k">2.2</span> Alat dan Bahan</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>Alat — Canting tulis:</b> menyalurkan malam panas dalam garis/titik.</li>
+              <li><b>Alat — Canting cap:</b> cap bermotif (umumnya tembaga) untuk pola berulang.</li>
+              <li><b>Alat — Wajan &amp; pemanas:</b> menjaga malam tetap cair.</li>
+              <li><b>Alat — Gawangan:</b> menyangga kain agar terbentang.</li>
+              <li><b>Alat — Kuas/spons &amp; wadah celup:</b> untuk teknik colet &amp; pencelupan.</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>Bahan — Kain mori:</b> kain dasar katun/kapas putih/pucat yang menyerap pewarna.</li>
+              <li><b>Bahan — Malam/lilin batik:</b> bahan perintang warna (mencair saat panas, mengeras saat dingin).</li>
+              <li><b>Bahan — Pewarna alami / sintetis:</b> memberi warna pada kain yang tak tertutup malam.</li>
+              <li><b>Bahan — Pengikat/fiksasi &amp; tali/karet:</b> penguat warna &amp; perintang pada celup ikat.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">2.3</span> Tahapan Umum Membatik</h3>
+        <ol class="num">
+          <li><b>Persiapan kain:</b> membersihkan kanji/kotoran (<i>nggirah, nganji, ngemplong</i>).</li>
+          <li><b>Pemolaan:</b> menggambar/memindahkan motif ke kain.</li>
+          <li><b>Pelekatan malam:</b> menempelkan malam dengan canting tulis atau cap.</li>
+          <li><b>Pewarnaan:</b> pencelupan atau colet (bisa berulang untuk warna bertingkat).</li>
+          <li><b>Fiksasi:</b> mengunci warna bila diperlukan sesuai jenis zat warna.</li>
+          <li><b>Nglorod:</b> melepaskan malam dari kain menggunakan air panas.</li>
+          <li><b>Pembilasan &amp; pengeringan:</b> membersihkan sisa bahan dan mengeringkan kain.</li>
+        </ol>
+
+        <h3 class="sub"><span class="k">2.5</span> Teknik Batik &amp; <span class="k">2.6</span> Pewarna</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Teknik</th><th>Ciri Proses &amp; Pembeda Utama</th></tr></thead>
+            <tbody>
+              <tr><td><b>Batik tulis</b></td><td>Malam digores manual dengan canting; detail personal, proses lebih lama.</td></tr>
+              <tr><td><b>Batik cap</b></td><td>Malam dipindahkan dengan cap bermotif berulang; pola konsisten, lebih cepat.</td></tr>
+              <tr><td><b>Celup ikat / jumputan</b></td><td>Kain dilipat/dijumput/diikat tali sebelum dicelup; ikatan menjadi perintang warna (pola radial/berulang).</td></tr>
+              <tr><td><b>Colet</b></td><td>Pewarna dioleskan lokal pada bagian motif tertentu memakai kuas/spons (bukan dicelup seluruh kain).</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Jenis Pewarna</th><th>Contoh</th><th>Catatan Penting</th></tr></thead>
+            <tbody>
+              <tr><td><b>Pewarna alami</b></td><td><b>Indigofera</b> (biru), <b>secang</b> (merah), <b>tingi, jambal, tegeran</b> (cokelat–kuning), mahoni.</td><td>Nuansa lembut/bumi; sering butuh mordant/fiksasi (tawas, kapur, tunjung).</td></tr>
+              <tr><td><b>Pewarna kimia / sintetis</b></td><td><b>Remasol, indigosol, naphtol/naptol</b>.</td><td>Pilihan warna luas &amp; terstandar; ikuti prosedur keselamatan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><span class="label"><span class="sq"></span>Urutan yang Sering Ditanyakan</span> Malam dilekatkan untuk merintangi warna &rarr; kain diwarnai (celup/colet) &rarr; malam dilepas dengan <b>nglorod</b>. Nglorod bukan tahap mengoles malam atau mewarnai.</div>
+      </section>
+
+      <!-- ===================== BAB 3 ===================== -->
+      <section class="sec" id="bab-3">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 3 &middot; Ragam Hias</span>
+          <button type="button" class="master" data-id="bab-3" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Motif Batik Daerah dan Motif Klasik</h2>
+        <p class="sec-intro">Kenali ciri visual paling menonjol dari delapan motif/daerah yang tercantum dalam kisi-kisi, plus peringatan Hari Batik Nasional (<b>2 Oktober</b>, Keppres No. 33 Tahun 2009).</p>
+
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Daerah / Motif</th><th>Petunjuk Visual Utama</th><th>Ciri Tambahan</th></tr></thead>
+            <tbody>
+              <tr><td><b>Banten — Datulaya</b></td><td>Dasar belah ketupat berbentuk bunga &amp; lingkaran, dibingkai sulur daun.</td><td>Nama terkait tempat tinggal pangeran / Kesultanan Banten.</td></tr>
+              <tr><td><b>Jakarta — Batik Betawi</b></td><td>Motif Ondel-ondel, Nusa Kalapa, Rasamala, flora-fauna Betawi.</td><td>Dibuat tulis/cap; warna cerah kerap dijumpai.</td></tr>
+              <tr><td><b>Bali — Ulamsari Mas</b></td><td>Ikan dan udang/fauna laut dipadukan unsur flora &amp; geometri.</td><td>Warna cerah (emas, hijau, merah, biru); simbol kemakmuran pesisir.</td></tr>
+              <tr><td><b>Pekalongan — Buketan</b></td><td>Buket bunga atau flora yang disusun dekoratif.</td><td>Batik pesisir berwarna cerah dan ragam hias beragam.</td></tr>
+              <tr><td><b>Cirebon — Mega Mendung</b></td><td>Awan berlapis/bergelombang berulang dengan garis lengkung.</td><td>Motif ikon Cirebon lainnya: <i>Paksi Naga Liman</i>.</td></tr>
+              <tr><td><b>Garut — Garutan</b></td><td>Geometris, diagonal/lereng, bentuk belah ketupat atau kawung.</td><td>Latar <b>gumading</b> (kuning gading/krem) &amp; warna lembut; mis. <i>Lereng Peuteuy, Merak Ngibing</i>.</td></tr>
+              <tr><td><b>Solo — Batik klasik</b></td><td>Motif keraton: Parang, Kawung, Sidomukti, Truntum.</td><td>Warna <b>sogan/cokelat</b> menjadi ciri menonjol.</td></tr>
+              <tr><td><b>Kawung</b></td><td>Empat bentuk oval/lonjong simetris mengitari pusat (irisan kolang-kaling).</td><td>Berbeda dari <i>Parang</i> yang berpola diagonal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAB 4 ===================== -->
+      <section class="sec" id="bab-4">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 4 &middot; Konsep Dasar</span>
+          <button type="button" class="master" data-id="bab-4" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Unsur, Struktur Warna, dan Prinsip Seni Rupa</h2>
+        <p class="sec-intro">Bedakan <b>unsur</b> (apa yang disusun) dari <b>prinsip</b> (bagaimana unsur ditata), serta tiga dimensi utama warna.</p>
+
+        <h3 class="sub"><span class="k">4.1</span> Unsur &amp; <span class="k">4.3</span> Prinsip Seni Rupa</h3>
+        <div class="two">
+          <div>
+            <ul class="clean">
+              <li><b>8 Unsur Seni Rupa:</b> <b>titik</b> (pointilis), <b>garis</b> (arsir/linear), <b>bidang</b> (blok/siluet), <b>bentuk/raut</b> (geometris/organis), <b>warna</b>, <b>tekstur</b> (nyata/semu), <b>gelap-terang</b> (volume), dan <b>ruang</b> (kedalaman/perspektif).</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="clean">
+              <li><b>8 Prinsip Penataan:</b> <b>kesatuan (unity)</b>, <b>keseimbangan</b> (simetris/asimetris), <b>proporsi</b> (perbandingan ukuran), <b>irama</b> (pengulangan), <b>keselarasan/harmoni</b>, <b>kontras</b>, <b>pusat perhatian</b>, dan <b>komposisi</b>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sub"><span class="k">4.2</span> Struktur / Dimensi Warna</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Istilah</th><th>Makna</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><b>Hue</b></td><td>Nama/jenis warna dasar (“warna apa?”).</td><td>Merah dan biru memiliki hue berbeda.</td></tr>
+              <tr><td><b>Value</b></td><td>Tingkat terang-gelap warna (“seberapa terang/gelap?”).</td><td>Merah muda punya value lebih terang dari merah tua.</td></tr>
+              <tr><td><b>Tint / Shade</b></td><td><b>Tint</b> = warna + putih (lebih terang); <b>Shade</b> = warna + hitam (lebih gelap).</td><td>Biru + putih = biru muda; biru + hitam = biru tua.</td></tr>
+              <tr><td><b>Intensity / Chroma</b></td><td>Tingkat kejenuhan/cerah-kusam (“seberapa pekat/kusam?”).</td><td>Merah cerah vs merah dicampur abu-abu.</td></tr>
+              <tr><td><b>Primer / Sekunder / Tersier</b></td><td><b>Primer:</b> merah, kuning, biru. <b>Sekunder:</b> jingga, hijau, ungu. <b>Tersier:</b> primer + sekunder berdekatan.</td><td>Merah + kuning = jingga; kuning + jingga = kuning-jingga.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== BAB 5 ===================== -->
+      <section class="sec" id="bab-5">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bab 5 &middot; Sejarah &amp; Gaya</span>
+          <button type="button" class="master" data-id="bab-5" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Tokoh Pelukis Dunia dan Aliran Seni Lukis</h2>
+        <p class="sec-intro">Kaitkan setiap tokoh dunia dengan satu karya atau ciri gayanya, serta bedakan aliran yang sering tertukar.</p>
+
+        <h3 class="sub"><span class="k">5.1</span> Tokoh Pelukis Dunia</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Tokoh</th><th>Periode / Gaya</th><th>Contoh Karya / Kaitan</th></tr></thead>
+            <tbody>
+              <tr><td><b>Leonardo da Vinci</b></td><td>Renaisans</td><td><i>Mona Lisa</i>; <i>The Last Supper</i>.</td></tr>
+              <tr><td><b>Michelangelo</b></td><td>Renaisans</td><td><i>The Creation of Adam</i> (langit-langit Kapel Sistina).</td></tr>
+              <tr><td><b>Rembrandt van Rijn</b></td><td>Belanda abad ke-17 (cahaya-bayangan)</td><td><i>The Night Watch</i>.</td></tr>
+              <tr><td><b>Claude Monet</b></td><td>Impresionisme (cahaya sesaat)</td><td><i>Impression, Sunrise</i>; seri <i>Water Lilies</i>.</td></tr>
+              <tr><td><b>Vincent van Gogh</b></td><td>Pasca-Impresionisme (sapuan &amp; warna ekspresif)</td><td><i>The Starry Night</i>; <i>Sunflowers</i>.</td></tr>
+              <tr><td><b>Pablo Picasso</b></td><td>Kubisme (bidang geometris, multi-sudut)</td><td><i>Les Demoiselles d’Avignon</i>; <i>Guernica</i>.</td></tr>
+              <tr><td><b>Georges Seurat</b></td><td>Neo-Impresionisme / Pointilisme</td><td><i>A Sunday Afternoon on the Island of La Grande Jatte</i>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">5.2</span> Aliran / Gaya Seni Lukis</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Aliran</th><th>Ciri Utama &amp; Petunjuk Cepat</th></tr></thead>
+            <tbody>
+              <tr><td><b>Naturalisme</b></td><td>Menggambarkan alam/objek sedekat mungkin dengan pengamatan nyata (alami, proporsi akurat).</td></tr>
+              <tr><td><b>Realisme</b></td><td>Menggambarkan kehidupan sehari-hari/kenyataan sosial tanpa mengidealkan berlebihan.</td></tr>
+              <tr><td><b>Romantisme</b></td><td>Menonjolkan emosi, imajinasi, drama, adegan heroik, atau alam yang agung.</td></tr>
+              <tr><td><b>Impresionisme</b></td><td>Menangkap kesan cahaya &amp; warna sesaat; sapuan kuas tampak.</td></tr>
+              <tr><td><b>Ekspresionisme</b></td><td>Luapan perasaan/gagasan batin; warna berani dan bentuk dapat terdistorsi.</td></tr>
+              <tr><td><b>Kubisme</b></td><td>Memecah objek menjadi bidang geometris &amp; menampilkan beberapa sudut pandang sekaligus.</td></tr>
+              <tr><td><b>Surealisme</b></td><td>Suasana seperti mimpi, ganjil, tidak logis (benda nyata dalam situasi mustahil).</td></tr>
+              <tr><td><b>Abstraksionisme</b></td><td>Tidak meniru objek alam; fokus pada bentuk, garis, warna, dan komposisi non-representasional.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn"><span class="label"><span class="sq"></span>Tiga Pasang yang Sering Tertukar</span> <b>Naturalisme</b> (pengamatan alam) vs <b>Realisme</b> (kenyataan hidup sehari-hari). <b>Impresionisme</b> (kesan cahaya sesaat) vs <b>Ekspresionisme</b> (luapan emosi batin). <b>Surealisme</b> (mimpi/ganjil) vs <b>Abstraksionisme</b> (tanpa objek dikenali).</div>
+      </section>
+
+      <!-- ===================== BAGIAN II: 1-40 ===================== -->
+      <section class="sec" id="indikator">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian II</span>
+          <button type="button" class="master" data-id="indikator" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Pembahasan Khusus Indikator 1–40</h2>
+        <p class="sec-intro">Cari nomor atau kata kunci, lalu buka tombol “Contoh &amp; Kunci” untuk melihat kemungkinan soal dan pembahasannya.</p>
+
+        <div class="tools-bar">
+          <label class="search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+            <input id="q-ind" type="search" placeholder="Cari nomor atau materi (misal: dusel, nglorod, Garutan, hue, MCMA)" aria-label="Cari indikator">
+          </label>
+          <span class="label" id="ind-count">40 indikator</span>
+        </div>
+        <div class="ind-list" id="ind-list"></div>
+        <div class="empty-search" id="empty-ind">Tidak ada indikator yang cocok.</div>
+      </section>
+
+      <!-- ===================== BAGIAN III: 20 SOAL ===================== -->
+      <section class="sec" id="latihan">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian III</span>
+          <button type="button" class="master" data-id="latihan" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Latihan Soal Tambahan (20 Soal)</h2>
+        <p class="sec-intro">Terdiri dari 10 Pilihan Ganda, 5 Pilihan Ganda Kompleks (MCMA), dan 5 Kategori/Analisis. Kerjakan dulu sebelum membuka kunci.</p>
+
+        <div class="tools-bar">
+          <label class="search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+            <input id="q-soal" type="search" placeholder="Cari soal latihan..." aria-label="Cari soal">
+          </label>
+          <select class="sel" id="f-soal" aria-label="Filter tipe soal">
+            <option value="all">Semua Tipe (20)</option>
+            <option value="pg">Pilihan Ganda (1–10)</option>
+            <option value="mcma">PG Kompleks / MCMA (11–15)</option>
+            <option value="analisis">Kategori &amp; Analisis (16–20)</option>
+          </select>
+          <span class="label" id="soal-count">20 soal</span>
+        </div>
+        <div class="soal-list" id="soal-list"></div>
+        <div class="empty-search" id="empty-soal">Tidak ada soal yang cocok.</div>
+      </section>
+
+      <!-- ===================== BAGIAN IV: RINGKASAN ===================== -->
+      <section class="sec" id="ringkasan">
+        <div class="sec-meta">
+          <span class="label"><span class="sq"></span>Bagian IV</span>
+          <button type="button" class="master" data-id="ringkasan" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button>
+        </div>
+        <h2 class="sec-title">Ringkasan Akhir, Glosarium &amp; Checklist</h2>
+        <p class="sec-intro">Pasangan konsep yang sering tertukar, istilah penting, kesalahan yang harus dihindari, dan checklist penguasaan sebelum ujian.</p>
+
+        <h3 class="sub"><span class="k">A</span> Tabel Perbandingan Konsep yang Sering Tertukar</h3>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th>Pasangan</th><th>Perbedaan Paling Penting</th></tr></thead>
+            <tbody>
+              <tr><td><b>Arsir vs dusel</b></td><td>Arsir terlihat dari garis sejajar/silang; dusel dari efek gosokan yang melembutkan gradasi.</td></tr>
+              <tr><td><b>Pointilis vs blok</b></td><td>Pointilis tersusun dari titik; blok berupa bidang warna rata/siluet.</td></tr>
+              <tr><td><b>Aquarel vs plakat</b></td><td>Aquarel tipis–transparan; plakat tebal–pekat dan menutup.</td></tr>
+              <tr><td><b>Celup ikat vs colet</b></td><td>Celup ikat memakai lipatan/ikatan perintang; colet memakai kuas/spons pada bagian tertentu.</td></tr>
+              <tr><td><b>Batik cap vs tulis</b></td><td>Cap memakai alat cap bermotif; tulis memakai canting yang digerakkan manual.</td></tr>
+              <tr><td><b>Malam vs pewarna</b></td><td>Malam melindungi/menghalangi warna; pewarna memberi warna pada serat kain.</td></tr>
+              <tr><td><b>Nglorod vs pewarnaan</b></td><td>Nglorod melepas malam (air panas); pewarnaan memasukkan zat warna.</td></tr>
+              <tr><td><b>Pewarna alami vs sintetis</b></td><td>Alami dari alam (<i>indigofera, secang</i>); sintetis kimia/industri (<i>remasol, indigosol</i>).</td></tr>
+              <tr><td><b>Hue vs value vs chroma</b></td><td>Hue = nama warna; value = terang-gelap; chroma = cerah-kusam.</td></tr>
+              <tr><td><b>Naturalisme vs realisme</b></td><td>Naturalisme = kemiripan pengamatan alam; realisme = kenyataan hidup sehari-hari.</td></tr>
+              <tr><td><b>Impresionisme vs ekspresionisme</b></td><td>Impresionisme = cahaya/kesan sesaat; ekspresionisme = emosi atau keadaan batin.</td></tr>
+              <tr><td><b>Surealisme vs abstraksi</b></td><td>Surealisme = dunia mimpi/ganjil; abstraksi = tidak harus menggambarkan objek dikenali.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="k">B</span> Kesalahan Umum yang Harus Dihindari</h3>
+        <ul class="clean">
+          <li>Menyebut arsir sebagai teknik titik atau dusel sebagai teknik garis; menganggap colet sama dengan celup ikat.</li>
+          <li>Menganggap malam sebagai pewarna, atau menganggap nglorod sebagai proses mencelup warna.</li>
+          <li>Menyebut semua motif awan sebagai Mega Mendung; menukar Batik Garutan (gumading) dengan Batik Solo (sogan).</li>
+          <li>Menukar hue, value, dan chroma; mengira warna adalah prinsip (warna = unsur; harmoni warna = prinsip).</li>
+          <li>Menghafal nama pelukis tanpa mengaitkan karya/gayanya.</li>
+        </ul>
+
+        <h3 class="sub"><span class="k">C</span> Checklist Penguasaan Sebelum Ujian</h3>
+        <ul class="chklist" id="chklist"></ul>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span class="label">Portal Belajar ASAS / SBD</span>
+    <a class="label" href="#top">Ke atas &uarr;</a>
+  </footer>
+</div>
+
+<script>
+const INDIKATOR = [
+  { n: 1, j: "Teknik menggambar atau melukis", d: "Disajikan pernyataan tentang teknik 2D; mengidentifikasi tekniknya.", m: "Linear, arsir, dusel, blok, pointilis, aquarel, plakat.", c: "Teknik yang membuat objek dengan kumpulan titik rapat di bagian gelap adalah ....", p: "B. Pointilis (ciri penentunya titik).", i: "Titik = pointilis; garis = arsir/linear; gosok = dusel; bidang rata = blok." },
+  { n: 2, j: "Teknik proses membatik", d: "Mengidentifikasi salah satu tahapan/teknik proses membatik.", m: "Persiapan kain, pemolaan, pelekatan malam, pewarnaan, fiksasi, nglorod, pembilasan.", c: "Tahap menghilangkan malam dari kain setelah pewarnaan disebut ....", p: "Nglorod (melepaskan malam dengan air panas).", i: "Ingat fungsi setiap tahap, jangan hanya menghafal urutan nama." },
+  { n: 3, j: "Teknik gambar/melukis — MCMA", d: "Mengidentifikasi beberapa teknik gambar/melukis lewat PG kompleks.", m: "Nilai tiap opsi terpisah: arsir (garis), pointilis (titik), dusel (gosok), blok (rata), aquarel (transparan), plakat (pekat).", c: "Pilih benar: (1) Arsir memakai garis berulang. (2) Pointilis memakai titik. (3) Dusel memakai cap tembaga. (4) Blok warna rata.", p: "Benar: (1), (2), (4). (3) salah karena cap tembaga untuk batik cap.", i: "Pada MCMA, periksa seluruh opsi secara mandiri." },
+  { n: 4, j: "Teknik gambar/melukis — kategori", d: "Mengelompokkan teknik berdasarkan ciri kerja.", m: "Kelompokkan menurut jejak utama: garis, titik, gosokan, bidang rata, sapuan cat.", c: "Kelompokkan pointilis, arsir, dusel, blok ke kategori titik, garis, gosokan, bidang rata.", p: "Pointilis = titik; arsir = garis; dusel = gosokan; blok = bidang rata.", i: "Cocokkan berdasarkan proses pembentuk hasil." },
+  { n: 5, j: "Identifikasi teknik dari gambar/bagan", d: "Mengenali teknik gambar 2D dari informasi visual.", m: "Amati tekstur tanda: titik berulang, garis sejajar/silang, gradasi gosokan, atau siluet.", c: "Sebuah bola dibentuk dari titik-titik kecil yang rapat di sisi gelap. Tekniknya?", p: "Pointilis (gelap-terang dari kerapatan titik).", i: "Titik adalah petunjuk yang lebih kuat daripada objek yang digambar." },
+  { n: 6, j: "Identifikasi teknik dari gambar/bagan (bayangan)", d: "Mengidentifikasi teknik gambar/melukis melalui bagan visual.", m: "Bedakan pembentuk bayangan: arsir (jejak garis), dusel (gosokan halus), pointilis (titik), blok (datar).", c: "Bayangan benda dengan garis-garis sejajar rapat dan menyilang. Tekniknya?", p: "Arsir (bayangan dibangun garis berulang & berpotongan).", i: "Lihat jejak pembentuk bayangannya, bukan hanya hasil akhirnya." },
+  { n: 7, j: "Motif batik khas Banten", d: "Mengidentifikasi/mendeskripsikan salah satu motif batik Banten.", m: "Datulaya: dasar belah ketupat berbentuk bunga dan lingkaran dalam bingkai sulur daun.", c: "Motif Banten dengan dasar belah ketupat berbentuk bunga, lingkaran, dan sulur daun disebut ....", p: "Datulaya.", i: "Datulaya = belah ketupat/bunga + lingkaran + sulur daun." },
+  { n: 8, j: "Motif batik khas Jakarta/Betawi", d: "Mengidentifikasi karya batik khas Jakarta.", m: "Ondel-ondel, Nusa Kalapa, Rasamala, flora-fauna Betawi, Daun Tarum.", c: "Motif ondel-ondel dan Nusa Kalapa merupakan contoh motif batik khas ....", p: "Jakarta / Betawi.", i: "Ondel-ondel, Nusa Kalapa, Rasamala = petunjuk Batik Betawi." },
+  { n: 9, j: "Motif batik khas Bali", d: "Mengidentifikasi karya batik Bali melalui gambar.", m: "Ulamsari Mas: ikan dan udang/fauna laut, warna cerah, simbol kemakmuran pesisir.", c: "Motif batik Bali yang menampilkan ikan dan udang sebagai kekayaan laut dikenal sebagai ....", p: "Ulamsari Mas.", i: "Ulamsari Mas = fauna laut, terutama ikan dan udang." },
+  { n: 10, j: "Pengertian batik secara umum — kategori", d: "Mengidentifikasi pengertian batik.", m: "Prinsip perintang warna dengan malam (bukan kain yang sekadar dicetak gambar motif batik).", c: "Pilih ciri prinsip batik: (A) perintang malam; (B) malam lindungi serat; (C) dicetak printer tanpa perintang.", p: "A dan B. C adalah tekstil bermotif batik hasil print.", i: "Batik = motif + proses perintangan warna." },
+  { n: 11, j: "Motif batik teknik celup ikat", d: "Mengidentifikasi batik celup ikat dari gambar.", m: "Kain diikat, dilipat, dipilin, atau dijumput sebelum dicelup; ikatan menghalangi warna.", c: "Kain diikat tali pada beberapa bagian lalu dicelup sehingga bagian ikatan tetap terang disebut ....", p: "Celup ikat / jumputan.", i: "Ikat dahulu, kemudian celup; ikatan membentuk area terlindung." },
+  { n: 12, j: "Motif batik teknik colet (di kisi-kisi tertulis no. 11)", d: "Mengidentifikasi karya batik dengan teknik colet.", m: "Pewarna dioleskan lokal pada bagian motif tertentu memakai kuas atau spons.", c: "Pewarna diaplikasikan pada bagian bunga dan daun terpisah memakai kuas disebut ....", p: "Colet (pewarnaan lokal, bukan mencelup seluruh kain).", i: "Colet = kuas/spons + warna pada bagian tertentu." },
+  { n: 13, j: "Teknik gambar/melukis — MCMA (pasangan)", d: "Mengidentifikasi beberapa teknik gambar/melukis.", m: "Pasangan nama dan ciri: aquarel (transparan), plakat (pekat), arsir (garis), dusel (gosokan).", c: "Pilih pasangan tepat: (1) aquarel-transparan; (2) plakat-pekat; (3) arsir-gosokan jari; (4) dusel-gosokan.", p: "Benar: (1), (2), (4). (3) salah karena gosokan adalah dusel.", i: "Hafalkan pasangan proses–hasil untuk tiap teknik." },
+  { n: 14, j: "Alat dan bahan membatik — kategori", d: "Mengidentifikasi alat, bahan, atau perlengkapan batik.", m: "Alat: canting, cap, kuas, gawangan, wajan. Bahan: mori, malam, pewarna, fiksasi, tali.", c: "Kelompokkan: canting, kain mori, malam, kuas, gawangan, pewarna.", p: "Alat: canting, kuas, gawangan. Bahan: mori, malam, pewarna.", i: "Canting adalah alat; malam, mori, dan pewarna adalah bahan." },
+  { n: 15, j: "Teknik gambar/melukis — MCMA tingkat analisis", d: "Mengidentifikasi teknik berdasarkan fungsi dan hasilnya.", m: "Tujuan sama (volume/gelap-terang), cara kerja berbeda: titik = pointilis, garis = arsir, gosok = dusel.", c: "Pilih teknik yang khas memakai (a) titik rapat-renggang; (b) garis sejajar/silang; (c) goresan digosok.", p: "(a) pointilis; (b) arsir; (c) dusel.", i: "Tujuan boleh sama, tetapi jejak visual menentukan nama teknik." },
+  { n: 16, j: "Pewarnaan kimia pada batik", d: "Mengidentifikasi pewarna kimia/sintetis.", m: "Contoh zat warna sintetis: remasol, indigosol, naphtol/naptol.", c: "Kelompok yang seluruhnya zat warna sintetis: A. secang & indigofera B. remasol & indigosol C. mahoni & tingi.", p: "B. Remasol dan indigosol.", i: "Remasol/indigosol/naphtol = kimia; indigofera/secang = alami." },
+  { n: 17, j: "Tabel pewarna kimia batik", d: "Mengidentifikasi contoh zat warna kimia dari tabel.", m: "Bedakan nama bahan pabrik (remasol, indigosol, naphtol) dari tumbuhan (indigofera, secang).", c: "Tabel: 1) indigofera, 2) remasol, 3) secang, 4) naphtol. Mana pewarna kimia?", p: "Nomor 2 dan 4.", i: "Kelompokkan dari asal bahan, bukan dugaan warna." },
+  { n: 18, j: "Motif batik khas Pekalongan", d: "Mengidentifikasi batik khas Pekalongan.", m: "Pusat batik pesisir warna cerah; motif buketan menampilkan rangkaian/buket bunga dekoratif.", c: "Motif buketan berupa rangkaian bunga berkembang pada batik pesisir ....", p: "Pekalongan.", i: "Pekalongan = pesisir, warna cerah, buketan/flora." },
+  { n: 19, j: "Motif batik khas Cirebon", d: "Mengidentifikasi motif khas Cirebon.", m: "Mega Mendung: gumpalan awan berlapis/bergelombang berulang dengan warna tegas.", c: "Motif Cirebon berbentuk awan berlapis dan bergelombang disebut ....", p: "Mega Mendung.", i: "Mega Mendung = awan berlapis khas Cirebon." },
+  { n: 20, j: "Motif batik khas Cirebon — analisis", d: "Mengidentifikasi karya batik Cirebon lainnya atau memperkuat ciri Mega Mendung.", m: "Selain Mega Mendung, Cirebon punya motif keraton seperti Paksi Naga Liman.", c: "Dua motif pengenal tradisi batik Cirebon adalah ....", p: "Mega Mendung dan Paksi Naga Liman.", i: "Cirebon: Mega Mendung (awan) dan Paksi Naga Liman (simbolik keraton)." },
+  { n: 21, j: "Batik dengan pewarna alami — MCMA", d: "Mengidentifikasi batik natural/alami.", m: "Indigofera (biru), secang (merah), tingi/jambal/tegeran (cokelat-kuning), mahoni. Tawas/kapur = fiksasi.", c: "Pilih semua pewarna alami: (1) indigofera, (2) remasol, (3) secang, (4) kulit mahoni.", p: "Benar: (1), (3), (4). Remasol sintetis.", i: "Nama tumbuhan/alam = pewarna alami; remasol/indigosol = sintetis." },
+  { n: 22, j: "Motif batik khas Garutan", d: "Mengidentifikasi karya batik Garutan dari gambar.", m: "Ragam geometris, diagonal/lereng, warna dasar krem/gumading + warna lembut (Lereng Peuteuy, Merak Ngibing).", c: "Kain berlatar gumading, pola geometris/diagonal, warna lembut adalah ciri batik ....", p: "Garutan.", i: "Garutan = gumading/krem + geometris/diagonal + warna lembut." },
+  { n: 23, j: "Unsur seni rupa teknik pointilis — kategori", d: "Menganalisis unsur seni rupa pada teknik pointilis.", m: "Unsur dominan = titik; kerapatan titik mengatur gelap-terang (value).", c: "Pada gambar pointilis, bagian bayangan tampak lebih gelap karena ....", p: "Titik disusun lebih rapat.", i: "Pointilis: titik adalah unsur; kerapatan titik mengatur value." },
+  { n: 24, j: "Unsur seni rupa teknik dusel", d: "Menganalisis unsur dan efek teknik dusel.", m: "Unsur tampak: gelap-terang, tekstur semu, bentuk/volume lewat transisi nada halus.", c: "Efek lembut pada bayangan pensil setelah goresan digosok disebut ....", p: "Dusel.", i: "Dusel = gosokan dan gradasi lembut." },
+  { n: 25, j: "Unsur seni rupa teknik blok", d: "Menganalisis unsur dan hasil teknik blok.", m: "Unsur terbaca: bidang, bentuk, kontras warna (siluet satu warna rata).", c: "Gambar pohon seluruhnya berwarna hitam rata di depan latar putih memakai teknik ....", p: "Blok.", i: "Blok = bidang rata/siluet; bukan titik atau garis arsir." },
+  { n: 26, j: "Unsur seni rupa teknik arsir", d: "Memahami teknik arsir.", m: "Gelap-terang dari garis sejajar, menyilang, atau bertumpuk.", c: "Teknik yang menghasilkan gelap-terang melalui susunan garis sejajar atau silang adalah ....", p: "Arsir.", i: "Arsir = garis berulang; kerapatan garis memengaruhi gelap-terang." },
+  { n: 27, j: "Unsur seni rupa teknik arsir — MCMA", d: "Menganalisis beberapa pernyataan tentang arsir.", m: "Arsir bisa memakai pensil, pena, dll. (tidak harus satu alat tertentu); makin rapat makin gelap.", c: "Pilih benar: (1) Arsir memakai garis. (2) Garis makin rapat makin gelap. (3) Harus pakai cat air.", p: "Benar: (1) dan (2). (3) salah.", i: "Arsir tidak ditentukan oleh satu jenis alat, tetapi oleh penggunaan garis." },
+  { n: 28, j: "Struktur warna — hue, value, intensity", d: "Menganalisis dimensi warna.", m: "Hue = nama warna; value = terang-gelap (tint/shade); intensity/chroma = cerah-kusam.", c: "Dua bidang sama-sama biru, tetapi bidang pertama lebih muda. Perbedaannya pada ....", p: "Value (tingkat terang-gelap).", i: "Hue = nama; value = terang-gelap; chroma = cerah-kusam." },
+  { n: 29, j: "Struktur warna — kelompok warna", d: "Menganalisis warna primer, sekunder, tersier dan temperatur.", m: "Primer (merah, kuning, biru); sekunder (jingga, hijau, ungu); tersier (primer + sekunder).", c: "Campuran merah dan kuning dengan perbandingan seimbang menghasilkan ....", p: "Jingga/oranye (warna sekunder).", i: "Primer tak dicampur; sekunder = 2 primer; tersier = primer + sekunder." },
+  { n: 30, j: "Hari Batik Nasional", d: "Mengidentifikasi penetapan Hari Batik Nasional.", m: "2 Oktober setiap tahun, Keppres Nomor 33 Tahun 2009 (terkait pengakuan UNESCO).", c: "Hari Batik Nasional di Indonesia diperingati setiap tanggal ....", p: "2 Oktober (Keppres 33/2009).", i: "2 Oktober = Hari Batik Nasional; Keppres 33 Tahun 2009." },
+  { n: 31, j: "Proses batik nglorod", d: "Mengidentifikasi proses nglorod.", m: "Melepaskan/meluruhkan malam dari kain setelah pewarnaan menggunakan air panas.", c: "Kain batik diproses untuk melepaskan lapisan malam setelah pewarnaan dinamakan ....", p: "Nglorod.", i: "Nglorod = melepas malam setelah pewarnaan." },
+  { n: 32, j: "Tokoh lukis dunia", d: "Menjelaskan tokoh lukis dunia.", m: "Leonardo da Vinci (Mona Lisa), Monet (Impresionisme), Van Gogh (Pasca-Impresionisme), Picasso (Kubisme), Seurat (Pointilisme).", c: "Pelukis yang dikenal dengan karya Mona Lisa adalah ....", p: "Leonardo da Vinci (tokoh Renaisans).", i: "Ingat nama pelukis bersama satu karya atau ciri gayanya." },
+  { n: 33, j: "Sifat lilin/malam batik", d: "Mengidentifikasi sifat malam dalam proses batik.", m: "Mencair saat dipanaskan, mengeras saat dingin, merintangi larutan pewarna.", c: "Fungsi utama malam pada batik adalah ....", p: "Merintangi zat warna agar tidak masuk ke bagian tertentu.", i: "Malam = bahan perintang warna, bukan pewarna." },
+  { n: 34, j: "Bahan kain mori", d: "Mengidentifikasi bahan kain mori.", m: "Kain dasar pembatikan berbahan kapas/katun berwarna putih/pucat yang menyerap warna.", c: "Bahan kain dasar yang lazim dipakai untuk membatik disebut ....", p: "Kain mori.", i: "Mori = kain dasar batik (bukan pewarna/alat)." },
+  { n: 35, j: "Ciri berkarya seni rupa yang baik", d: "Mengidentifikasi ciri proses/karya seni rupa yang baik.", m: "Tujuan/ide jelas, perencanaan/sketsa, media sesuai, komposisi & proporsi matang, teknik baik, rapi.", c: "Sebelum melukis poster, siswa membuat beberapa sketsa dan memilih komposisi paling jelas. Ini menunjukkan ....", p: "Proses berkarya yang terencana.", i: "Karya baik = gagasan jelas + proses terencana + teknik sesuai + rapi." },
+  { n: 36, j: "Prinsip seni rupa secara umum", d: "Mengidentifikasi prinsip berkarya seni rupa.", m: "Kesatuan, keseimbangan, proporsi, irama, harmoni, kontras, pusat perhatian, komposisi.", c: "Prinsip yang mengatur agar seluruh bagian karya terasa menjadi satu kesatuan disebut ....", p: "Kesatuan (unity).", i: "Unsur = apa yang disusun; prinsip = bagaimana unsur ditata." },
+  { n: 37, j: "Proses batik cap", d: "Mengidentifikasi proses batik cap.", m: "Memakai alat cap bermotif (tembaga) yang ditekan berulang untuk memindahkan malam.", c: "Teknik membatik memakai alat cap bermotif untuk memindahkan malam disebut ....", p: "Batik cap.", i: "Cap = alat/cetakan bermotif; tulis = canting." },
+  { n: 38, j: "Motif batik Kawung", d: "Mengidentifikasi motif Kawung.", m: "Empat bentuk oval/lonjong simetris mengitari pusat (irisan kolang-kaling).", c: "Motif yang tersusun dari empat bentuk oval simetris mengitari pusat disebut ....", p: "Kawung.", i: "Kawung = empat oval simetris; Parang = pola diagonal." },
+  { n: 39, j: "Motif batik Solo", d: "Mengidentifikasi karya batik Solo.", m: "Warna cokelat sogan & motif klasik keraton (Parang, Kawung, Sidomukti, Truntum).", c: "Warna dominan cokelat sogan dan motif keraton seperti Sidomukti/Parang adalah ciri batik ....", p: "Solo / Surakarta.", i: "Solo = sogan + motif klasik keraton." },
+  { n: 40, j: "Aliran seni lukis — kategori", d: "Menjelaskan/mengelompokkan aliran seni lukis.", m: "Naturalisme, realisme, romantisme, impresionisme, ekspresionisme, kubisme, surealisme, abstraksionisme.", c: "Kelompokkan: (a) bidang geometris; (b) suasana mimpi; (c) cahaya sesaat.", p: "(a) Kubisme; (b) Surealisme; (c) Impresionisme.", i: "Ingat kata kunci tiap aliran; jangan samakan emosi batin dengan kesan cahaya." }
+];
+
+const SOAL = [
+  { n: 1, g: "pg", t: "Pilihan ganda", q: "Teknik gambar yang menghasilkan bayangan dengan titik-titik rapat dan renggang disebut ....", o: ["dusel", "pointilis", "blok", "aquarel"], k: "B - Pointilis", b: "Titik yang lebih rapat membentuk nilai gelap." },
+  { n: 2, g: "pg", t: "Pilihan ganda", q: "Sapuan cat air yang tipis sehingga lapisan bawah masih terlihat merupakan teknik ....", o: ["plakat", "arsir", "aquarel", "blok"], k: "C - Aquarel", b: "Sapuan cat air yang tipis dan transparan merupakan aquarel." },
+  { n: 3, g: "pg", t: "Pilihan ganda", q: "Bentuk awan berlapis dan bergelombang merupakan tanda motif ....", o: ["Mega Mendung", "Kawung", "Datulaya", "Ulamsari Mas"], k: "A - Mega Mendung", b: "Ciri utamanya awan berlapis dan bergelombang, berasal dari Cirebon." },
+  { n: 4, g: "pg", t: "Pilihan ganda", q: "Proses pelepasan malam setelah pembatikan disebut ....", o: ["pemolaan", "nglorod", "pencantingan", "colet"], k: "B - Nglorod", b: "Tahap menghilangkan malam setelah proses pembatikan/pewarnaan." },
+  { n: 5, g: "pg", t: "Pilihan ganda", q: "Empat bentuk oval yang tersusun simetris mengitari pusat merupakan motif ....", o: ["Parang", "Buketan", "Kawung", "Mega Mendung"], k: "C - Kawung", b: "Bentuk oval simetris berulang adalah petunjuk Kawung." },
+  { n: 6, g: "pg", t: "Pilihan ganda", q: "Nama warna seperti merah atau biru disebut dimensi ....", o: ["value", "hue", "intensity", "tekstur"], k: "B - Hue", b: "Hue menunjukkan nama atau jenis warna." },
+  { n: 7, g: "pg", t: "Pilihan ganda", q: "Pelukis yang terkenal dengan Mona Lisa adalah ....", o: ["Claude Monet", "Leonardo da Vinci", "Pablo Picasso", "Georges Seurat"], k: "B - Leonardo da Vinci", b: "Mona Lisa merupakan karya terkenal Leonardo da Vinci." },
+  { n: 8, g: "pg", t: "Pilihan ganda", q: "Kain dasar yang lazim digunakan dalam pembatikan disebut ....", o: ["mori", "malam", "canting", "remasol"], k: "A - Mori", b: "Mori adalah kain dasar batik, umumnya katun." },
+  { n: 9, g: "pg", t: "Pilihan ganda", q: "Motif buketan berupa rangkaian bunga banyak dikenal dalam batik ....", o: ["Pekalongan", "Garutan", "Betawi", "Banten"], k: "A - Pekalongan", b: "Buketan dan warna cerah merupakan ciri yang dikenal pada batik pesisir Pekalongan." },
+  { n: 10, g: "pg", t: "Pilihan ganda", q: "Alat cap bermotif untuk menempelkan malam digunakan dalam teknik ....", o: ["tulis", "celup ikat", "cap", "colet"], k: "C - Cap", b: "Batik cap memakai cap bermotif untuk memindahkan malam." },
+  { n: 11, g: "mcma", t: "PG Kompleks", q: "Pilih semua pernyataan yang benar tentang teknik gambar.", o: ["Arsir memakai garis berulang.", "Dusel menggunakan proses menggosok.", "Pointilis dibentuk oleh titik.", "Blok selalu menggunakan titik-titik."], k: "A, B, C", b: "Arsir memakai garis; dusel memakai gosokan; pointilis memakai titik. Blok menutup bidang dengan warna rata, bukan titik." },
+  { n: 12, g: "mcma", t: "PG Kompleks", q: "Pilih semua bahan pewarna alami.", o: ["Indigofera.", "Remasol.", "Secang.", "Tingi."], k: "A, C, D", b: "Indigofera, secang, dan tingi adalah bahan alam. Remasol merupakan zat warna sintetis." },
+  { n: 13, g: "mcma", t: "PG Kompleks", q: "Pilih semua alat/perlengkapan membatik.", o: ["Canting.", "Gawangan.", "Kain mori.", "Kuas colet."], k: "A, B, D", b: "Canting, gawangan, dan kuas adalah alat. Mori merupakan bahan kain." },
+  { n: 14, g: "mcma", t: "PG Kompleks", q: "Pilih semua ciri yang dapat dikaitkan dengan batik Solo klasik.", o: ["Warna sogan.", "Motif Parang.", "Motif Kawung.", "Hanya menggunakan motif awan Mega Mendung."], k: "A, B, C", b: "Warna sogan, Parang, dan Kawung berkaitan dengan batik Solo klasik. Mega Mendung merupakan ikon Cirebon." },
+  { n: 15, g: "mcma", t: "PG Kompleks", q: "Pilih semua prinsip seni rupa.", o: ["Keseimbangan.", "Kesatuan.", "Warna.", "Irama."], k: "A, B, D", b: "Keseimbangan, kesatuan, dan irama adalah prinsip; warna termasuk unsur seni rupa." },
+  { n: 16, g: "analisis", t: "Kategori", q: "Pasangkan teknik dengan ciri: (a) pointilis, (b) dusel, (c) arsir, (d) blok. Ciri: 1. garis sejajar/silang; 2. bidang warna rata; 3. titik; 4. gosokan.", o: null, k: "a-3, b-4, c-1, d-2", b: "Pointilis = titik (3); dusel = gosokan (4); arsir = garis sejajar/silang (1); blok = bidang warna rata (2)." },
+  { n: 17, g: "analisis", t: "Kategori", q: "Tentukan teknik batik: (a) kain diikat lalu dicelup; (b) warna dikuaskan pada motif tertentu; (c) malam dipindahkan memakai cap tembaga; (d) malam dilepas setelah pewarnaan.", o: null, k: "a. celup ikat; b. colet; c. batik cap; d. nglorod", b: "Sesuai fungsi masing-masing proses pembatikan." },
+  { n: 18, g: "analisis", t: "Analisis warna", q: "Sebuah bidang tetap berwarna merah, tetapi menjadi merah muda setelah ditambah putih. Dimensi apa yang berubah?", o: null, k: "Value menjadi lebih terang; hue tetap merah.", b: "Campuran warna dengan putih disebut tint; jenis warna dasarnya (hue) tidak berubah." },
+  { n: 19, g: "analisis", t: "Analisis motif", q: "Sebuah kain berlatar krem gading, berisi susunan geometris diagonal yang berulang dan warna lembut. Daerah batik apa yang patut dikenali?", o: null, k: "Garutan", b: "Warna gumading (krem gading) dan pola geometris/diagonal merupakan petunjuk khas Batik Garutan." },
+  { n: 20, g: "analisis", t: "Analisis gaya", q: "Lukisan menampilkan jam-jam cahaya yang berubah pada permukaan air dengan sapuan warna yang tampak. Aliran apa yang paling mungkin?", o: null, k: "Impresionisme", b: "Fokus pada kesan cahaya dan warna sesaat dengan sapuan kuas tampak." }
+];
+
+const CHECKS = [
+  "Saya bisa membedakan linear, arsir, dusel, blok, pointilis, aquarel, dan plakat dari petunjuk visual.",
+  "Saya bisa menyusun urutan proses umum membatik dan menjelaskan fungsi malam serta nglorod.",
+  "Saya bisa membedakan batik tulis, cap, celup ikat, dan colet.",
+  "Saya bisa mengelompokkan alat dan bahan batik serta memberi contoh pewarna alami dan sintetis.",
+  "Saya bisa mengenali Datulaya, Batik Betawi, Ulamsari Mas, Buketan Pekalongan, Mega Mendung, Garutan, Kawung, dan Batik Solo.",
+  "Saya bisa menjelaskan hue, value, intensity/chroma, warna primer, sekunder, dan tersier.",
+  "Saya bisa menjelaskan unsur dan prinsip seni rupa serta membedakan keduanya.",
+  "Saya bisa menghubungkan beberapa tokoh pelukis dunia dengan karya atau gaya yang dikenal.",
+  "Saya bisa membedakan naturalisme, realisme, romantisme, impresionisme, ekspresionisme, kubisme, surealisme, dan abstraksionisme.",
+  "Saya sudah mengerjakan latihan dan membaca alasan setiap jawaban."
+];
+
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var $ = function (id) { return document.getElementById(id); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  /* ---------- render 1-40 ---------- */
+  var iList = $('ind-list'), qInd = $('q-ind'), emptyInd = $('empty-ind'), iCnt = $('ind-count');
+  iList.innerHTML = INDIKATOR.map(function (it) {
+    return '<div class="ind" data-search="' + esc((it.n + ' ' + it.j + ' ' + it.d + ' ' + it.m + ' ' + it.c + ' ' + it.p + ' ' + it.i).toLowerCase()) + '">' +
+      '<div class="ind-n">' + pad(it.n) + '</div>' +
+      '<div>' +
+        '<div class="ind-title">' + esc(it.j) + '</div>' +
+        '<div class="ind-meta">' + esc(it.d) + '</div>' +
+        '<div class="ind-mat">' + esc(it.m) + '</div>' +
+        '<div class="ind-ingat"><b>Wajib diingat:</b> ' + esc(it.i) + '</div>' +
+        '<div class="ind-ex"><div class="q">Contoh: ' + esc(it.c) + '</div><div><b>Pembahasan:</b> ' + esc(it.p) + '</div></div>' +
+      '</div>' +
+      '<button type="button" class="kbtn">Contoh</button>' +
+    '</div>';
+  }).join('');
+
+  iList.addEventListener('click', function (e) {
+    var b = e.target.closest('.kbtn');
+    if (!b) return;
+    var row = b.closest('.ind');
+    row.classList.toggle('open');
+    b.textContent = row.classList.contains('open') ? 'Tutup' : 'Contoh';
+  });
+
+  qInd.addEventListener('input', function () {
+    var t = qInd.value.trim().toLowerCase(), n = 0;
+    iList.querySelectorAll('.ind').forEach(function (el) {
+      var ok = !t || el.getAttribute('data-search').indexOf(t) !== -1;
+      el.style.display = ok ? '' : 'none';
+      if (ok) n++;
+    });
+    iCnt.textContent = n + '/' + INDIKATOR.length + ' indikator';
+    emptyInd.style.display = n ? 'none' : 'block';
+  });
+
+  /* ---------- render 20 soal ---------- */
+  var sList = $('soal-list'), qSoal = $('q-soal'), fSoal = $('f-soal'), emptySoal = $('empty-soal'), sCnt = $('soal-count');
+  var LBL = ['A', 'B', 'C', 'D'];
+  sList.innerHTML = SOAL.map(function (s) {
+    var opts = s.o ? '<ul class="opts">' + s.o.map(function (o, i) { return '<li><b>' + LBL[i] + '.</b>' + esc(o) + '</li>'; }).join('') + '</ul>' : '';
+    return '<div class="soal" data-g="' + s.g + '" data-search="' + esc((s.n + ' ' + s.t + ' ' + s.q + ' ' + (s.o ? s.o.join(' ') : '') + ' ' + s.k + ' ' + s.b).toLowerCase()) + '">' +
+      '<div class="soal-n">' + pad(s.n) + '</div>' +
+      '<div>' +
+        '<div class="soal-tags"><span class="tag">' + esc(s.t) + '</span></div>' +
+        '<div class="soal-q">' + esc(s.q) + '</div>' + opts +
+        '<div class="kunci-box"><div class="ans">Kunci: ' + esc(s.k) + '</div><div>' + esc(s.b) + '</div></div>' +
+      '</div>' +
+      '<button type="button" class="kbtn">Kunci</button>' +
+    '</div>';
+  }).join('');
+
+  sList.addEventListener('click', function (e) {
+    var b = e.target.closest('.kbtn');
+    if (!b) return;
+    var row = b.closest('.soal');
+    row.classList.toggle('open');
+    b.textContent = row.classList.contains('open') ? 'Tutup' : 'Kunci';
+  });
+
+  function filterSoal() {
+    var t = qSoal.value.trim().toLowerCase(), g = fSoal.value, n = 0;
+    sList.querySelectorAll('.soal').forEach(function (el) {
+      var ok = (g === 'all' || el.getAttribute('data-g') === g) && (!t || el.getAttribute('data-search').indexOf(t) !== -1);
+      el.style.display = ok ? '' : 'none';
+      if (ok) n++;
+    });
+    sCnt.textContent = n + '/' + SOAL.length + ' soal';
+    emptySoal.style.display = n ? 'none' : 'block';
+  }
+  qSoal.addEventListener('input', filterSoal);
+  fSoal.addEventListener('change', filterSoal);
+
+  /* ---------- show all keys ---------- */
+  var showKeys = $('show-keys');
+  try { showKeys.checked = localStorage.getItem('asas.sbd.showKeys') === '1'; } catch (e) {}
+  function applyKeys() { document.body.classList.toggle('show-keys', showKeys.checked); }
+  showKeys.addEventListener('change', function () {
+    try { localStorage.setItem('asas.sbd.showKeys', showKeys.checked ? '1' : '0'); } catch (e) {}
+    applyKeys();
+  });
+  applyKeys();
+
+  /* ---------- checklist ---------- */
+  var CHK_KEY = 'asas.sbd.chk';
+  var chkState = {};
+  try { chkState = JSON.parse(localStorage.getItem(CHK_KEY)) || {}; } catch (e) {}
+  var chkList = $('chklist');
+  chkList.innerHTML = CHECKS.map(function (c, i) {
+    var on = !!chkState[i];
+    return '<li class="' + (on ? 'done' : '') + '"><input type="checkbox" class="chk" id="ck-' + i + '" data-i="' + i + '" ' + (on ? 'checked' : '') + '><label for="ck-' + i + '">' + esc(c) + '</label></li>';
+  }).join('');
+  chkList.addEventListener('change', function (e) {
+    var cb = e.target.closest('.chk');
+    if (!cb) return;
+    var i = cb.getAttribute('data-i');
+    if (cb.checked) chkState[i] = 1; else delete chkState[i];
+    cb.closest('li').classList.toggle('done', cb.checked);
+    try { localStorage.setItem(CHK_KEY, JSON.stringify(chkState)); } catch (err) {}
+  });
+
+  /* ---------- mastered state ---------- */
+  var KEY = 'asas.kisi.sbd';
+  var SECS = ['bab-1', 'bab-2', 'bab-3', 'bab-4', 'bab-5', 'indikator', 'latihan', 'ringkasan'];
+  var mastered = {};
+  try { mastered = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  if (typeof mastered !== 'object' || Array.isArray(mastered)) mastered = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(mastered)); } catch (e) {} }
+
+  function refresh() {
+    var n = 0;
+    SECS.forEach(function (id) {
+      var on = !!mastered[id];
+      if (on) n++;
+      var btn = document.querySelector('.master[data-id="' + id + '"]');
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+      var a = document.querySelector('.toc a[data-id="' + id + '"]');
+      if (a) a.classList.toggle('mastered', on);
+    });
+    $('m-done').textContent = n + '/' + SECS.length;
+    $('top').style.setProperty('--p', (n / SECS.length * 100) + '%');
+  }
+
+  $('content').addEventListener('click', function (e) {
+    var m = e.target.closest('.master');
+    if (!m) return;
+    var id = m.getAttribute('data-id');
+    if (mastered[id]) delete mastered[id]; else mastered[id] = 1;
+    save(); refresh();
+  });
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua tanda "dikuasai" untuk Seni Budaya?')) { mastered = {}; save(); refresh(); }
+  });
+
+  /* ---------- TOC ---------- */
+  var tocBox = $('toc-box');
+  if (window.matchMedia('(min-width: 961px)').matches) tocBox.open = true;
+  $('toc').addEventListener('click', function (e) {
+    if (e.target.closest('a') && !window.matchMedia('(min-width: 961px)').matches) tocBox.open = false;
+  });
+
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+          var a = links[en.target.id]; if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('section.sec').forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- theme ---------- */
+  function themeLabel() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
+  }
+  $('theme-toggle').addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('asas.theme', next); } catch (e) {}
+    themeLabel();
+  });
+
+  themeLabel();
+  refresh();
+})();
+</script>
+</body>
+</html>
