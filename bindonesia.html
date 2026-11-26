@@ -38,7 +38,7 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  html { scroll-padding-top: 72px; }
   body {
     background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.62;
     -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
@@ -53,8 +53,7 @@
   /* sticky top pill nav */
   .topnav {
     position: sticky; top: 0; z-index: 40;
-    background: color-mix(in srgb, var(--bg) 86%, transparent);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: var(--paper);
     border-bottom: 1.5px solid var(--line);
   }
   .topnav::after { content: ""; position: absolute; left: 0; bottom: -1.5px; height: 3px; width: var(--p, 0%); background: linear-gradient(90deg, var(--g1), var(--g2)); transition: width .35s ease; }
@@ -944,21 +943,44 @@ const CHECKS = [
     if (confirm('Hapus semua tanda "dikuasai" untuk Bahasa Indonesia?')) { mastered = {}; save(); refresh(); }
   });
 
-  /* ---------- TOC ---------- */
-  if ('IntersectionObserver' in window) {
-    var links = {};
-    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
-          var a = links[en.target.id];
-          if (a) { a.classList.add('active'); a.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    document.querySelectorAll('section.sec').forEach(function (s) { io.observe(s); });
+  /* ---------- TOC & smooth anchor ---------- */
+  var tocEl = $('toc');
+  var links = {};
+  document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+  var secEls = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var curId = '';
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var best = secEls[0] ? secEls[0].id : '';
+    for (var i = 0; i < secEls.length; i++) {
+      if (secEls[i].getBoundingClientRect().top <= 120) best = secEls[i].id;
+    }
+    if (best && best !== curId) {
+      curId = best;
+      Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+      var a = links[best];
+      if (a) {
+        a.classList.add('active');
+        if (tocEl) tocEl.scrollLeft = a.offsetLeft - (tocEl.clientWidth - a.offsetWidth) / 2;
+      }
+    }
   }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+  }, { passive: true });
+  spy();
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    var y = id === 'top' ? 0 : target.getBoundingClientRect().top + window.pageYOffset - 68;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
 
   /* ---------- theme ---------- */
   function themeLabel() {

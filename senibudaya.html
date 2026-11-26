@@ -38,7 +38,7 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  html { scroll-padding-top: 72px; }
   body {
     background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.62;
     -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
@@ -53,8 +53,7 @@
   /* sticky top pill nav */
   .topnav {
     position: sticky; top: 0; z-index: 40;
-    background: color-mix(in srgb, var(--bg) 86%, transparent);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background: var(--paper);
     border-bottom: 1.5px solid var(--line);
   }
   .topnav::after { content: ""; position: absolute; left: 0; bottom: -1.5px; height: 3px; width: var(--p, 0%); background: linear-gradient(90deg, var(--g1), var(--g2)); transition: width .35s ease; }
@@ -208,6 +207,32 @@
   ul.chklist label { cursor: pointer; }
   ul.chklist li.done label { color: var(--muted); text-decoration: line-through; }
 
+  /* visual galleries (SVG examples) */
+  .vis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 12px; margin: 14px 0 18px; }
+  .vis-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .vis-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .vis-card { border-radius: 16px; background: var(--surface); border: 1.5px solid var(--line); overflow: hidden; display: flex; flex-direction: column; }
+  .vis-art { background: var(--paper); border-bottom: 1.5px solid var(--line); aspect-ratio: 4 / 3; display: grid; place-items: center; padding: 8px; }
+  .vis-art svg { width: 100%; height: 100%; display: block; border-radius: 10px; }
+  .vis-cap { padding: 10px 12px; font-size: 13px; line-height: 1.4; }
+  .vis-cap b { display: block; font-size: 14px; color: var(--fg); margin-bottom: 2px; }
+  .vis-cap span { color: var(--muted); }
+  .vis-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+  .color-demo { display: grid; gap: 12px; margin: 14px 0; }
+  .cd-row { border-radius: 14px; background: var(--surface); border: 1.5px solid var(--line); padding: 12px 14px; display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; }
+  .cd-row b { display: block; font-size: 14px; }
+  .cd-row small { color: var(--muted); font-size: 12.5px; }
+  .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .sw { height: 42px; border-radius: 10px; display: flex; align-items: end; padding: 4px 7px; font-family: var(--mono); font-size: 10.5px; font-weight: 700; border: 1px solid rgba(0,0,0,.08); }
+  @media (max-width: 760px) {
+    .vis-grid.cols-4, .vis-flow { grid-template-columns: repeat(2, 1fr); }
+    .vis-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .cd-row { grid-template-columns: 1fr; gap: 8px; }
+  }
+  @media (max-width: 480px) {
+    .vis-flow { grid-template-columns: 1fr; }
+  }
+
   footer { border-top: 1.5px solid var(--line); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
   @media (max-width: 760px) {
@@ -292,6 +317,119 @@
         <h2 class="sec-title">Teknik Berkarya Seni Rupa Dua Dimensi</h2>
         <p class="sec-intro">Karya visual berdimensi panjang dan lebar pada bidang permukaan (kertas, kanvas, kain). Kenali teknik dari jejak visualnya, bukan hanya nama medianya.</p>
 
+        <h3 class="sub"><span class="k">1.1</span> Contoh Visual 7 Teknik Seni Rupa 2D</h3>
+        <div class="vis-grid cols-4">
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik linear">
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <path d="M65 28h30l-5 16c18 8 24 26 20 44-3 12-14 18-30 18s-27-6-30-18c-4-18 2-36 20-44z" fill="none" stroke="#1E293B" stroke-width="2.2"/>
+                <path d="M92 34c16-2 24 8 20 22-3 10-12 14-18 14" fill="none" stroke="#1E293B" stroke-width="2"/>
+                <ellipse cx="80" cy="28" rx="15" ry="4" fill="none" stroke="#1E293B" stroke-width="2"/>
+                <path d="M34 96c12-10 22-4 28 6M34 96c8 8 20 10 28 6" fill="none" stroke="#1E293B" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>1. Linear</b><span>Objek dibentuk murni dari garis kontur &amp; lengkung.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik arsir">
+                <defs>
+                  <clipPath id="c-arsir"><circle cx="80" cy="58" r="36"/></clipPath>
+                </defs>
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <ellipse cx="92" cy="96" rx="34" ry="8" fill="none" stroke="#475569" stroke-width="1"/>
+                <path d="M62 96l10-6M70 98l14-8M80 99l16-9M90 99l16-9M100 98l14-8M110 96l10-5" stroke="#334155" stroke-width="1.2"/>
+                <g clip-path="url(#c-arsir)" stroke="#1E293B" stroke-linecap="round">
+                  <path d="M58 95l55-55M64 98l55-55M70 100l55-55M76 102l55-55M82 104l55-55M88 106l55-55M94 108l55-55M50 88l50-50M44 80l42-42" stroke-width="1.3"/>
+                  <path d="M78 32l42 42M72 38l44 44M68 46l44 44M66 56l42 42M72 70l36 36" stroke-width="1.2"/>
+                </g>
+                <circle cx="80" cy="58" r="36" fill="none" stroke="#1E293B" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>2. Arsir</b><span>Gelap-terang dari garis sejajar/silang yang makin rapat.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik dusel">
+                <defs>
+                  <radialGradient id="g-dusel" cx="36%" cy="34%" r="65%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="45%" stop-color="#CBD5E1"/>
+                    <stop offset="82%" stop-color="#64748B"/>
+                    <stop offset="100%" stop-color="#334155"/>
+                  </radialGradient>
+                  <radialGradient id="g-dsh" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#475569" stop-opacity=".55"/>
+                    <stop offset="100%" stop-color="#475569" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <ellipse cx="92" cy="96" rx="40" ry="10" fill="url(#g-dsh)"/>
+                <circle cx="80" cy="58" r="36" fill="url(#g-dusel)"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>3. Dusel</b><span>Gradasi halus lembut hasil gosokan (tanpa jejak garis).</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik blok">
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <path d="M25 98h110v6H25z" fill="#171B2E"/>
+                <rect x="74" y="64" width="12" height="36" fill="#171B2E"/>
+                <circle cx="80" cy="48" r="24" fill="#171B2E"/>
+                <circle cx="62" cy="56" r="16" fill="#171B2E"/>
+                <circle cx="98" cy="56" r="16" fill="#171B2E"/>
+                <path d="M118 34c5-5 11-5 15 0-5-2-9 0-12 4-3-4-7-6-12-4 3-4 6-4 9 0z" fill="#171B2E"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>4. Blok (Siluet)</b><span>Bidang ditutup satu warna rata &amp; tegas tanpa gradasi.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik pointilis">
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <g fill="#1E293B">
+                  <circle cx="62" cy="34" r="1.3"/><circle cx="72" cy="28" r="1.3"/><circle cx="54" cy="44" r="1.3"/><circle cx="68" cy="42" r="1.3"/><circle cx="50" cy="58" r="1.4"/><circle cx="62" cy="54" r="1.4"/>
+                  <circle cx="84" cy="26" r="1.5"/><circle cx="94" cy="30" r="1.6"/><circle cx="80" cy="38" r="1.5"/><circle cx="90" cy="40" r="1.7"/><circle cx="102" cy="38" r="1.8"/>
+                  <circle cx="74" cy="52" r="1.6"/><circle cx="84" cy="50" r="1.8"/><circle cx="94" cy="48" r="1.9"/><circle cx="104" cy="48" r="2"/><circle cx="110" cy="54" r="2"/>
+                  <circle cx="56" cy="70" r="1.6"/><circle cx="66" cy="66" r="1.7"/><circle cx="76" cy="62" r="1.8"/><circle cx="86" cy="60" r="2"/><circle cx="94" cy="58" r="2.1"/><circle cx="102" cy="58" r="2.1"/><circle cx="110" cy="62" r="2.1"/>
+                  <circle cx="62" cy="80" r="1.8"/><circle cx="70" cy="76" r="1.9"/><circle cx="78" cy="72" r="2"/><circle cx="86" cy="70" r="2.1"/><circle cx="94" cy="68" r="2.2"/><circle cx="102" cy="68" r="2.2"/><circle cx="108" cy="72" r="2.2"/>
+                  <circle cx="70" cy="86" r="2"/><circle cx="78" cy="82" r="2.1"/><circle cx="86" cy="80" r="2.2"/><circle cx="92" cy="78" r="2.3"/><circle cx="99" cy="78" r="2.3"/><circle cx="104" cy="82" r="2.2"/>
+                  <circle cx="80" cy="90" r="2.2"/><circle cx="87" cy="88" r="2.3"/><circle cx="94" cy="86" r="2.3"/><circle cx="90" cy="92" r="2.1"/><circle cx="98" cy="64" r="2.1"/><circle cx="89" cy="74" r="2.2"/><circle cx="97" cy="73" r="2.2"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>5. Pointilis</b><span>Disusun dari titik-titik; area gelap titiknya makin rapat.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik aquarel">
+                <rect width="160" height="120" rx="8" fill="#FAF9F5"/>
+                <circle cx="116" cy="36" r="16" fill="#F59E0B" fill-opacity=".35"/>
+                <path d="M12 88c26-34 52-30 82-6s40 16 54 6v24H12z" fill="#3B82F6" fill-opacity=".35"/>
+                <path d="M12 96c34-18 66-38 102-16 16 10 26 10 34 6v26H12z" fill="#10B981" fill-opacity=".38"/>
+                <path d="M40 74c24-28 54-24 84 4" fill="none" stroke="#1D4ED8" stroke-opacity=".35" stroke-width="8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>6. Aquarel</b><span>Cat air tipis &amp; transparan; warna bawah/kertas tembus.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Contoh teknik plakat">
+                <rect width="160" height="120" rx="8" fill="#1E3A8A"/>
+                <path d="M0 78c38-16 74-8 160 6v36H0z" fill="#15803D"/>
+                <circle cx="80" cy="54" r="26" fill="#E11D48"/>
+                <circle cx="58" cy="54" r="16" fill="#F43F5E"/>
+                <circle cx="102" cy="54" r="16" fill="#F43F5E"/>
+                <circle cx="80" cy="54" r="11" fill="#FACC15"/>
+                <path d="M76 80h8v30h-8z" fill="#22C55E"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>7. Plakat</b><span>Cat pekat &amp; tebal (opak); menutup penuh lapisan bawah.</span></div>
+          </div>
+        </div>
+
         <h3 class="sub"><span class="k">1.2</span> Tujuh Teknik Utama</h3>
         <div class="table-wrap">
           <table class="tbl">
@@ -351,6 +489,99 @@
           <li><b>Pembilasan &amp; pengeringan:</b> membersihkan sisa bahan dan mengeringkan kain.</li>
         </ol>
 
+        <h3 class="sub"><span class="k">2.4</span> Ilustrasi Proses Malam &amp; 4 Teknik Batik</h3>
+        <div class="vis-flow">
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 110" aria-label="Pelekatan malam di kain mori">
+                <rect width="180" height="110" rx="8" fill="#FAF6EC"/>
+                <path d="M24 55c22-26 44 26 66 0s44 26 66 0" fill="none" stroke="#C68B2C" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="56" cy="55" r="7" fill="#C68B2C"/><circle cx="122" cy="55" r="7" fill="#C68B2C"/>
+                <path d="M128 18l26 12-18 14-6-3z" fill="#92400E"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Tahap A: Malam Dilekatkan</b><span>Lilin malam menutup serat kain mori sebagai perintang.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 110" aria-label="Pewarnaan kain batik">
+                <rect width="180" height="110" rx="8" fill="#1E3A8A"/>
+                <path d="M24 55c22-26 44 26 66 0s44 26 66 0" fill="none" stroke="#C68B2C" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="56" cy="55" r="7" fill="#C68B2C"/><circle cx="122" cy="55" r="7" fill="#C68B2C"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Tahap B: Pewarnaan</b><span>Kain dicelup warna; bagian tertutup malam tidak tembus.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 110" aria-label="Hasil setelah nglorod">
+                <rect width="180" height="110" rx="8" fill="#1E3A8A"/>
+                <path d="M24 55c22-26 44 26 66 0s44 26 66 0" fill="none" stroke="#FAF6EC" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="56" cy="55" r="7" fill="#FAF6EC"/><circle cx="122" cy="55" r="7" fill="#FAF6EC"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Tahap C: Nglorod (Air Panas)</b><span>Malam luruh, muncul motif terang bekas perintang.</span></div>
+          </div>
+        </div>
+
+        <div class="vis-grid cols-4">
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Batik tulis">
+                <rect width="160" height="120" rx="8" fill="#FAF6EC"/>
+                <path d="M22 86c18-32 42-40 68-14 14 14 28 12 42-6" fill="none" stroke="#92400E" stroke-width="3.2" stroke-linecap="round"/>
+                <circle cx="48" cy="68" r="3" fill="#92400E"/><circle cx="58" cy="64" r="3" fill="#92400E"/><circle cx="68" cy="66" r="3" fill="#92400E"/>
+                <path d="M108 22l34 10-8 14-26-10z" fill="#B45309"/>
+                <path d="M108 22l-14 36 8-4" fill="none" stroke="#78350F" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Batik Tulis</b><span>Digores manual memakai canting tulis.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Batik cap">
+                <rect width="160" height="120" rx="8" fill="#FAF6EC"/>
+                <g stroke="#92400E" stroke-width="2" fill="none">
+                  <rect x="24" y="18" width="48" height="40" rx="4"/><circle cx="48" cy="38" r="11"/>
+                  <rect x="88" y="18" width="48" height="40" rx="4"/><circle cx="112" cy="38" r="11"/>
+                  <rect x="24" y="64" width="48" height="40" rx="4"/><circle cx="48" cy="84" r="11"/>
+                  <rect x="88" y="64" width="48" height="40" rx="4"/><circle cx="112" cy="84" r="11"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Batik Cap</b><span>Pola berulang presisi dari cap tembaga.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Celup ikat jumputan">
+                <rect width="160" height="120" rx="8" fill="#7C2D92"/>
+                <g fill="none" stroke="#FAF6EC">
+                  <circle cx="80" cy="60" r="40" stroke-width="5" stroke-dasharray="10 6"/>
+                  <circle cx="80" cy="60" r="24" stroke-width="6"/>
+                  <circle cx="80" cy="60" r="9" fill="#FAF6EC"/>
+                  <circle cx="26" cy="24" r="12" stroke-width="4"/><circle cx="134" cy="96" r="12" stroke-width="4"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Celup Ikat / Jumputan</b><span>Pola radial/cincin terang dari ikatan tali.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Teknik colet">
+                <rect width="160" height="120" rx="8" fill="#FAF6EC"/>
+                <path d="M36 86c0-20 18-24 28-10-10 14-28 18-28 10z" fill="#16A34A" stroke="#78350F" stroke-width="2"/>
+                <path d="M124 86c0-20-18-24-28-10 10 14 28 18 28 10z" fill="#16A34A" stroke="#78350F" stroke-width="2"/>
+                <circle cx="80" cy="40" r="13" fill="#E11D48" stroke="#78350F" stroke-width="2"/>
+                <circle cx="64" cy="54" r="13" fill="#E11D48" stroke="#78350F" stroke-width="2"/>
+                <circle cx="96" cy="54" r="13" fill="#E11D48" stroke="#78350F" stroke-width="2"/>
+                <circle cx="80" cy="54" r="8" fill="#FACC15" stroke="#78350F" stroke-width="2"/>
+                <path d="M114 18l24 20-8 8-24-20z" fill="#0284C7"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Teknik Colet</b><span>Warna dioles lokal per bagian memakai kuas.</span></div>
+          </div>
+        </div>
+
         <h3 class="sub"><span class="k">2.5</span> Teknik Batik &amp; <span class="k">2.6</span> Pewarna</h3>
         <div class="table-wrap">
           <table class="tbl">
@@ -383,6 +614,128 @@
         </div>
         <h2 class="sec-title">Motif Batik Daerah dan Motif Klasik</h2>
         <p class="sec-intro">Kenali ciri visual paling menonjol dari delapan motif/daerah yang tercantum dalam kisi-kisi, plus peringatan Hari Batik Nasional (<b>2 Oktober</b>, Keppres No. 33 Tahun 2009).</p>
+
+        <h3 class="sub"><span class="k">3.1</span> Galeri Visual 8 Motif Batik Kisi-Kisi</h3>
+        <div class="vis-grid cols-4">
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Mega Mendung Cirebon">
+                <rect width="160" height="120" rx="8" fill="#7F1D1D"/>
+                <g stroke-linejoin="round">
+                  <path d="M22 76c0-14 12-22 24-20 6-14 24-18 36-8 12-8 28-2 30 12 12 0 20 8 20 16H22z" fill="#1E3A8A" stroke="#DBEAFE" stroke-width="2"/>
+                  <path d="M32 74c0-10 9-16 18-14 5-10 18-13 28-6 9-6 21-1 22 9 9 0 15 6 15 11H32z" fill="#2563EB"/>
+                  <path d="M44 72c0-7 7-11 14-9 4-7 13-9 20-4 7-4 15 0 16 6 6 0 10 4 10 7H44z" fill="#60A5FA"/>
+                  <path d="M56 70c4-6 14-8 22-3 6-3 13 0 15 3H56z" fill="#EFF6FF"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Cirebon — Mega Mendung</b><span>Awan berlapis/bergelombang bertingkat.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Kawung">
+                <rect width="160" height="120" rx="8" fill="#6B3F1D"/>
+                <g fill="#F5E6C8" stroke="#3E220D" stroke-width="1.5">
+                  <ellipse cx="62" cy="42" rx="14" ry="8" transform="rotate(45 62 42)"/>
+                  <ellipse cx="98" cy="42" rx="14" ry="8" transform="rotate(-45 98 42)"/>
+                  <ellipse cx="62" cy="78" rx="14" ry="8" transform="rotate(-45 62 78)"/>
+                  <ellipse cx="98" cy="78" rx="14" ry="8" transform="rotate(45 98 78)"/>
+                </g>
+                <circle cx="80" cy="60" r="4" fill="#F5E6C8"/>
+                <circle cx="62" cy="42" r="2" fill="#6B3F1D"/><circle cx="98" cy="42" r="2" fill="#6B3F1D"/>
+                <circle cx="62" cy="78" r="2" fill="#6B3F1D"/><circle cx="98" cy="78" r="2" fill="#6B3F1D"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Motif Kawung</b><span>4 oval simetris mengitari pusat (kolang-kaling).</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Solo Parang Sogan">
+                <rect width="160" height="120" rx="8" fill="#7C4A21"/>
+                <g stroke="#2B1708" stroke-width="2" fill="#F3DFC1">
+                  <path d="M-10 90L90 -10h22L12 90z"/><path d="M35 125L135 25h22L57 125z"/><path d="M80 130L170 40v22L102 130z"/>
+                </g>
+                <g fill="#7C4A21">
+                  <circle cx="38" cy="52" r="5"/><circle cx="56" cy="34" r="5"/>
+                  <circle cx="84" cy="88" r="5"/><circle cx="102" cy="70" r="5"/><circle cx="120" cy="52" r="5"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Solo — Klasik Sogan</b><span>Warna cokelat sogan &amp; pola diagonal Parang.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Garutan">
+                <rect width="160" height="120" rx="8" fill="#F5ECCD"/>
+                <g stroke="#B45309" stroke-width="2" fill="none">
+                  <path d="M0 40L40 0M0 80L80 0M0 120L120 0M40 120L160 0M80 120L160 40M120 120L160 80" stroke-opacity=".35"/>
+                  <polygon points="80,22 114,60 80,98 46,60" fill="#D97706" fill-opacity=".22"/>
+                  <polygon points="80,36 100,60 80,84 60,60" fill="#0F766E" fill-opacity=".28"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Garut — Garutan</b><span>Latar krem gumading + geometris diagonal.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Datulaya Banten">
+                <rect width="160" height="120" rx="8" fill="#1E3A5F"/>
+                <polygon points="80,14 132,60 80,106 28,60" fill="#991B1B" stroke="#FDE68A" stroke-width="2"/>
+                <circle cx="80" cy="60" r="20" fill="none" stroke="#FDE68A" stroke-width="2"/>
+                <g fill="#FDE68A">
+                  <circle cx="80" cy="46" r="6"/><circle cx="80" cy="74" r="6"/><circle cx="66" cy="60" r="6"/><circle cx="94" cy="60" r="6"/>
+                  <circle cx="80" cy="60" r="4" fill="#991B1B"/>
+                </g>
+                <path d="M18 28c10 2 14 10 12 18M142 28c-10 2-14 10-12 18M18 92c10-2 14-10 12-18M142 92c-10-2-14-10-12-18" fill="none" stroke="#86EFAC" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Banten — Datulaya</b><span>Belah ketupat bunga &amp; lingkaran + sulur daun.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Ulamsari Mas Bali">
+                <rect width="160" height="120" rx="8" fill="#0E7490"/>
+                <path d="M16 96c24-12 48 12 72 0s36 12 56 0" fill="none" stroke="#67E8F9" stroke-width="2"/>
+                <path d="M36 52c18-18 46-18 66 0-20 18-48 18-66 0z" fill="#F59E0B" stroke="#FEF08A" stroke-width="2"/>
+                <polygon points="100,52 120,38 116,66" fill="#EF4444"/>
+                <circle cx="50" cy="50" r="3" fill="#171B2E"/>
+                <path d="M58 84c12-10 28-8 36 2" fill="none" stroke="#FDE047" stroke-width="4" stroke-linecap="round"/>
+                <path d="M24 104V72M30 104V78" stroke="#4ADE80" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Bali — Ulamsari Mas</b><span>Fauna laut (ikan &amp; udang) berwarna cerah.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Buketan Pekalongan">
+                <rect width="160" height="120" rx="8" fill="#FFFBEB"/>
+                <path d="M80 104C78 78 60 62 44 46M80 104c2-26 20-42 36-58M80 104V40" fill="none" stroke="#15803D" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="44" cy="44" r="12" fill="#EC4899"/><circle cx="44" cy="44" r="4" fill="#FDE047"/>
+                <circle cx="80" cy="34" r="14" fill="#E11D48"/><circle cx="80" cy="34" r="5" fill="#FDE047"/>
+                <circle cx="116" cy="46" r="12" fill="#3B82F6"/><circle cx="116" cy="46" r="4" fill="#FDE047"/>
+                <path d="M68 94h24l-5 10H73z" fill="#D97706"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Pekalongan — Buketan</b><span>Rangkaian buket bunga pesisir warna cerah.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 160 120" aria-label="Motif Batik Betawi">
+                <rect width="160" height="120" rx="8" fill="#DC2626"/>
+                <polygon points="16,112 32,74 48,112" fill="#FACC15"/><polygon points="112,112 128,74 144,112" fill="#16A34A"/>
+                <g stroke="#FACC15" stroke-width="2.2" stroke-linecap="round">
+                  <line x1="80" y1="48" x2="54" y2="20"/><line x1="80" y1="48" x2="68" y2="16"/>
+                  <line x1="80" y1="48" x2="80" y2="14"/><line x1="80" y1="48" x2="92" y2="16"/><line x1="80" y1="48" x2="106" y2="20"/>
+                </g>
+                <circle cx="54" cy="20" r="3.5" fill="#22C55E"/><circle cx="80" cy="14" r="3.5" fill="#38BDF8"/><circle cx="106" cy="20" r="3.5" fill="#22C55E"/>
+                <circle cx="80" cy="64" r="18" fill="#FEF2F2" stroke="#171B2E" stroke-width="2"/>
+                <circle cx="73" cy="61" r="2.5" fill="#171B2E"/><circle cx="87" cy="61" r="2.5" fill="#171B2E"/>
+                <path d="M73 71q7 5 14 0" fill="none" stroke="#DC2626" stroke-width="2.2"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Jakarta — Batik Betawi</b><span>Ikon Ondel-ondel, kembang kelapa &amp; tumpal.</span></div>
+          </div>
+        </div>
 
         <div class="table-wrap">
           <table class="tbl">
@@ -424,7 +777,39 @@
           </div>
         </div>
 
-        <h3 class="sub"><span class="k">4.2</span> Struktur / Dimensi Warna</h3>
+        <h3 class="sub"><span class="k">4.2</span> Struktur / Dimensi Warna (Visual)</h3>
+        <div class="color-demo">
+          <div class="cd-row">
+            <div><b>Hue</b><small>Nama/jenis warna dasar</small></div>
+            <div class="swatches">
+              <div class="sw" style="background:#EF4444;color:#fff">Merah</div>
+              <div class="sw" style="background:#FACC15;color:#171B2E">Kuning</div>
+              <div class="sw" style="background:#22C55E;color:#fff">Hijau</div>
+              <div class="sw" style="background:#2563EB;color:#fff">Biru</div>
+              <div class="sw" style="background:#9333EA;color:#fff">Ungu</div>
+            </div>
+          </div>
+          <div class="cd-row">
+            <div><b>Value (Tint &rarr; Shade)</b><small>Terang (+putih) ke gelap (+hitam)</small></div>
+            <div class="swatches">
+              <div class="sw" style="background:#DBEAFE;color:#1E3A8A">Tint ++</div>
+              <div class="sw" style="background:#93C5FD;color:#1E3A8A">Tint +</div>
+              <div class="sw" style="background:#2563EB;color:#fff">Biru Asli</div>
+              <div class="sw" style="background:#1E40AF;color:#fff">Shade +</div>
+              <div class="sw" style="background:#172554;color:#fff">Shade ++</div>
+            </div>
+          </div>
+          <div class="cd-row">
+            <div><b>Intensity / Chroma</b><small>Cerah/pekat ke kusam (+abu)</small></div>
+            <div class="swatches">
+              <div class="sw" style="background:#EF233C;color:#fff">Cerah</div>
+              <div class="sw" style="background:#D84352;color:#fff">Tinggi</div>
+              <div class="sw" style="background:#B55D66;color:#fff">Sedang</div>
+              <div class="sw" style="background:#947075;color:#fff">Redup</div>
+              <div class="sw" style="background:#7A7274;color:#fff">Kusam</div>
+            </div>
+          </div>
+        </div>
         <div class="table-wrap">
           <table class="tbl">
             <thead><tr><th>Istilah</th><th>Makna</th><th>Contoh</th></tr></thead>
@@ -464,7 +849,90 @@
           </table>
         </div>
 
-        <h3 class="sub"><span class="k">5.2</span> Aliran / Gaya Seni Lukis</h3>
+        <h3 class="sub"><span class="k">5.2</span> Aliran / Gaya Seni Lukis &amp; Contoh Visual</h3>
+        <div class="vis-grid cols-3">
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Naturalisme Realisme">
+                <rect width="180" height="120" rx="8" fill="#BAE6FD"/>
+                <polygon points="20,90 72,34 124,90" fill="#64748B"/>
+                <polygon points="72,34 58,50 86,50" fill="#F8FAFC"/>
+                <polygon points="84,90 130,44 172,90" fill="#475569"/>
+                <rect y="88" width="180" height="32" fill="#4D7C0F"/>
+                <path d="M76 88c-8 10 14 16 4 32h26c8-14-14-20-6-32z" fill="#38BDF8"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Naturalisme / Realisme</b><span>Proporsi &amp; warna alami sesuai pengamatan nyata.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Impresionisme">
+                <rect width="180" height="120" rx="8" fill="#93C5FD"/>
+                <rect y="64" width="180" height="56" fill="#60A5FA"/>
+                <circle cx="90" cy="44" r="14" fill="#FB923C"/>
+                <g stroke-linecap="round" stroke-width="3.5">
+                  <line x1="76" y1="72" x2="104" y2="72" stroke="#FB923C"/>
+                  <line x1="82" y1="82" x2="100" y2="82" stroke="#FDBA74"/>
+                  <line x1="74" y1="92" x2="96" y2="92" stroke="#FB923C"/>
+                  <line x1="22" y1="76" x2="46" y2="76" stroke="#1D4ED8"/>
+                  <line x1="126" y1="84" x2="154" y2="84" stroke="#1D4ED8"/>
+                  <line x1="40" y1="102" x2="68" y2="102" stroke="#DBEAFE"/>
+                </g>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Impresionisme</b><span>Kesan cahaya sesaat; sapuan kuas pendek tampak.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Ekspresionisme">
+                <rect width="180" height="120" rx="8" fill="#1E1B4B"/>
+                <path d="M14 42c24-22 50 18 76-4s44 16 74-6" fill="none" stroke="#FACC15" stroke-width="5" stroke-linecap="round"/>
+                <path d="M18 64c26-18 52 18 78-2s42 14 68-4" fill="none" stroke="#38BDF8" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="144" cy="28" r="12" fill="#FDE047"/>
+                <path d="M36 120c-4-34 8-52 4-82 10 26 4 48 12 82z" fill="#0F172A"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Ekspresionisme</b><span>Luapan emosi batin; garis &amp; warna berani/meliuk.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Kubisme">
+                <rect width="180" height="120" rx="8" fill="#F1F5F9"/>
+                <polygon points="48,20 92,16 90,64 44,56" fill="#F59E0B" stroke="#1E293B" stroke-width="2"/>
+                <polygon points="92,16 136,28 126,70 90,64" fill="#38BDF8" stroke="#1E293B" stroke-width="2"/>
+                <polygon points="44,56 90,64 86,106 52,98" fill="#FB7185" stroke="#1E293B" stroke-width="2"/>
+                <polygon points="90,64 126,70 118,106 86,106" fill="#A78BFA" stroke="#1E293B" stroke-width="2"/>
+                <circle cx="70" cy="44" r="5" fill="#1E293B"/><polygon points="104,44 118,40 112,52" fill="#1E293B"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Kubisme</b><span>Objek dipecah jadi bidang geometris multi-sudut.</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Surealisme">
+                <rect width="180" height="120" rx="8" fill="#FED7AA"/>
+                <rect y="78" width="180" height="42" fill="#C2410C"/>
+                <path d="M36 96V34h54" fill="none" stroke="#431407" stroke-width="4" stroke-linecap="round"/>
+                <path d="M62 34c18 0 26 8 24 22-2 14-8 24-20 24-10 0-14-10-12-24 1-12 2-22 8-22z" fill="#F8FAFC" stroke="#1E293B" stroke-width="2"/>
+                <path d="M72 48v10l8 5" fill="none" stroke="#1E293B" stroke-width="2"/>
+                <circle cx="136" cy="40" r="14" fill="#38BDF8"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Surealisme</b><span>Benda nyata dalam adegan mimpi/ganjil (jam meleleh).</span></div>
+          </div>
+          <div class="vis-card">
+            <div class="vis-art">
+              <svg viewBox="0 0 180 120" aria-label="Abstraksionisme">
+                <rect width="180" height="120" rx="8" fill="#FAF9F5"/>
+                <circle cx="62" cy="56" r="28" fill="#EF4444" fill-opacity=".85"/>
+                <rect x="84" y="28" width="54" height="54" fill="#2563EB" fill-opacity=".8" transform="rotate(14 111 55)"/>
+                <polygon points="40,98 92,48 112,102" fill="#FACC15" fill-opacity=".9"/>
+                <line x1="20" y1="26" x2="160" y2="96" stroke="#171B2E" stroke-width="3.5"/>
+              </svg>
+            </div>
+            <div class="vis-cap"><b>Abstraksionisme</b><span>Komposisi bentuk, garis &amp; warna tanpa objek nyata.</span></div>
+          </div>
+        </div>
         <div class="table-wrap">
           <table class="tbl">
             <thead><tr><th>Aliran</th><th>Ciri Utama &amp; Petunjuk Cepat</th></tr></thead>
@@ -800,21 +1268,44 @@ const CHECKS = [
     if (confirm('Hapus semua tanda "dikuasai" untuk Seni Budaya?')) { mastered = {}; save(); refresh(); }
   });
 
-  /* ---------- TOC ---------- */
-  if ('IntersectionObserver' in window) {
-    var links = {};
-    document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
-          var a = links[en.target.id];
-          if (a) { a.classList.add('active'); a.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }
-        }
-      });
-    }, { rootMargin: '-20% 0px -70% 0px' });
-    document.querySelectorAll('section.sec').forEach(function (s) { io.observe(s); });
+  /* ---------- TOC & smooth anchor ---------- */
+  var tocEl = $('toc');
+  var links = {};
+  document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+  var secEls = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var curId = '';
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var best = secEls[0] ? secEls[0].id : '';
+    for (var i = 0; i < secEls.length; i++) {
+      if (secEls[i].getBoundingClientRect().top <= 120) best = secEls[i].id;
+    }
+    if (best && best !== curId) {
+      curId = best;
+      Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+      var a = links[best];
+      if (a) {
+        a.classList.add('active');
+        if (tocEl) tocEl.scrollLeft = a.offsetLeft - (tocEl.clientWidth - a.offsetWidth) / 2;
+      }
+    }
   }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+  }, { passive: true });
+  spy();
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    var y = id === 'top' ? 0 : target.getBoundingClientRect().top + window.pageYOffset - 68;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
 
   /* ---------- theme ---------- */
   function themeLabel() {
