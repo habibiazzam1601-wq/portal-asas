@@ -3,36 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sejarah — Portal Belajar ASAS</title>
-
-<!-- =====================================================================
-     KISI-KISI — EDIT DI SINI SAJA
-     Setiap bab = satu objek { bab, poin, catatan }.
-     ===================================================================== -->
+<title>Sejarah Indonesia — Portal Belajar ASAS</title>
 <script>
-const KISI = [
-  {
-    bab: "Contoh: Judul Bab 1",
-    poin: [
-      "Contoh indikator: menjelaskan konsep ...",
-      "Contoh indikator: menghitung / menganalisis ..."
-    ],
-    catatan: "Opsional. Tulis rumus atau poin penting di sini."
-  },
-  {
-    bab: "Contoh: Judul Bab 2",
-    poin: [
-      "Indikator pertama",
-      "Indikator kedua",
-      "Indikator ketiga"
-    ]
-  }
-];
-</script>
-<!-- ===================================================================== -->
-
-<script>
-  const MAPEL = { id: "sej", code: "SEJ", num: "07", name: "Sejarah", al: "#86561A", ad: "#CFA062" };
   (function () {
     try {
       var t = localStorage.getItem('asas.theme');
@@ -48,201 +20,1579 @@ const KISI = [
   :root {
     --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    --gap: 20px;
     --pad: clamp(14px, 4vw, 32px);
+    --g1: #B5651D; --g2: #D9A521;
   }
   html[data-theme="light"] {
-    --bg: #F3F5FA; --paper: #FFFFFF; --surface: #F6F7FB; --fg: #171B2E; --muted: #5B6278; --line: #DFE3EE;
-    --a: var(--al); --tip: #13865A; color-scheme: light;
+    --bg: #F3F5FA; --paper: #FFFFFF; --surface: #F6F7FB; --fg: #171B2E; --muted: #5B6278; --line: #DFE3EE; --strong: #171B2E;
+    --a: #A3580F; --tip: #13865A; --trap: #B57A00; --why: #7A4BD6; --danger: #C92A4E;
+    --b1: #2563EB; --b2: #DC5815; --b3: #15803D; --b4: #6D3CE8; --b5: #C2255C; --b6: #0B7FA8;
+    color-scheme: light;
   }
   html[data-theme="dark"] {
-    --bg: #0E111B; --paper: #171B28; --surface: #1D2232; --fg: #E8EBF4; --muted: #A0A7BA; --line: #2A3042;
-    --a: var(--ad); --tip: #5FD69C; color-scheme: dark;
+    --bg: #0E111B; --paper: #171B28; --surface: #1D2232; --fg: #E8EBF4; --muted: #A0A7BA; --line: #2A3042; --strong: #E8EBF4;
+    --a: #F2B66D; --tip: #5FD69C; --trap: #FFC94F; --why: #B9A0FF; --danger: #FF7FA3;
+    --b1: #7DA2FF; --b2: #FF945E; --b3: #57D68D; --b4: #B49BFF; --b5: #FF7FA3; --b6: #5CC8F0;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease; }
+  html { scroll-padding-top: 72px; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.62;
+    -webkit-font-smoothing: antialiased; transition: background-color .25s ease, color .25s ease;
+  }
   a { color: inherit; text-decoration: none; }
-  button, input { font: inherit; color: inherit; }
+  button, input, select { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
   .label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--pad); }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 var(--pad); }
+  b, strong { font-weight: 700; }
 
-  .topnav { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); border-bottom: 1.5px solid var(--line); }
-  .topnav::after { content: ""; position: absolute; left: 0; bottom: -1.5px; height: 3px; width: var(--p, 0%); background: var(--a); transition: width .35s ease; }
-  .nav-in { max-width: 860px; margin: 0 auto; padding: 10px var(--pad); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); font-size: 13px; font-weight: 700; }
+  /* sticky top pill nav (solid, zero scroll-jitter) */
+  .topnav { position: sticky; top: 0; z-index: 40; background: var(--paper); border-bottom: 1.5px solid var(--line); }
+  .topnav::after { content: ""; position: absolute; left: 0; bottom: -1.5px; height: 3px; width: var(--p, 0%); background: linear-gradient(90deg, var(--g1), var(--g2)); transition: width .35s ease; }
+  .nav-in { max-width: 1120px; margin: 0 auto; padding: 10px var(--pad); display: flex; align-items: center; gap: 10px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; }
   .pill:hover { border-color: var(--a); }
+  .toc { display: flex; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc a { --b: var(--a); display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); font-size: 12.5px; font-weight: 700; white-space: nowrap; color: var(--muted); }
+  .toc a .n { font-family: var(--mono); color: var(--b); }
+  .toc a .st { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--line); }
+  .toc a.mastered .st { background: var(--tip); border-color: var(--tip); }
+  .toc a.active { background: var(--b); border-color: var(--b); color: #fff; }
+  .toc a.active .n { color: #fff; }
+  html[data-theme="dark"] .toc a.active, html[data-theme="dark"] .toc a.active .n { color: #0E111B; }
+  .nav-r { display: flex; align-items: center; gap: 8px; flex: none; }
+  .key-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .key-pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .key-pill:has(input:checked) { background: var(--why); border-color: var(--why); color: #fff; }
+  html[data-theme="dark"] .key-pill:has(input:checked) { color: #0E111B; }
   .toggle { display: inline-flex; align-items: center; gap: 8px; background: var(--paper); border: 1.5px solid var(--line); padding: 5px 10px 5px 6px; border-radius: 999px; cursor: pointer; font-size: 12.5px; font-weight: 700; }
   .switch { position: relative; width: 30px; height: 18px; border-radius: 999px; background: var(--line); flex: none; }
   .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform .25s ease; }
   html[data-theme="dark"] .toggle .switch { background: var(--a); }
   html[data-theme="dark"] .toggle .switch::after { transform: translateX(12px); }
 
+  /* hero + peta */
   .hero { position: relative; overflow: hidden; margin-top: 22px; border-radius: 22px; background: var(--paper); border: 1.5px solid var(--line); padding: clamp(22px, 4vw, 34px); }
-  .hero::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: var(--a); }
-  .code { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--a) 13%, var(--paper)); color: var(--a); font-family: var(--mono); font-size: 12px; font-weight: 700; margin-bottom: 10px; }
-  h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.06; letter-spacing: -.03em; font-weight: 800; }
-  .hero-stats { margin-top: 16px; display: flex; gap: 18px; flex-wrap: wrap; padding-top: 14px; border-top: 1.5px solid var(--line); font-size: 13.5px; color: var(--muted); font-weight: 600; }
-  .hero-stats b { color: var(--fg); }
-
-  .tools { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 20px 0 16px; flex-wrap: wrap; }
-  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--paper); padding: 0 12px; }
-  .search svg { width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 1.5; flex: none; }
-  .search input { border: 0; background: transparent; padding: 10px 0; outline: none; width: 100%; }
-  .search input::placeholder { color: var(--muted); }
+  .hero::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: linear-gradient(90deg, var(--b1), var(--b2), var(--b3), var(--b4), var(--b5)); }
+  .hero-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .code { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--a) 14%, var(--paper)); color: var(--a); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+  .hero h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.06; letter-spacing: -.03em; font-weight: 800; }
+  .subtitle { margin-top: 8px; color: var(--muted); }
+  .hero-stats { margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 14px; border-top: 1.5px solid var(--line); font-size: 13.5px; font-weight: 600; color: var(--muted); }
   .link-btn { border: 0; background: transparent; padding: 0; cursor: pointer; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
   .link-btn:hover { color: var(--fg); }
 
-  .bab { border-radius: 20px; background: var(--paper); border: 1.5px solid var(--line); border-top: 5px solid var(--a); padding: 20px; margin-bottom: 16px; }
-  .bab-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
-  .bab h2 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -.015em; }
-  .bab-prog { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--a); white-space: nowrap; }
-  ul.poin { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  ul.poin li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface); }
-  .chk { appearance: none; -webkit-appearance: none; margin: 2px 0 0; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--muted); background: var(--paper); cursor: pointer; display: grid; place-items: center; }
-  .chk::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
-  .chk:checked { background: var(--tip); border-color: var(--tip); }
-  .chk:checked::after { opacity: 1; }
-  ul.poin label { cursor: pointer; overflow-wrap: anywhere; }
-  li.done label { color: var(--muted); text-decoration: line-through; }
-  .catatan { margin-top: 12px; padding: 12px 14px; border-radius: 12px; border-left: 4px solid var(--a); background: color-mix(in srgb, var(--a) 8%, var(--paper)); font-size: 14px; white-space: pre-line; }
-  .catatan .label { display: block; margin-bottom: 4px; color: var(--a); font-weight: 700; }
-  .empty { padding: 28px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 18px; background: var(--paper); }
+  .peta { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 16px 0 18px; }
+  .peta a { --b: var(--a); display: block; border-radius: 16px; background: var(--paper); border: 1.5px solid var(--line); border-top: 5px solid var(--b); padding: 12px; transition: transform .18s ease, border-color .18s ease; }
+  .peta a:hover { transform: translateY(-2px); border-color: var(--b); }
+  .peta a span { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--b); }
+  .peta a b { display: block; margin-top: 4px; font-size: 13.5px; line-height: 1.25; }
 
-  footer { border-top: 1.5px solid var(--line); margin-top: 32px; padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  /* guide & pengecoh */
+  .guide-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; margin-bottom: 18px; }
+  .guide { border-radius: 18px; border: 1.5px solid var(--line); border-left: 6px solid var(--why); padding: 15px 18px; background: var(--paper); }
+  .guide.trap-top { border-left-color: var(--danger); background: color-mix(in srgb, var(--danger) 6%, var(--paper)); }
+  .guide .label { display: block; margin-bottom: 8px; color: var(--why); font-weight: 700; }
+  .guide.trap-top .label { color: var(--danger); }
+  .guide ul { margin: 0; padding: 0 0 0 18px; font-size: 14px; }
+  .guide li { margin-bottom: 5px; }
+
+  /* global search bar */
+  .tools-bar { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin: 0 0 22px; flex-wrap: wrap; background: var(--paper); border: 1.5px solid var(--line); border-radius: 18px; padding: 10px 14px; }
+  .search { flex: 1 1 240px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .search svg { width: 16px; height: 16px; stroke: var(--muted); fill: none; stroke-width: 1.7; flex: none; }
+  .search input { border: 0; background: transparent; padding: 6px 0; outline: none; width: 100%; font-size: 14.5px; }
+  .search input::placeholder { color: var(--muted); }
+
+  /* Arc sections */
+  main.content { padding-bottom: 48px; }
+  .sec { --b: var(--b1); border-radius: 22px; background: var(--paper); border: 1.5px solid var(--line); border-top: 6px solid var(--b); padding: clamp(18px, 3.5vw, 28px); margin-bottom: 26px; }
+  #arc-1 { --b: var(--b1); } #arc-2 { --b: var(--b2); } #arc-3 { --b: var(--b3); }
+  #arc-4 { --b: var(--b4); } #arc-5 { --b: var(--b5); } #kronologi { --b: var(--b6); }
+  .sec-meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .sec-meta .label { display: inline-flex; align-items: center; gap: 8px; color: var(--b); font-weight: 700; }
+  .sq { width: 8px; height: 8px; border-radius: 3px; background: var(--b); display: inline-block; flex: none; }
+  .sec-title { margin: 8px 0 0; font-size: clamp(23px, 3.2vw, 31px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; }
+  .sec-intro { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+  .master { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1.5px solid var(--line); padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; background: var(--surface); }
+  .master:hover { border-color: var(--b); }
+  .master .box { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--muted); display: inline-grid; place-items: center; }
+  .master[aria-pressed="true"] { border-color: var(--tip); background: color-mix(in srgb, var(--tip) 12%, var(--paper)); color: var(--tip); }
+  .master[aria-pressed="true"] .box { background: var(--tip); border-color: var(--tip); }
+
+  /* visual SVG banners inside arcs */
+  .vis-box { margin: 18px 0 8px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface); overflow: hidden; }
+  .vis-box svg { width: 100%; height: auto; display: block; }
+  .vis-box .vcap { padding: 9px 14px; border-top: 1.5px solid var(--line); font-size: 13px; color: var(--muted); }
+  .vis-box .vcap b { color: var(--fg); }
+
+  /* indicator cards inside each Arc */
+  .topic-list { display: grid; gap: 18px; margin-top: 18px; }
+  .tcard { border-radius: 18px; border: 1.5px solid var(--line); background: var(--surface); overflow: hidden; }
+  .tcard-head { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: color-mix(in srgb, var(--b) 12%, var(--paper)); border-bottom: 1.5px solid var(--line); }
+  .tcard-num { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 30px; padding: 0 8px; border-radius: 9px; background: var(--b); color: #fff; font-family: var(--mono); font-size: 13px; font-weight: 700; flex: none; }
+  html[data-theme="dark"] .tcard-num { color: #0E111B; }
+  .tcard-head h3 { margin: 0; font-size: 17px; font-weight: 800; line-height: 1.28; letter-spacing: -.01em; }
+  .tcard-body { padding: 15px 16px 16px; display: grid; gap: 12px; }
+
+  .blk-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--b); margin-bottom: 4px; display: block; }
+  .alur p { margin: 0 0 8px; font-size: 15px; }
+  .alur p:last-child { margin-bottom: 0; }
+  .kw-box { border-radius: 13px; background: var(--paper); border: 1.5px solid var(--line); padding: 11px 14px; }
+  .kw-box ul { margin: 0; padding: 0 0 0 18px; font-size: 14.2px; display: grid; gap: 4px; }
+
+  /* tables */
+  .tbl-title { font-family: var(--mono); font-size: 11.5px; font-weight: 700; color: var(--b); text-transform: uppercase; letter-spacing: .04em; margin: 2px 0 6px; }
+  .table-wrap { overflow-x: auto; border-radius: 13px; border: 1.5px solid var(--line); background: var(--paper); }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 13.8px; }
+  table.tbl th { text-align: left; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--b); background: color-mix(in srgb, var(--b) 11%, var(--paper)); border-bottom: 1.5px solid var(--line); padding: 9px 12px; white-space: nowrap; }
+  table.tbl td { border-bottom: 1px solid var(--line); padding: 9px 12px; vertical-align: top; }
+  table.tbl tr:last-child td { border-bottom: 0; }
+  table.tbl td.yr { font-family: var(--mono); font-weight: 700; color: var(--b); white-space: nowrap; width: 110px; }
+
+  /* trik & jebakan pair */
+  .tj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tj-grid.one { grid-template-columns: 1fr; }
+  .trik-box { border-radius: 13px; padding: 11px 13px; border-left: 5px solid var(--trap); background: color-mix(in srgb, var(--trap) 11%, var(--paper)); font-size: 13.8px; }
+  .trik-box .blk-label { color: var(--trap); }
+  .jebak-box { border-radius: 13px; padding: 11px 13px; border-left: 5px solid var(--danger); background: color-mix(in srgb, var(--danger) 9%, var(--paper)); font-size: 13.8px; }
+  .jebak-box .blk-label { color: var(--danger); }
+
+  /* latihan HOTS per Arc */
+  .lat-wrap { margin-top: 22px; padding-top: 18px; border-top: 1.5px dashed var(--line); }
+  .lat-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .lat-head h3 { margin: 0; font-size: 17px; font-weight: 800; color: var(--b); }
+  .soal-list { display: grid; gap: 10px; }
+  .soal { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: start; padding: 13px 15px; border-radius: 15px; background: var(--surface); border: 1.5px solid var(--line); }
+  .soal-n { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--b); padding-top: 2px; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; background: color-mix(in srgb, var(--b) 13%, var(--paper)); color: var(--b); padding: 2px 8px; margin-bottom: 5px; }
+  .soal-q { font-size: 14.5px; font-weight: 600; }
+  .kunci-box { display: none; margin-top: 10px; padding: 10px 13px; border-radius: 11px; border-left: 4px solid var(--tip); background: color-mix(in srgb, var(--tip) 10%, var(--paper)); font-size: 13.8px; }
+  .kunci-box .ans { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--tip); text-transform: uppercase; margin-bottom: 3px; }
+  .soal.open .kunci-box, body.show-keys .kunci-box { display: block; }
+  body.show-keys .kbtn { visibility: hidden; }
+  .kbtn { border: 1.5px solid var(--line); border-radius: 999px; background: var(--paper); padding: 5px 12px; cursor: pointer; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .kbtn:hover { border-color: var(--b); color: var(--b); }
+  .empty-search { padding: 22px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 16px; display: none; margin-bottom: 20px; }
+
+  footer { border-top: 1.5px solid var(--line); padding: 18px 0 32px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 780px) {
+    .peta { grid-template-columns: repeat(2, 1fr); }
+    .guide-grid, .tj-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 620px) {
+    body { font-size: 15px; }
+    .soal { grid-template-columns: 28px 1fr; }
+    .kbtn { grid-column: 2; justify-self: start; }
+  }
+  @media print {
+    .topnav, .kbtn, .master, .tools-bar, footer { display: none !important; }
+    .kunci-box { display: block !important; }
+  }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 </style>
 </head>
 <body>
-<nav class="topnav" id="top">
+<nav class="topnav" id="top" aria-label="Navigasi Arc">
   <div class="nav-in">
     <a class="pill" href="index.html">&larr; Indeks</a>
-    <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
-      <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
-    </button>
+    <div class="toc" id="toc">
+      <a href="#arc-1" data-id="arc-1" style="--b:var(--b1)"><span class="n">Arc 1</span><span>Penjelajahan &amp; VOC</span><span class="st"></span></a>
+      <a href="#arc-2" data-id="arc-2" style="--b:var(--b2)"><span class="n">Arc 2</span><span>Tanam Paksa &amp; Perang</span><span class="st"></span></a>
+      <a href="#arc-3" data-id="arc-3" style="--b:var(--b3)"><span class="n">Arc 3</span><span>Dampak &amp; Politik Etis</span><span class="st"></span></a>
+      <a href="#arc-4" data-id="arc-4" style="--b:var(--b4)"><span class="n">Arc 4</span><span>Pergerakan &amp; Sumpah Pemuda</span><span class="st"></span></a>
+      <a href="#arc-5" data-id="arc-5" style="--b:var(--b5)"><span class="n">Arc 5</span><span>Akhir Hindia Belanda</span><span class="st"></span></a>
+      <a href="#kronologi" data-id="kronologi" style="--b:var(--b6)"><span class="n">++</span><span>Kronologi Besar</span><span class="st"></span></a>
+    </div>
+    <div class="nav-r">
+      <label class="key-pill" title="Tampilkan semua kunci latihan HOTS">
+        <input type="checkbox" id="show-keys"><span>Kunci</span>
+      </label>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang/gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Terang</span>
+      </button>
+    </div>
   </div>
 </nav>
 
 <div class="wrap">
   <header class="hero">
-    <div class="code"><span id="m-code"></span></div>
-    <h1 id="m-name"></h1>
+    <div class="hero-top">
+      <span class="code">03 / SEJ</span>
+      <span class="label">5 Arc &middot; 40 Indikator &middot; 20 Latihan HOTS</span>
+    </div>
+    <h1>Sejarah Indonesia</h1>
+    <div class="subtitle">Semester Ganjil 2026 &middot; Alur cerita, keyword ujian, tabel perbandingan, trik hafal, jebakan soal &amp; kronologi besar</div>
     <div class="hero-stats">
-      <span>Bab: <b id="m-bab">0</b></span>
-      <span>Dikuasai: <b id="m-done">0/0</b> (<b id="m-pct">0%</b>)</span>
+      <span>Bagian dikuasai: <b id="m-done">0/6</b></span>
+      <button class="link-btn" id="reset" type="button">Reset tanda dikuasai</button>
     </div>
   </header>
 
-  <main>
-    <div class="tools">
-      <label class="search">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-        <input id="q" type="search" placeholder="Cari bab atau indikator" aria-label="Cari">
-      </label>
-      <button class="link-btn" id="reset" type="button">Reset centang mapel ini</button>
+  <div class="peta">
+    <a href="#arc-1" style="--b:var(--b1)"><span>ARC 1 · 1–8</span><b>Penjelajahan, VOC, Daendels &amp; Raffles</b></a>
+    <a href="#arc-2" style="--b:var(--b2)"><span>ARC 2 · 9–17</span><b>Tanam Paksa, Liberal &amp; Perlawanan</b></a>
+    <a href="#arc-3" style="--b:var(--b3)"><span>ARC 3 · 18–25</span><b>Dampak Kolonial &amp; Politik Etis</b></a>
+    <a href="#arc-4" style="--b:var(--b4)"><span>ARC 4 · 26–35</span><b>Kebangkitan &amp; Sumpah Pemuda</b></a>
+    <a href="#arc-5" style="--b:var(--b5)"><span>ARC 5 · 36–40</span><b>Akhir Hindia Belanda &amp; Sejarawan</b></a>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide">
+      <span class="label">Langkah Belajar</span>
+      <ul>
+        <li><b>Baca Alur dulu</b> sampai paham sebab-akibatnya, baru hafalkan <b>Keyword</b> (tahun, tokoh, istilah).</li>
+        <li><b>Pelajari Tabel:</b> soal perbandingan hampir selalu diambil dari sini.</li>
+        <li><b>Cek indikator 4 &amp; 40:</b> topiknya di kisi-kisi kurang spesifik, jadi cocokkan juga dengan buku paket/catatan guru.</li>
+      </ul>
     </div>
-    <div id="list"></div>
-  </main>
+    <div class="guide trap-top">
+      <span class="label">3 Pengecoh Terbesar (Sering Muncul!)</span>
+      <ul>
+        <li><b>Budi Utomo</b> = organisasi <i>modern</i> pertama; <b>Indische Partij</b> = organisasi <i>politik</i> pertama.</li>
+        <li><b>Trias van Deventer</b> (Irigasi, Edukasi, Emigrasi) &ne; <i>Trias Politica</i>.</li>
+        <li><b>Daendels</b> = Jalan Raya Pos + 9 prefektur; <b>Raffles</b> = landrent + 16 karesidenan.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tools-bar">
+    <label class="search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input id="q-all" type="search" placeholder="Cari nomor (1–40), tokoh, perjanjian, atau kata kunci (misal: Snouck, Bongaya, Landrent, Sumpah Pemuda)..." aria-label="Cari indikator">
+    </label>
+    <span class="label" id="q-count">40 indikator</span>
+  </div>
+  <div class="empty-search" id="empty-all">Tidak ada indikator yang cocok dengan pencarianmu.</div>
+
+  <main class="content" id="content"></main>
 
   <footer>
-    <span class="label">Portal Belajar ASAS / <span id="f-code"></span></span>
+    <span class="label">Portal Belajar ASAS / SEJ</span>
     <a class="label" href="#top">Ke atas &uarr;</a>
   </footer>
 </div>
 
 <script>
+const ARCS = [
+  {
+    id: "arc-1", label: "Arc 1 · Indikator 1–8", judul: "Era Penjelajahan, VOC, Daendels dan Raffles",
+    intro: "Dari jatuhnya Konstantinopel 1453, monopoli VOC di Maluku, tangan besi Daendels, hingga sistem sewa tanah Raffles.",
+    svg: '<div class="vis-box"><svg viewBox="0 0 760 150" aria-label="Skema Arah Penjelajahan Portugis vs Spanyol">' +
+      '<rect width="760" height="150" fill="#0F172A"/>' +
+      '<line x1="380" y1="36" x2="380" y2="138" stroke="#FACC15" stroke-width="2" stroke-dasharray="6 5"/>' +
+      '<rect x="264" y="11" width="232" height="24" rx="12" fill="#FACC15"/><text x="380" y="27" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#0F172A">Tordesillas 1494 · Saragosa 1529</text>' +
+      '<path d="M295 80 C215 54, 135 58, 70 88" fill="none" stroke="#FB7185" stroke-width="3.5" stroke-linecap="round"/>' +
+      '<polygon points="64,91 78,93 72,80" fill="#FB7185"/>' +
+      '<text x="190" y="56" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#FDA4AF">SPANYOL &larr; KE BARAT (Atlantik)</text>' +
+      '<text x="190" y="110" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#E2E8F0">Columbus (1492 Amerika) &rarr; Magellan/Elcano (1521 Tidore)</text>' +
+      '<text x="190" y="128" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#94A3B8">Saragosa: dapat Filipina · Sekutu: Tidore</text>' +
+      '<path d="M465 80 C545 54, 625 58, 690 88" fill="none" stroke="#60A5FA" stroke-width="3.5" stroke-linecap="round"/>' +
+      '<polygon points="696,91 682,93 688,80" fill="#60A5FA"/>' +
+      '<text x="570" y="56" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#93C5FD">PORTUGIS &rarr; KE TIMUR (Afrika)</text>' +
+      '<text x="570" y="110" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#E2E8F0">Diaz (1488) &rarr; Vasco da Gama (1498) &rarr; Albuquerque (1511)</text>' +
+      '<text x="570" y="128" text-anchor="middle" font-family="sans-serif" font-size="10.5" fill="#94A3B8">Malaka 1511 · Saragosa: Maluku · Sekutu: Ternate</text>' +
+      '</svg><div class="vcap"><b>Peta Mental Arc 1:</b> Pemicu awal jatuhnya <b>Konstantinopel (1453)</b> &rarr; Portugis ke timur (Ternate) vs Spanyol ke barat (Tidore).</div></div>',
+    items: [
+      {
+        n: 1, j: "Faktor Pendorong Penjelajahan Samudra (Spanyol & Portugis)",
+        alur: [
+          "Bayangin supplier utama bahan masak kamu tiba-tiba ditutup, terus harganya naik 10x. Itu yang terjadi di Eropa tahun <b>1453: Konstantinopel jatuh ke Turki Utsmani</b> (Sultan Mehmed II). Jalur darat dan Laut Tengah ke Asia dikuasai Turki, sementara pedagang Venesia dan Genoa memonopoli rempah yang masuk. Padahal rempah (cengkih, pala, lada) itu 'barang mewah': pengawet makanan, penghangat tubuh di musim dingin, obat, sampai parfum.",
+          "Di saat yang sama, Eropa lagi 'bangun tidur' lewat <b>Renaisans</b>: rasa ingin tahu meledak, ilmu pengetahuan maju, kompas dan astrolabe dipakai, kapal <b>karavel</b> makin tangguh, dan cerita <b>Marco Polo</b> soal kekayaan Timur bikin ngiler. Portugis start duluan karena <b>Pangeran Henry (Henrique) si Navigator</b> membangun pusat navigasi di Sagres. Spanyol menyusul setelah selesai <b>Reconquista</b> (mengusir Moor dari Granada, 1492).",
+          "Plot twist-nya: dua negara ini rebutan dunia sampai Paus turun tangan. <b>Perjanjian Tordesillas (1494)</b> membagi dunia: Portugis ke timur, Spanyol ke barat. Lalu <b>Perjanjian Saragosa (1529)</b> menyelesaikan rebutan Maluku: Maluku untuk Portugis, Spanyol dapat Filipina."
+        ],
+        kw: [
+          "<b>3G:</b> Gold (kekayaan/ekonomi — motif paling dominan), Glory (kejayaan/politik), Gospel (penyebaran agama)",
+          "Jatuhnya <b>Konstantinopel 1453</b> = pemicu langsung",
+          "Renaisans, kompas, astrolabe, kapal karavel, Marco Polo",
+          "<b>Tordesillas 1494</b> (Paus Alexander VI) dan <b>Saragosa 1529</b>",
+          "<b>Portugis:</b> Bartolomeus Diaz (1488, Tanjung Harapan), Vasco da Gama (1498, Kalikut/India), Alfonso d'Albuquerque (1511, Malaka)",
+          "<b>Spanyol:</b> Christopher Columbus (1492, Amerika), Ferdinand Magellan (1519, tewas di Filipina 1521), Juan Sebastian del Cano/Elcano (selesai keliling dunia 1522)"
+        ],
+        tbls: [{
+          t: "Portugis vs Spanyol", h: ["Aspek", "Portugis", "Spanyol"],
+          r: [
+            ["Arah penjelajahan", "Ke timur, mengitari Afrika", "Ke barat, menyeberangi Atlantik"],
+            ["Tokoh", "Diaz, Vasco da Gama, Albuquerque", "Columbus, Magellan, Elcano"],
+            ["Capaian kunci", "Tanjung Harapan 1488, India 1498, Malaka 1511", "Amerika 1492, keliling dunia 1519–1522"],
+            ["Sekutu di Maluku", "Ternate", "Tidore"]
+          ]
+        }],
+        trik: "Hafalkan <b>'3G + 1453'</b>. Kalau soal tanya pendorong utama, pilih <b>Gold (ekonomi)</b>. Kalau tanya pemicu langsung, pilih <b>jatuhnya Konstantinopel</b>.",
+        jebak: "Gospel itu salah satu dari 3G, tapi bukan motif utama. Kalau opsi jawaban ada 'penyebaran agama' dan 'mencari rempah/kekayaan', pilih yang kedua kecuali soal menanyakan 3G lengkap."
+      },
+      {
+        n: 2, j: "Perbedaan Konsep Kolonialisme dan Imperialisme",
+        alur: [
+          "Gampangnya: <b>imperialisme itu 'niat dan sistemnya'</b>, <b>kolonialisme itu 'praktik di lapangannya'</b>. Imperialisme itu paham untuk mendominasi bangsa lain, bisa lewat ekonomi, politik, atau budaya, dan nggak harus menduduki wilayah. Kolonialisme pasti ada penguasaan dan pendudukan wilayah (jadi koloni) untuk dieksploitasi.",
+          "Imperialisme sendiri ada dua generasi. <b>Imperialisme kuno</b> didorong 3G (abad ke-15 sampai ke-18). <b>Imperialisme modern</b> muncul setelah <b>Revolusi Industri</b> (abad ke-19): pabrik Eropa butuh <b>bahan baku, pasar, tempat investasi modal, dan tenaga kerja murah</b>. Dibumbui ideologi Darwinisme sosial dan <i>White Man's Burden</i> (Rudyard Kipling) untuk membenarkan penjajahan."
+        ],
+        kw: [
+          "<b>Kolonialisme:</b> dari kata Latin <i>colonia</i> (permukiman/tanah pertanian); <b>imperialisme:</b> dari <i>imperare</i> (memerintah)",
+          "Imperialisme kuno = 3G; imperialisme modern = Revolusi Industri (bahan baku, pasar, modal, tenaga kerja murah)",
+          "Jenis koloni: koloni dagang, koloni pemukiman, koloni eksploitasi",
+          "Kata kunci kolonialisme: menduduki, menetap, mengeksploitasi wilayah"
+        ],
+        tbls: [
+          {
+            t: "Kolonialisme vs Imperialisme", h: ["Aspek", "Kolonialisme", "Imperialisme"],
+            r: [
+              ["Hakikat", "Praktik penguasaan dan pendudukan wilayah", "Paham/sistem untuk mendominasi bangsa lain"],
+              ["Cara", "Langsung: menduduki, menetap, memerintah", "Langsung maupun tidak langsung (ekonomi, politik, budaya)"],
+              ["Hasil", "Wilayah menjadi koloni", "Dominasi/pengaruh, belum tentu ada wilayah yang diduduki"],
+              ["Asal kata", "colonia (Latin)", "imperare (Latin)"]
+            ]
+          },
+          {
+            t: "Imperialisme Kuno vs Modern", h: ["Aspek", "Kuno", "Modern"],
+            r: [
+              ["Periode", "Abad ke-15 sampai 18", "Setelah Revolusi Industri (abad ke-19)"],
+              ["Motif", "3G (Gold, Glory, Gospel)", "Bahan baku, pasar, modal, tenaga kerja murah"],
+              ["Pelaku utama", "Spanyol, Portugis", "Inggris, Prancis, Belanda, Jerman, dll."]
+            ]
+          }
+        ],
+        trik: "<b>'Imperialisme = otaknya, kolonialisme = tangannya.'</b> Imperialisme bisa tanpa menduduki, kolonialisme wajib menduduki.",
+        jebak: "Pernyataan 'imperialisme selalu menduduki wilayah' itu <b>SALAH</b>. Waspadai kata 'selalu'."
+      },
+      {
+        n: 3, j: "Urutan Kronologis Kedatangan Bangsa Eropa ke Nusantara",
+        alur: [
+          "Ceritanya kayak rebutan 'kapling' kuliner paling cuan: Maluku. <b>Portugis</b> datang paling awal. Setelah merebut <b>Malaka (1511)</b> dari Sultan Mahmud Syah lewat Alfonso d'Albuquerque, mereka lanjut ke Maluku (1512, Francisco Serrao) dan diterima Ternate. Tahun <b>1521</b>, sisa ekspedisi Magellan (kapal Victoria dipimpin Elcano) tiba di <b>Tidore</b> dan jadi sekutunya. Portugis-Ternate vs Spanyol-Tidore, sampai Saragosa 1529 'menengahi'.",
+          "Berikutnya <b>Belanda</b>: tahun <b>1596</b>, Cornelis de Houtman membawa 4 kapal (sekitar 249 awak) mendarat di <b>Banten</b>. Misi pertama ini nyaris bubar karena anak buahnya kasar dan sombong, jadi diusir. Baru <b>1598</b> ekspedisi Jacob van Neck sukses besar, lalu para pedagang Belanda disatukan jadi <b>VOC (1602)</b>.",
+          "<b>Inggris</b> adalah jebakan klasik. Francis Drake sudah singgah di Ternate pada <b>1579</b> (lebih awal dari Belanda!), tapi kedatangan dagang resminya baru 1602 lewat <b>James Lancaster</b> (Aceh dan Banten) dengan EIC (didirikan 1600)."
+        ],
+        kw: [
+          "Urutan 'arus utama' buku sekolah: <b>Portugis, Spanyol, Belanda, Inggris</b>",
+          "Portugis: 1509 (Sequeira ke Malaka, gagal), <b>1511 Malaka</b>, 1512 Maluku",
+          "Spanyol: <b>1521</b> Tidore (Magellan/Elcano); Saragosa <b>1529</b>",
+          "Belanda: <b>1596</b> Cornelis de Houtman di <b>Banten</b>; 1598 Jacob van Neck; VOC <b>1602</b>",
+          "Inggris: 1579 Francis Drake (Ternate); 1602 James Lancaster"
+        ],
+        tbls: [{
+          t: "Urutan Kedatangan", h: ["No", "Bangsa", "Tahun", "Tokoh & Lokasi"],
+          r: [
+            ["1", "Portugis", "1511 / 1512", "Albuquerque (Malaka), Serrao (Maluku)"],
+            ["2", "Spanyol", "1521", "Elcano/Magellan (Tidore)"],
+            ["3", "Belanda", "1596", "Cornelis de Houtman (Banten)"],
+            ["4", "Inggris", "1579 / 1602", "Francis Drake (Ternate) / James Lancaster (Aceh, Banten)"]
+          ]
+        }],
+        trik: "<b>'Portugis Sudah Beli Intan'</b> = Portugis, Spanyol, Belanda, Inggris.",
+        jebak: "Kalau soal bertanya 'kedatangan PERTAMA tiap bangsa' (bukan kedatangan resmi), Inggris (Drake 1579) bisa lebih awal dari Belanda (1596). Baca kata kunci soal dengan teliti."
+      },
+      {
+        n: 4, j: "Pernyataan Benar atau Salah (Pola Jebakan Materi Arc 1)",
+        alur: [
+          "Soal Benar/Salah itu sebenarnya cuma <b>satu kata yang diganti</b>: tahun, tokoh, tempat, atau kata mutlak seperti 'selalu', 'hanya', 'semua', 'pasti'. Triknya: cari bagian yang paling spesifik, lalu cocokkan dengan hafalan kamu.",
+          "<i>Catatan: di kisi-kisimu indikator ini tidak menyebut topik spesifik, jadi di bawah ini kumpulan pernyataan yang paling sering diplesetkan dari materi Arc 1. Cek ke guru kalau ada topik khusus.</i>"
+        ],
+        kw: [
+          "Cek <b>kata mutlak:</b> selalu, hanya, semua, pasti, satu-satunya (biasanya salah)",
+          "Cek <b>angka:</b> 1453, 1494, 1511, 1521, 1596, 1602, 1799",
+          "Cek <b>tokoh vs tempat:</b> Houtman di Banten, bukan Batavia",
+          "Cek <b>pelaku kebijakan:</b> Daendels vs Raffles vs van den Bosch"
+        ],
+        tbls: [{
+          t: "Latihan Membedah Pernyataan", h: ["Pernyataan", "Status", "Alasan"],
+          r: [
+            ["Imperialisme selalu menduduki wilayah", "SALAH", "Itu ciri kolonialisme"],
+            ["Cornelis de Houtman mendarat di Batavia", "SALAH", "Di Banten (1596)"],
+            ["Portugis tiba di Maluku sebelum Spanyol", "BENAR", "1512 vs 1521"],
+            ["Konstantinopel jatuh pada 1453 ke Turki Utsmani", "BENAR", "Pemicu pencarian jalur rempah"],
+            ["Kebangkrutan VOC murni karena faktor eksternal", "SALAH", "Faktor internal (korupsi dll.) dominan"],
+            ["Raffles menerapkan tanam paksa", "SALAH", "Itu van den Bosch (1830)"],
+            ["Daendels membagi Jawa menjadi 16 karesidenan", "SALAH", "9 prefektur (16 karesidenan = Raffles)"],
+            ["Hongi Tochten adalah pemusnahan tanaman rempah", "SALAH", "Itu ekstirpasi; hongi = pelayaran patroli"]
+          ]
+        }],
+        trik: "Rumus anti-jebakan: <b>curigai kata mutlak, lalu cek angka dan nama tokoh.</b>",
+        jebak: null
+      },
+      {
+        n: 5, j: "Hak Istimewa VOC di Maluku (Hak Octrooi)",
+        alur: [
+          "VOC (<i>Vereenigde Oostindische Compagnie</i>, 20 Maret <b>1602</b>) itu semacam 'startup raksasa' yang diberi kartu sakti bernama <b>Hak Octrooi</b> oleh Staten Generaal Belanda. Dengan kartu itu VOC boleh punya tentara sendiri, mencetak uang sendiri, bahkan menyatakan perang. Dikelola dewan direksi <b>Heeren XVII</b> (17 direktur).",
+          "Di Maluku, kartu sakti itu dipakai untuk <b>memonopoli rempah</b>. Caranya brutal: <b>Hongi Tochten</b> (pelayaran patroli armada kora-kora untuk menghancurkan pelanggar monopoli) dan <b>Ekstirpasi</b> (menebang tanaman rempah yang berlebih supaya harga tetap tinggi). Puncak kekejaman: <b>J.P. Coen</b> membantai orang Banda tahun <b>1621</b> dan menggantinya dengan budak serta pekebun (<i>perkenier</i>) Belanda. Coen juga mendirikan Batavia (1619); Gubernur Jenderal pertama VOC adalah <b>Pieter Both (1610)</b>."
+        ],
+        kw: [
+          "<b>Hak Octrooi:</b> monopoli dagang, mencetak uang, membentuk tentara, membangun benteng, menyatakan perang & damai, membuat perjanjian dengan raja, mengangkat pegawai, memerintah wilayah",
+          "<b>Hongi Tochten</b> = pelayaran patroli pengawas monopoli",
+          "<b>Ekstirpasi</b> = pemusnahan tanaman rempah berlebih agar harga stabil",
+          "J.P. Coen: Batavia 1619, pembantaian Banda 1621",
+          "Pieter Both: Gubernur Jenderal pertama (1610)"
+        ],
+        tbls: [{
+          t: "Praktik Monopoli VOC", h: ["Istilah", "Arti", "Sasaran"],
+          r: [
+            ["Hak Octrooi", "Hak istimewa dari pemerintah Belanda", "Landasan hukum seluruh kekuasaan VOC"],
+            ["Hongi Tochten", "Pelayaran armada kora-kora untuk patroli", "Menumpas penyelundupan/pelanggar monopoli"],
+            ["Ekstirpasi", "Menebang/membakar tanaman rempah berlebih", "Menjaga harga rempah tetap tinggi"]
+          ]
+        }],
+        trik: "<b>'Hongi = Patroli, Ekstirpasi = Tebang.'</b> Octrooi = 'kartu sakti' VOC.",
+        jebak: "<i>Contingenten</i> dan <i>verplichte leverantie</i> adalah penyerahan wajib hasil bumi yang lebih identik dengan praktik VOC di Jawa (Priangan), bukan istilah khas Maluku. Jangan ketukar dengan hongi dan ekstirpasi."
+      },
+      {
+        n: 6, j: "Faktor Internal Kebangkrutan VOC",
+        alur: [
+          "VOC itu kayak perusahaan yang kelihatannya megah, tapi <b>dikorupsi orang dalamnya sendiri</b>. Gaji pegawai rendah, jadi mereka nyambi dagang gelap dan korupsi. Biaya perang dan penjagaan benteng membengkak karena wilayah makin luas dan sulit diawasi. Anehnya, VOC tetap membagikan <b>dividen besar</b> ke pemegang saham padahal kas defisit (dibayar dengan utang).",
+          "Akhirnya VOC dibubarkan <b>31 Desember 1799</b> dengan utang sekitar <b>134 juta gulden</b>. Seluruh aset dan wilayahnya diambil alih pemerintah Belanda, sejak itu wilayahnya disebut <b>Hindia Belanda</b>. Faktor eksternal juga ada (Perang Inggris-Belanda IV 1780–1784 dan Prancis menguasai Belanda 1795), tapi akar masalahnya <b>internal</b>."
+        ],
+        kw: [
+          "<b>Internal:</b> korupsi, gaji pegawai rendah, nepotisme, biaya perang dan garnisun besar, dividen tetap besar padahal rugi, wilayah terlalu luas/administrasi buruk, monopoli tak efektif, penyelundupan",
+          "<b>Eksternal:</b> Perang Inggris-Belanda IV (1780–1784), Prancis menguasai Belanda (1795, Republik Bataaf), persaingan dagang Inggris (EIC)",
+          "Bubar <b>31 Desember 1799</b>"
+        ],
+        tbls: [{
+          t: "Internal vs Eksternal", h: ["Internal", "Eksternal"],
+          r: [
+            ["Korupsi pegawai dan gaji rendah", "Perang Inggris-Belanda IV (1780–1784)"],
+            ["Biaya perang dan benteng besar", "Prancis menguasai Belanda (1795)"],
+            ["Dividen besar padahal defisit", "Persaingan dengan Inggris (EIC)"],
+            ["Administrasi buruk, wilayah terlalu luas", "Perubahan politik di Eropa"]
+          ]
+        }],
+        trik: "Plesetan terkenal: VOC = <b>'Vergaan Onder Corruptie'</b> (hancur karena korupsi).",
+        jebak: "Kalau soal minta 'faktor internal', jangan pilih perang melawan Inggris atau pendudukan Prancis. Itu eksternal."
+      },
+      {
+        n: 7, j: "Kebijakan Daendels dan Raffles di Nusantara",
+        alur: [
+          "<b>Daendels (1808–1811)</b> dikirim oleh Louis Napoleon (adik Napoleon Bonaparte, raja Holland yang dikuasai Prancis) dengan misi tunggal: <b>pertahankan Jawa dari serangan Inggris</b>. Dijuluki <i>Marsekal Besi</i>. Ia membangun <b>Jalan Raya Pos (Anyer–Panarukan, ~1.000 km)</b> dengan kerja paksa (rodi), membuat pabrik senjata dan benteng, membagi Jawa menjadi <b>9 prefektur</b>, menjual tanah ke swasta, dan memangkas wibawa raja Jawa. Dipanggil pulang 1811.",
+          "Setelah Inggris menang lewat <b>Kapitulasi Tuntang (1811)</b> (Janssens menyerah ke Lord Minto), muncul <b>Raffles (1811–1816)</b> dengan gaya liberal: menghapus penyerahan wajib dan kerja paksa, membagi Jawa jadi <b>16 karesidenan</b>, menerapkan <b>sewa tanah (landrent)</b>, peradilan model Inggris, serta menulis <i>History of Java</i> dan memugar Borobudur. Tahun 1812 menyerbu keraton Yogyakarta (Geger Sepehi). Lewat <b>Convention of London 1814</b>, Jawa dikembalikan ke Belanda (serah terima 1816)."
+        ],
+        kw: [
+          "<b>Daendels:</b> Louis Napoleon, <b>Jalan Raya Pos</b>, rodi, 9 prefektur, pabrik senjata (Semarang, Surabaya), jual tanah ke swasta, julukan Marsekal Besi",
+          "<b>Raffles:</b> Lord Minto/EIC, <b>landrent</b>, 16 karesidenan, hapus kerja paksa & penyerahan wajib, peradilan Inggris",
+          "<b>Kapitulasi Tuntang 1811</b>, Convention of London 1814, Jawa kembali ke Belanda 1816"
+        ],
+        tbls: [{
+          t: "Daendels vs Raffles", h: ["Aspek", "Daendels (1808–1811)", "Raffles (1811–1816)"],
+          r: [
+            ["Asal", "Belanda (era Prancis, Louis Napoleon)", "Inggris (EIC, Lord Minto)"],
+            ["Tujuan", "Pertahanan Jawa dari Inggris", "Mencari untung lewat sistem liberal"],
+            ["Gaya", "Otoriter, tangan besi", "Liberal"],
+            ["Pembagian wilayah", "9 prefektur", "16 karesidenan"],
+            ["Kebijakan utama", "Jalan Raya Pos, rodi, pabrik senjata, jual tanah", "Sewa tanah, hapus rodi dan penyerahan wajib"],
+            ["Hukum", "Memperkuat kekuasaan gubernur jenderal", "Peradilan model Inggris"],
+            ["Akhir", "Dipanggil pulang 1811", "Digantikan, Jawa kembali ke Belanda 1816"]
+          ]
+        }],
+        trik: "<b>'Daendels = Jalan + Senjata (9). Raffles = Sewa + Bebas (16).'</b>",
+        jebak: "Jalan Raya Pos itu Daendels, bukan Raffles. Pembagian 16 karesidenan itu Raffles, bukan Daendels."
+      },
+      {
+        n: 8, j: "Kebijakan Raffles tentang Sewa Tanah (Landrent)",
+        alur: [
+          "Raffles berpikir: <b>semua tanah milik pemerintah</b> (pewaris raja-raja Jawa), jadi petani hanyalah 'penyewa' yang wajib membayar pajak sewa. Idealnya petani jadi bebas menanam apa saja, kenal ekonomi uang, dan akhirnya mampu membeli barang-barang produksi Inggris.",
+          "Plot twist-nya: di lapangan <b>gagal</b>. Petani Jawa belum akrab dengan ekonomi uang, tanah belum diukur dengan benar, jumlah pegawai kurang, dan pemungutan lewat kepala desa rawan korupsi. Hasilnya, banyak petani justru terbebani dan terjerat utang."
+        ],
+        kw: [
+          "<b>Landrent</b> / sistem sewa tanah / pajak tanah",
+          "Besar pajak: tanah <b>subur 1/2</b> hasil panen, <b>sedang 2/5</b>, <b>kurang subur 1/3</b>",
+          "Bayar dengan uang, bila tak ada uang boleh dengan hasil bumi (beras); pemungutan lewat <b>kepala desa</b>",
+          "<b>Tujuan:</b> kepastian hukum, kebebasan menanam, memperkenalkan ekonomi uang, menambah kas pemerintah",
+          "<b>Gagal karena:</b> pegawai kurang, ekonomi uang belum dikenal, tanah belum terukur, kepala desa korup"
+        ],
+        tbls: [{
+          t: "Besar Pajak Landrent", h: ["Tingkat Kesuburan", "Pajak dari Hasil Panen"],
+          r: [
+            ["Tanah subur", "1/2 (sekitar 50 persen)"],
+            ["Tanah sedang", "2/5 (sekitar 40 persen)"],
+            ["Tanah kurang subur", "1/3 (sekitar 33 persen)"]
+          ]
+        }],
+        trik: "<b>'Subur-Sedang-Kurang = 1/2, 2/5, 1/3'</b>. Makin subur, makin besar pajaknya.",
+        jebak: "Landrent bukan tanam paksa! Pada landrent petani bebas menanam, pada tanam paksa petani wajib menanam tanaman ekspor."
+      }
+    ],
+    latihan: [
+      { t: "HOTS", q: "Sebuah negara Eropa menguasai pelabuhan di Asia hanya untuk mengontrol jalur perdagangan, tanpa menjajah penduduk daratan, sambil menekan penguasa lokal lewat perjanjian. Praktik ini paling tepat disebut apa, dan jelaskan kenapa bukan kolonialisme murni!",
+        a: "Disebut imperialisme (khususnya dominasi ekonomi/politik). Bukan kolonialisme murni karena kolonialisme mensyaratkan pendudukan, penetapan permukiman, dan penguasaan wilayah daratan secara langsung sebagai koloni, sedangkan imperialisme bisa dijalankan lewat kontrol dan pengaruh tanpa menduduki seluruh wilayah." },
+      { t: "Jebakan Kronologi", q: "Urutkan dari yang paling awal: (a) ekspedisi Cornelis de Houtman, (b) Francis Drake singgah di Ternate, (c) Francisco Serrao tiba di Maluku, (d) Magellan/Elcano tiba di Tidore. Jelaskan kenapa banyak siswa salah menaruh posisi Inggris.",
+        a: "Urutan tepat: (c) Serrao 1512 → (d) Magellan/Elcano 1521 → (b) Francis Drake 1579 → (a) Cornelis de Houtman 1596. Siswa sering salah karena menghafal urutan resmi dagang (Portugis-Spanyol-Belanda-Inggris 1602/James Lancaster), padahal persinggahan pertama Inggris lewat Francis Drake (1579) terjadi sebelum Belanda mendarat di Banten (1596)." },
+      { t: "HOTS", q: "Raffles menghapus kerja paksa dan menerapkan sewa tanah, tapi rakyat tetap menderita. Sebutkan dua alasan sistem ini gagal, lalu bandingkan tujuan utama Raffles dengan Daendels dalam satu kalimat!",
+        a: "Gagal karena: (1) masyarakat Jawa belum mengenal ekonomi uang dan tanah belum terukur akurat, serta (2) keterbatasan pegawai membuat pemungutan lewat kepala desa rawan penyelewengan/korupsi. Perbandingan: Daendels bertujuan mempertahankan Pulau Jawa dari serangan Inggris secara militer, sedangkan Raffles bertujuan mencari keuntungan ekonomi melalui sistem pajak sewa tanah liberal." },
+      { t: "Benar / Salah", q: "Tentukan Benar atau Salah dan perbaiki yang salah: (a) Hongi Tochten adalah pemusnahan tanaman rempah berlebih. (b) Kebangkrutan VOC murni karena kekalahan perang melawan Inggris. (c) Daendels membagi Jawa menjadi 9 prefektur, sedangkan Raffles menjadi 16 karesidenan.",
+        a: "(a) SALAH — pemusnahan tanaman rempah adalah Ekstirpasi, sedangkan Hongi Tochten adalah pelayaran patroli pengawas monopoli. (b) SALAH — penyebab utamanya faktor internal (korupsi pegawai, biaya perang/benteng besar, pembagian dividen saat defisit). (c) BENAR." }
+    ]
+  },
+
+  {
+    id: "arc-2", label: "Arc 2 · Indikator 9–17", judul: "Tanam Paksa, Liberal dan Perlawanan Daerah",
+    intro: "Eksploitasi Cultuurstelsel 1830 & Ekonomi Liberal 1870, serta perlawanan daerah dari Makassar, Mataram, Jawa, Minangkabau, Bali, hingga Aceh.",
+    svg: "",
+    items: [
+      {
+        n: 9, j: "Penyimpangan Aturan Tanam Paksa (Cultuurstelsel)",
+        alur: [
+          "Setelah Perang Diponegoro (1825–1830) dan perang Belgia (1830), kas Belanda bangkrut. Gubernur Jenderal <b>Johannes van den Bosch</b> datang tahun <b>1830</b> dengan 'solusi' tanam paksa: rakyat wajib menanam tanaman ekspor (tebu, kopi, nila, teh, tembakau, kayu manis, kapas, lada) yang laku di pasar Eropa.",
+          "Di atas kertas aturannya terdengar 'adil'. Di lapangan, aturan itu <b>dilanggar habis-habisan</b> karena pegawai Eropa, bupati, dan kepala desa dikasih bonus <b>cultuurprocenten</b> (persentase hasil tanam), jadi mereka berlomba memeras rakyat. Akibatnya terjadi kelaparan hebat di Cirebon (1843–1844), Demak (1849), dan Grobogan (1850). Kritik datang dari <b>Eduard Douwes Dekker (Multatuli)</b> lewat novel <i>Max Havelaar</i> (1860), serta Baron van Hoevell dan Fransen van de Putte. Tanam paksa dihapus bertahap (lada 1860, nila & teh 1865, gula 1870, kopi 1917)."
+        ],
+        kw: [
+          "Van den Bosch, <b>1830</b>, tujuan: mengisi kas negeri Belanda",
+          "<b>Aturan resmi:</b> 1/5 tanah rakyat untuk tanaman ekspor, bebas pajak tanah, kerja maksimal 66 hari (1/5 tahun), kelebihan hasil dikembalikan, gagal panen ditanggung pemerintah",
+          "<b>Penyimpangan:</b> tanah lebih dari 1/5, tanah tetap dikenai pajak, kerja melebihi 66 hari, kelebihan hasil tak dikembalikan, gagal panen ditanggung petani, memakai tanah subur",
+          "<b>Cultuurprocenten</b> = bonus bagi pegawai, pemicu pemerasan",
+          "Kritik: Multatuli (<i>Max Havelaar</i>), van Hoevell, Fransen van de Putte",
+          "Efek negatif: kelaparan Cirebon, Demak, Grobogan. Efek ke Belanda: <i>batig slot</i> (keuntungan besar)"
+        ],
+        tbls: [{
+          t: "Aturan Resmi vs Penyimpangan", h: ["Aspek", "Aturan Resmi", "Penyimpangan"],
+          r: [
+            ["Luas tanah", "1/5 tanah desa", "Bisa 1/3, 1/2, bahkan seluruh tanah"],
+            ["Pajak tanah", "Tanah tanam paksa bebas pajak", "Tetap dikenai pajak"],
+            ["Jam kerja", "Maksimal 66 hari/tahun", "Bisa sepanjang tahun"],
+            ["Kelebihan hasil", "Dikembalikan ke petani", "Tidak dikembalikan"],
+            ["Gagal panen", "Ditanggung pemerintah", "Ditanggung petani"],
+            ["Jenis tanah", "Tanah yang sama dgn tanah lain", "Dipakai tanah subur/terbaik"]
+          ]
+        }],
+        trik: "<b>'Lima-Enam-Enam'</b>: 1/5 tanah, 66 hari kerja. Semua 'aturan manis' itu dilanggar demi bonus cultuurprocenten.",
+        jebak: "Penyimpangan = pelanggaran terhadap aturan resmi. Kalau opsi menyebut 'tanah 1/5 bebas pajak', itu aturan resmi (bukan penyimpangan)."
+      },
+      {
+        n: 10, j: "Penerapan Sistem Ekonomi Liberal Setelah 1870",
+        alur: [
+          "Kritik terhadap tanam paksa membuat <b>kaum liberal</b> di parlemen Belanda menang. Lahirlah dua UU tahun <b>1870: Agrarische Wet</b> (UU Agraria, Engelbertus de Waal) dan <b>Suiker Wet</b> (UU Gula, Fransen van de Putte).",
+          "Agrarische Wet memberi kesempatan swasta menyewa tanah: tanah pribumi tidak boleh dijual ke non-pribumi, tanah negara bisa disewa hingga <b>75 tahun (erfpacht)</b>. Suiker Wet menghentikan monopoli tebu pemerintah bertahap (selesai 1878). Perkebunan swasta meledak (tembakau Deli di Sumatera Timur, karet, kopi, teh, kina, tebu), tapi rakyat tetap jadi buruh murah lewat <b>kuli kontrak</b> dan <b>Poenale Sanctie (1880)</b> (sanksi pidana bagi buruh yang kabur)."
+        ],
+        kw: [
+          "<b>1870:</b> Agrarische Wet (de Waal) dan Suiker Wet (Fransen van de Putte)",
+          "Sewa tanah <i>erfpacht</i> hingga 75 tahun; tanah pribumi tak boleh dijual ke non-pribumi",
+          "Perkebunan swasta: tembakau Deli (Sumatera Timur), karet, teh, kopi, kina, tebu",
+          "Kuli kontrak, <b>Poenale Sanctie (1880)</b>",
+          "Dampak: infrastruktur (jalan, kereta api, pelabuhan) tapi kemiskinan rakyat, ekonomi uang berkembang"
+        ],
+        tbls: [{
+          t: "Tanam Paksa vs Liberal", h: ["Aspek", "Tanam Paksa (1830)", "Liberal (1870)"],
+          r: [
+            ["Pelaku", "Pemerintah kolonial", "Swasta/pengusaha"],
+            ["Penguasaan tanah", "Memakai tanah rakyat", "Menyewa tanah (erfpacht)"],
+            ["Tenaga kerja", "Rodi/kerja wajib", "Buruh/kuli kontrak"],
+            ["Keuntungan", "Kas negara Belanda (batig slot)", "Pengusaha swasta"],
+            ["Tokoh/UU", "Van den Bosch", "Agrarische Wet, Suiker Wet"]
+          ]
+        }],
+        trik: "<b>'1870 = Agraria + Gula (AG)'</b>. Pelakunya swasta, bukan pemerintah.",
+        jebak: "Liberal bukan berarti rakyat sejahtera! Eksploitasi tetap ada, hanya pelakunya berubah dari pemerintah ke swasta."
+      },
+      {
+        n: 11, j: "Ciri Perlawanan Rakyat Nusantara Sebelum Abad ke-20",
+        alur: [
+          "Perlawanan sebelum 1900 ibarat 'tim sepak bola kampung' melawan 'klub profesional'. Semangatnya besar, tapi <b>bergerak sendiri-sendiri</b>. Tiap daerah melawan sendiri, bergantung pada <b>tokoh karismatik</b> (raja, bangsawan, ulama), memakai senjata tradisional, dan tanpa organisasi modern. Belanda menang dengan <b>devide et impera</b> (adu domba), senjata unggul, dan <i>benteng stelsel</i>.",
+          "Setelah tokohnya gugur atau ditangkap, perlawanan biasanya padam. Berbeda dengan perlawanan abad ke-20 yang memakai organisasi modern, jaringan nasional, dan cara politik/diplomasi."
+        ],
+        kw: [
+          "Bersifat <b>kedaerahan</b> (tidak nasional)",
+          "Bergantung pada <b>tokoh karismatik</b>; saat tokoh gugur, perlawanan padam",
+          "Senjata <b>tradisional</b>, tanpa organisasi modern",
+          "Mudah dipatahkan: <b>devide et impera</b>, benteng stelsel, persenjataan Belanda lebih unggul",
+          "Contoh: Banten (Sultan Ageng Tirtayasa), Makassar (Hasanuddin), Mataram (Sultan Agung), Maluku (Pattimura 1817), Padri, Diponegoro, Bali, Aceh, Banjar (Antasari), Batak (Sisingamangaraja XII)"
+        ],
+        tbls: [{
+          t: "Sebelum vs Sesudah Abad ke-20", h: ["Aspek", "Sebelum Abad ke-20", "Abad ke-20"],
+          r: [
+            ["Cakupan", "Kedaerahan", "Nasional"],
+            ["Pemimpin", "Raja, bangsawan, ulama karismatik", "Kaum terpelajar/intelektual"],
+            ["Cara", "Perang fisik bersenjata tradisional", "Organisasi, politik, pers, diplomasi"],
+            ["Hasil", "Mudah dipecah-belah", "Kesadaran bangsa dan persatuan"]
+          ]
+        }],
+        trik: "<b>'Daerah, Tokoh, Senjata'</b>: kedaerahan, bergantung tokoh, senjata tradisional.",
+        jebak: "Kalau ada opsi 'dipimpin organisasi modern' atau 'bersifat nasional', itu ciri abad ke-20, bukan sebelum 1900."
+      },
+      {
+        n: 12, j: "Perjanjian Bongaya (1667)",
+        alur: [
+          "Makassar (Gowa) abad ke-17 adalah pelabuhan bebas yang ramai, dan <b>Sultan Hasanuddin</b> (julukan <i>Ayam Jantan dari Timur</i>) menolak monopoli VOC. VOC di bawah <b>Cornelis Speelman</b> bersekutu dengan <b>Aru Palakka</b> (Bone) yang ingin lepas dari Gowa dan Kapten Jonker (Ambon).",
+          "Setelah terdesak, Hasanuddin terpaksa menandatangani <b>Perjanjian Bongaya pada 18 November 1667</b>. Tapi perlawanan berlanjut hingga <b>Benteng Somba Opu jatuh 1669</b>. Hasanuddin wafat 1670."
+        ],
+        kw: [
+          "<b>Isi pokok:</b> VOC memonopoli perdagangan Makassar; Gowa melepas Bone, Luwu, & daerah taklukan; Aru Palakka diakui raja Bone; Benteng Ujung Pandang diserahkan VOC (jadi <b>Fort Rotterdam</b>); Gowa bayar ganti rugi perang; bangsa Eropa lain diusir dari Makassar",
+          "Tokoh: Sultan Hasanuddin vs Cornelis Speelman, Aru Palakka, Kapten Jonker",
+          "Hasanuddin = <i>Ayam Jantan dari Timur</i>; Somba Opu jatuh 1669"
+        ],
+        tbls: [{
+          t: "Pihak yang Terlibat", h: ["Gowa-Makassar", "VOC dan Sekutu"],
+          r: [
+            ["Sultan Hasanuddin", "Cornelis Speelman"],
+            ["Menolak monopoli, pelabuhan bebas", "Ingin monopoli rempah"],
+            ["Kalah, Bongaya 1667", "Aru Palakka (Bone), Kapten Jonker (Ambon)"]
+          ]
+        }],
+        trik: "<b>'Bongaya = Bone, monopoli, benteng'</b>: Bone lepas, VOC monopoli, benteng jadi Fort Rotterdam.",
+        jebak: "Perjanjian Bongaya <b>bukan</b> akhir langsung perlawanan. Perang masih berlanjut sampai 1669."
+      },
+      {
+        n: 13, j: "Faktor Kegagalan Serangan Kedua Sultan Agung ke Batavia (1629)",
+        alur: [
+          "<b>Sultan Agung</b> (Mataram) ingin mengusir VOC dari Batavia. Serangan pertama (<b>1628</b>) gagal total. Serangan kedua (<b>1629</b>) sudah lebih disiapkan, tetapi VOC mengetahui rencana itu. Sebelum pasukan tiba, VOC <b>membakar lumbung-lumbung padi di Tegal dan Cirebon</b>, sehingga pasukan Mataram kekurangan makanan.",
+          "Ditambah jarak jauh, wabah penyakit (malaria & kolera), serta persenjataan dan benteng VOC yang lebih unggul, pasukan Mataram mundur. J.P. Coen wafat pada 1629 di tengah pengepungan itu, tetapi Batavia tetap bertahan."
+        ],
+        kw: [
+          "<b>Faktor kegagalan (1629):</b> lumbung padi (Tegal, Cirebon) dibakar VOC, logistik terputus, jarak jauh, wabah penyakit, senjata & benteng VOC lebih kuat",
+          "Tahun: serangan I <b>1628</b>, serangan II <b>1629</b>",
+          "Pemimpin: Tumenggung Baurekso (1628); Suro Agul-Agul, Mandurareja, Upasanta (1629)",
+          "Alasan perang: menolak monopoli VOC dan ingin menguasai Jawa"
+        ],
+        tbls: [{
+          t: "Serangan I vs II", h: ["Aspek", "Serangan I (1628)", "Serangan II (1629)"],
+          r: [
+            ["Persiapan", "Kurang matang", "Lebih siap (pasokan beras disiapkan)"],
+            ["Penyebab gagal", "Logistik, jarak jauh, senjata kalah", "Lumbung dibakar VOC, wabah, senjata kalah"],
+            ["Hasil", "Gagal", "Gagal, Mataram mundur"]
+          ]
+        }],
+        trik: "<b>'Perut kosong kalah perang'</b>: logistik (lumbung dibakar) = kunci gagalnya serangan II.",
+        jebak: "Pertanyaan 'faktor utama' serangan II biasanya jawabannya <b>logistik/lumbung dibakar</b>, bukan 'kurang semangat prajurit'."
+      },
+      {
+        n: 14, j: "Fakta Perang Diponegoro dan Perang Padri",
+        alur: [
+          "<b>Perang Diponegoro (1825–1830)</b> dipicu <b>pemasangan patok jalan di tanah makam leluhur Diponegoro di Tegalrejo</b> oleh Belanda, ditambah campur tangan keraton Yogyakarta dan pajak berat. Diponegoro dibantu <b>Kyai Mojo, Sentot Alibasya Prawiradirja, Pangeran Mangkubumi</b>. Jenderal <b>de Kock</b> memakai <b>benteng stelsel</b>, lalu menjebak Diponegoro lewat 'perundingan' di Magelang (28 Maret 1830); diasingkan ke Manado lalu Makassar (wafat 1855).",
+          "<b>Perang Padri (1803–1837)</b> di Minangkabau awalnya <b>perang saudara</b>: kaum Padri (ulama) ingin memurnikan ajaran Islam, kaum Adat menolak lalu meminta bantuan Belanda (1821, Perjanjian Masang). Padri melawan Belanda dipimpin <b>Tuanku Imam Bonjol</b>. Belanda memakai benteng stelsel (Fort de Kock) dan <b>Plakat Panjang (1833)</b>. Adat & Padri bersatu (1832), tapi Bonjol jatuh 1837; Imam Bonjol diasingkan ke Cianjur, Ambon, lalu Manado."
+        ],
+        kw: [
+          "<b>Diponegoro:</b> 1825–1830, patok Tegalrejo, gerilya, Kyai Mojo, Sentot, de Kock, benteng stelsel, ditangkap 28 Maret 1830",
+          "<b>Padri:</b> 1803–1837, kaum Padri vs kaum Adat, Imam Bonjol, Perjanjian Masang 1821, Plakat Panjang 1833, Bonjol jatuh 1837",
+          "Keduanya dipatahkan dengan <b>benteng stelsel</b> dan tipu muslihat perundingan"
+        ],
+        tbls: [{
+          t: "Diponegoro vs Padri", h: ["Aspek", "Perang Diponegoro", "Perang Padri"],
+          r: [
+            ["Tahun", "1825–1830", "1803–1837"],
+            ["Wilayah", "Jawa (Yogyakarta dan sekitarnya)", "Minangkabau, Sumatera Barat"],
+            ["Pemicu", "Patok jalan di makam leluhur, campur tangan keraton", "Konflik Padri vs Adat, lalu campur tangan Belanda"],
+            ["Tokoh", "Diponegoro, Kyai Mojo, Sentot", "Imam Bonjol, Tuanku Nan Renceh"],
+            ["Siasat Belanda", "Benteng stelsel, penjebakan di Magelang", "Benteng stelsel, Plakat Panjang"],
+            ["Akhir", "Diponegoro ditangkap 1830", "Bonjol jatuh 1837"]
+          ]
+        }],
+        trik: "<b>'Diponegoro = Patok. Padri = Pemurnian.'</b> Dua-duanya kalah lewat benteng stelsel dan tipu muslihat.",
+        jebak: "Perang Padri <b>awalnya</b> perang saudara, bukan langsung melawan Belanda. Jangan terjebak opsi 'sejak awal melawan Belanda'."
+      },
+      {
+        n: 15, j: "Nasihat Snouck Hurgronje untuk Mengakhiri Perang Aceh",
+        alur: [
+          "Perang Aceh (1873–1904) bikin Belanda kewalahan karena semangat jihad rakyat Aceh. Belanda memanggil <b>Dr. Christiaan Snouck Hurgronje</b>, ahli Islam yang menyamar sebagai <b>Haji Abdul Ghaffar</b> dan meneliti Aceh 1891–1892 (menulis <i>De Atjehers</i>).",
+          "Kesimpulan Snouck: <b>musuh sejati Belanda adalah kaum ulama</b> (penggerak jihad), bukan bangsawan (<i>uleebalang</i>). Strateginya: <b>pecah belah ulama dan uleebalang</b>, rangkul uleebalang, keras terhadap ulama, jangan berunding dengan Sultan/pejuang, dan bentuk pasukan khusus <b>Marsose</b> untuk mengejar gerilya. Dijalankan <b>Van Heutsz</b> dan diakhiri dengan <b>Korte Verklaring</b> (Pernyataan Pendek)."
+        ],
+        kw: [
+          "Snouck Hurgronje (Haji Abdul Ghaffar); buku <i>De Atjehers</i>",
+          "<b>Nasihat:</b> pecah belah ulama vs uleebalang; keras terhadap ulama, rangkul uleebalang; pasukan khusus <b>Marsose</b>; jangan berunding dengan Sultan; perbaikan bagi rakyat kecil",
+          "Pelaksana: Van Heutsz; kebijakan <i>Korte Verklaring</i>",
+          "Latar Perang Aceh: Traktat Sumatera 1871, perang 26 Maret 1873 (Mayjen Kohler tewas)"
+        ],
+        tbls: [{
+          t: "Nasihat Snouck dan Implementasinya", h: ["Nasihat", "Implementasi"],
+          r: [
+            ["Musuh utama = ulama", "Ulama dijadikan sasaran serangan keras"],
+            ["Rangkul uleebalang", "Uleebalang diberi jabatan dan dibujuk"],
+            ["Hadapi gerilya dengan pasukan khusus", "Pembentukan Marsose"],
+            ["Tundukkan secara hukum", "Korte Verklaring (Pernyataan Pendek)"]
+          ]
+        }],
+        trik: "<b>'Snouck = Sikat Ulama, Sayangi Uleebalang, Sebar Marsose.'</b>",
+        jebak: "Snouck <b>bukan</b> menyarankan 'Berunding dengan Sultan'. Justru sebaliknya."
+      },
+      {
+        n: 16, j: "Hak Tawan Karang di Bali",
+        alur: [
+          "Di Bali berlaku adat <b>Hak Tawan Karang</b>: raja berhak <b>merampas kapal yang terdampar di perairannya beserta muatannya</b>. Bagi raja Bali ini hak kedaulatan; bagi Belanda ini mengganggu pelayaran dan perdagangan.",
+          "Belanda memaksa perjanjian penghapusan Tawan Karang (<b>1841</b>), namun <b>Buleleng</b> menolak. Tahun 1844 kapal Belanda terdampar di Prancak dan Sangsit lalu dirampas. Belanda mengirim ekspedisi militer (1846, 1848, 1849). Terkenal lewat <b>Perang Jagaraga</b> dengan tokoh <b>I Gusti Ketut Jelantik</b> (patih Buleleng) yang kalah pada 1849, disusul perang <b>puputan</b>: Badung (1906) dan Klungkung (1908)."
+        ],
+        kw: [
+          "<b>Hak Tawan Karang</b> = hak merampas kapal terdampar beserta isinya",
+          "Perjanjian penghapusan <b>1841</b>; Buleleng menolak",
+          "Perang Jagaraga (1846, 1848, 1849), I Gusti Ketut Jelantik",
+          "<b>Puputan</b> (perang habis-habisan hingga titik darah penghabisan): Badung 1906, Klungkung 1908"
+        ],
+        tbls: [{
+          t: "Tawan Karang dalam Dua Sudut Pandang", h: ["Raja Bali", "Belanda"],
+          r: [
+            ["Hak kedaulatan atas laut dan pantai", "Mengganggu pelayaran dan perdagangan"],
+            ["Adat turun-temurun", "Alasan membenarkan intervensi militer"]
+          ]
+        }],
+        trik: "<b>'Tawan = Rampas Kapal'</b>. Ingat Jelantik (Buleleng) untuk Perang Jagaraga.",
+        jebak: "Hak Tawan Karang itu <b>hak raja merampas kapal terdampar</b>, bukan hak memungut pajak pelabuhan."
+      },
+      {
+        n: 17, j: "Perjuangan Cut Nyak Dhien",
+        alur: [
+          "Cut Nyak Dhien lahir 1848 di Lampadang, Aceh Besar. Suami pertamanya, <b>Teuku Ibrahim Lamnga</b>, gugur melawan Belanda (1878). Ia lalu menikah dengan <b>Teuku Umar</b> (1880) yang terkenal dengan siasat <i>pura-pura menyerah</i> kepada Belanda (1893) untuk mendapatkan senjata, lalu berbalik menyerang (1896).",
+          "Teuku Umar gugur pada <b>1899</b> di Meulaboh. Cut Nyak Dhien melanjutkan gerilya di hutan pedalaman bertahun-tahun. Dalam kondisi tua dan sakit (rabun & encok), ia ditangkap pada <b>1905</b> (dilaporkan Pang Laot Ali karena iba), diasingkan ke <b>Sumedang</b> (Jawa Barat), dan wafat 6 November 1908. Ditetapkan Pahlawan Nasional (1964)."
+        ],
+        kw: [
+          "Lahir 1848, Lampadang, Aceh Besar",
+          "Suami: Teuku Ibrahim Lamnga (gugur 1878), Teuku Umar (gugur 1899)",
+          "Ditangkap <b>1905</b>, diasingkan ke <b>Sumedang</b>, wafat <b>1908</b>",
+          "Siasat Teuku Umar: pura-pura menyerah; Pahlawan Nasional (1964)"
+        ],
+        tbls: [{
+          t: "Tokoh Perang Aceh", h: ["Tokoh", "Peran"],
+          r: [
+            ["Cut Nyak Dhien", "Memimpin gerilya setelah Teuku Umar gugur"],
+            ["Teuku Umar", "Siasat pura-pura menyerah, gugur 1899"],
+            ["Teungku Cik di Tiro", "Ulama pejuang"],
+            ["Panglima Polim", "Panglima perang Aceh"],
+            ["Van Heutsz", "Gubernur militer Aceh, pelaksana strategi Snouck"]
+          ]
+        }],
+        trik: "<b>'Tiga fase Cut Nyak Dhien: Lamnga (gugur), Umar (gugur), hutan (gerilya)'</b>, lalu Sumedang.",
+        jebak: "Cut Nyak Dhien diasingkan ke <b>Sumedang</b>, bukan ke Ambon atau Manado (itu pengasingan tokoh lain)."
+      }
+    ],
+    latihan: [
+      { t: "HOTS", q: "Seorang pegawai tanam paksa menetapkan separuh tanah desa untuk kopi dan memaksa petani bekerja 200 hari setahun. Sebutkan dua penyimpangan dalam kasus ini dan jelaskan apa motivasi pegawai itu menyimpang!",
+        a: "Dua penyimpangan: (1) luas tanah 1/2 desa melebihi aturan resmi maksimal 1/5 tanah desa; (2) waktu kerja 200 hari melebihi aturan maksimal 66 hari/tahun. Motivasi utamanya adalah mengejar bonus cultuurprocenten (persentase dari kelebihan hasil panen)." },
+      { t: "Jebakan", q: "Pada 1870 Belanda mengeluarkan Agrarische Wet dan Suiker Wet. Apakah ini tanda berakhirnya eksploitasi terhadap rakyat? Jelaskan dengan menyebut satu perbedaan dan satu kesamaan dengan tanam paksa!",
+        a: "Bukan akhir eksploitasi! Kesamaan: rakyat tetap diperas sebagai tenaga kerja murah dan menderita kemiskinan. Perbedaan: pada Tanam Paksa pelaku utamanya pemerintah kolonial dengan sistem kerja wajib, sedangkan pada era Liberal (1870) pelakunya pengusaha swasta yang menyewa tanah (erfpacht) dengan buruh/kuli kontrak (diikat Poenale Sanctie)." },
+      { t: "HOTS", q: "Perang Diponegoro, Perang Padri, dan Perang Aceh sama-sama berakhir kekalahan. Sebutkan dua faktor yang sama dan satu siasat Belanda yang paling khas pada Perang Aceh!",
+        a: "Dua faktor yang sama: bersifat kedaerahan/belum bersatu secara nasional, kalah persenjataan/logistik, serta politik adu domba (devide et impera) Belanda. Siasat paling khas di Aceh: nasihat Snouck Hurgronje (memecah ulama vs uleebalang, merangkul uleebalang, menumpas ulama dengan pasukan khusus anti-gerilya Marsose, dan Korte Verklaring)." },
+      { t: "Benar / Salah", q: "Tentukan Benar/Salah dan perbaiki: (a) Serangan kedua Sultan Agung gagal terutama karena prajurit kurang semangat. (b) Hak Tawan Karang adalah hak raja merampas kapal yang terdampar. (c) Cut Nyak Dhien diasingkan ke Ambon.",
+        a: "(a) SALAH — gagal terutama karena lumbung beras/logistik di Tegal dan Cirebon dibakar VOC serta wabah penyakit. (b) BENAR. (c) SALAH — Cut Nyak Dhien diasingkan ke Sumedang (Jawa Barat)." }
+    ]
+  },
+
+  {
+    id: "arc-3", label: "Arc 3 · Indikator 18–25", judul: "Dampak Kolonialisme dan Politik Etis",
+    intro: "Dampak politik, ekonomi dualistik, kasta sosial E-T-P, jejak Portugis di Kampung Tugu, hingga Politik Etis (Trias van Deventer).",
+    svg: '<div class="vis-box"><svg viewBox="0 0 760 155" aria-label="Piramida Stratifikasi Sosial & Trias van Deventer">' +
+      '<rect width="760" height="155" fill="#0F172A"/>' +
+      '<polygon points="92,18 268,18 286,56 74,56" fill="#2563EB"/>' +
+      '<polygon points="70,62 290,62 312,100 48,100" fill="#F59E0B"/>' +
+      '<polygon points="44,106 316,106 340,142 20,142" fill="#10B981"/>' +
+      '<text x="180" y="42" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#FFF">1. EROPA (Raad van Justitie)</text>' +
+      '<text x="180" y="85" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#0F172A">2. TIMUR ASING (Tionghoa, Arab, India)</text>' +
+      '<text x="180" y="129" text-anchor="middle" font-family="sans-serif" font-size="11.5" font-weight="700" fill="#0F172A">3. PRIBUMI (Landraad · Terbawah)</text>' +
+      '<line x1="368" y1="20" x2="368" y2="138" stroke="#334155" stroke-width="1.5"/>' +
+      '<text x="564" y="34" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#86EFAC">TRIAS VAN DEVENTER (Teori vs Praktik)</text>' +
+      '<rect x="388" y="46" width="352" height="28" rx="7" fill="#1E293B"/><text x="400" y="64" font-family="sans-serif" font-size="11" fill="#E2E8F0"><tspan font-weight="700" fill="#4ADE80">Irigasi:</tspan> Sawah rakyat &rarr; malah kebun swasta Belanda</text>' +
+      '<rect x="388" y="80" width="352" height="28" rx="7" fill="#1E293B"/><text x="400" y="98" font-family="sans-serif" font-size="11" fill="#E2E8F0"><tspan font-weight="700" fill="#FACC15">Edukasi:</tspan> Tenaga murah &rarr; lahir kaum terpelajar!</text>' +
+      '<rect x="388" y="114" width="352" height="28" rx="7" fill="#1E293B"/><text x="400" y="132" font-family="sans-serif" font-size="11" fill="#E2E8F0"><tspan font-weight="700" fill="#38BDF8">Emigrasi:</tspan> Pemerataan &rarr; pemasok kuli Sumatera Timur</text>' +
+      '</svg><div class="vcap"><b>Visual Arc 3:</b> Piramida golongan <b>E–T–P</b> (IS/RR 1854) &amp; ironi <b>Politik Etis</b> yang melahirkan pelopor pergerakan nasional.</div></div>',
+    items: [
+      {
+        n: 18, j: "Dampak Kolonialisme di Bidang Politik yang Paling Mendasar",
+        alur: [
+          "Kalau ditanya 'apa dampak politik yang <b>paling mendasar</b>?', jawabannya bukan sekadar 'dipecah belah', tapi <b>hilangnya kedaulatan (kemerdekaan) bangsa</b>. Begitu kedaulatan hilang, semua keputusan penting (hukum, pajak, pemerintahan, perang) dikendalikan penjajah dari Batavia dan negeri Belanda. Raja-raja pribumi diturunkan derajatnya jadi alat atau pegawai kolonial.",
+          "Dari kehilangan kedaulatan itu muncul efek turunan: politik <b>devide et impera</b>, birokrasi sentralistis lewat <i>Pangreh Praja</i>, hukum diskriminatif, dan pembatasan hak politik pribumi."
+        ],
+        kw: [
+          "<b>Paling mendasar = hilangnya kedaulatan/kemerdekaan</b>",
+          "Turunannya: devide et impera, birokrasi sentralistis (Pangreh Praja), hukum diskriminatif, raja menjadi alat kolonial",
+          "Sistem pemerintahan: Gubernur Jenderal di Batavia sebagai penguasa tertinggi"
+        ],
+        tbls: [{
+          t: "Dampak Kolonialisme per Bidang", h: ["Bidang", "Dampak Khas"],
+          r: [
+            ["Politik", "Hilang kedaulatan, devide et impera, birokrasi sentralistis"],
+            ["Ekonomi", "Eksploitasi SDA, kemiskinan, ekonomi uang, ekonomi dualistik"],
+            ["Sosial", "Stratifikasi tiga golongan, diskriminasi"],
+            ["Budaya", "Pengaruh budaya Eropa, pendidikan Barat, bahasa Belanda"]
+          ]
+        }],
+        trik: "<b>'Politik = Kedaulatan lenyap.'</b> Kata kuncinya 'paling mendasar'.",
+        jebak: "Devide et impera memang dampak politik, tapi bukan yang <b>paling mendasar</b>. Itu efek dari hilangnya kedaulatan."
+      },
+      {
+        n: 19, j: "Dampak Kolonialisme di Bidang Ekonomi",
+        alur: [
+          "Penjajah memandang Nusantara sebagai 'tambang kekayaan'. SDA dikeruk, keuntungan dibawa ke Belanda (<i>batig slot</i>), rakyat jadi petani miskin dan buruh murah. Muncul <b>ekonomi dualistik</b> (J.H. Boeke): sektor modern (perkebunan, perusahaan Barat) berdampingan dengan sektor tradisional (pertanian rakyat) yang miskin.",
+          "Ada 'efek samping' tak langsung: perkenalan <b>ekonomi uang</b>, pembangunan <b>infrastruktur</b> (jalan, rel kereta api, pelabuhan, irigasi), bank (<i>De Javasche Bank</i>, 1828), dan pelayaran (KPM) — namun dibangun demi kepentingan penjajah, bukan rakyat."
+        ],
+        kw: [
+          "Eksploitasi SDA, perkebunan monokultur, kemiskinan, kuli kontrak, pajak berat",
+          "<b>Ekonomi dualistik</b> (J.H. Boeke)",
+          "Diperkenalkan <b>ekonomi uang</b> dan perdagangan internasional",
+          "Infrastruktur (jalan, rel, pelabuhan) untuk kepentingan kolonial; <i>batig slot</i> dikirim ke Belanda"
+        ],
+        tbls: [{
+          t: "Dampak Negatif vs Positif (Tak Langsung)", h: ["Negatif", "Positif Tak Langsung"],
+          r: [
+            ["Eksploitasi SDA dan kemiskinan", "Infrastruktur (jalan, rel, pelabuhan)"],
+            ["Kuli kontrak, kerja paksa", "Perkenalan ekonomi uang"],
+            ["Ekonomi dualistik", "Tanaman dan teknologi baru"],
+            ["Keuntungan mengalir ke Belanda", "Munculnya lembaga keuangan modern"]
+          ]
+        }],
+        trik: "<b>'Ekonomi = Kuras, Dualistik, Uang.'</b>",
+        jebak: "Infrastruktur itu bukan 'hadiah'. Tujuannya melancarkan angkutan hasil perkebunan dan kepentingan militer."
+      },
+      {
+        n: 20, j: "Stratifikasi Masyarakat Masa Hindia Belanda",
+        alur: [
+          "Masyarakat dibagi seperti 'kasta resmi' lewat <i>Regeringsreglement</i> 1854 (diperkuat <i>Indische Staatsregeling</i>). Tiga golongan: <b>Eropa</b> di puncak, <b>Timur Asing</b> (Tionghoa, Arab, India) di tengah, dan <b>Pribumi</b> di dasar — berlaku di hukum, pendidikan, dan pekerjaan.",
+          "Orang Eropa diadili di <i>Raad van Justitie</i> dengan hukum Belanda, sedangkan pribumi di <i>Landraad</i> dengan hukum adat. Timur Asing berperan sebagai perantara dagang dan dibatasi lewat <i>wijkenstelsel</i> (permukiman khusus) dan <i>passenstelsel</i> (izin bepergian)."
+        ],
+        kw: [
+          "3 golongan: <b>Eropa, Timur Asing, Pribumi</b> (urut dari atas)",
+          "Dasar hukum: Regeringsreglement 1854 / Indische Staatsregeling",
+          "<i>Wijkenstelsel</i> = sistem permukiman, <i>passenstelsel</i> = sistem izin jalan",
+          "Pengadilan: <i>Raad van Justitie</i> (Eropa), <i>Landraad</i> (pribumi)"
+        ],
+        tbls: [{
+          t: "Tiga Golongan Masyarakat", h: ["Golongan", "Siapa", "Hukum/Peradilan", "Peran"],
+          r: [
+            ["Eropa (atas)", "Belanda, Eropa lain, yang dipersamakan", "Hukum Belanda, Raad van Justitie", "Penguasa, pejabat, pengusaha"],
+            ["Timur Asing (tengah)", "Tionghoa, Arab, India", "Hukum campuran", "Perantara dagang"],
+            ["Pribumi (bawah)", "Penduduk asli Nusantara", "Hukum adat, Landraad", "Petani, buruh, pegawai rendah"]
+          ]
+        }],
+        trik: "<b>'E-T-P'</b> = Eropa, Timur Asing, Pribumi (dari atas ke bawah).",
+        jebak: "Tionghoa, Arab, dan India itu <b>Timur Asing</b>, bukan 'pribumi' dan bukan 'Eropa'."
+      },
+      {
+        n: 21, j: "Pengaruh Budaya Portugis di Kampung Tugu, Batavia",
+        alur: [
+          "Setelah VOC merebut <b>Malaka dari Portugis (1641)</b>, banyak orang Portugis dan keturunan campuran (termasuk <b>Mardijkers</b>, bekas budak yang dimerdekakan) dibawa ke Batavia. Mereka merdeka dengan syarat pindah ke agama Protestan dan ditempatkan di daerah <b>Tugu</b> (Jakarta Utara).",
+          "Dari komunitas inilah lahir budaya Portugis-Betawi: <b>Keroncong Tugu</b>, <b>Gereja Tugu</b> (abad ke-17), nama keluarga bergaya Portugis (Michiels, Andries, Quiko, Abrahams, Seymons), serta tradisi <b>Mandi-mandi</b> dan <b>Rabo-rabo</b> di awal tahun."
+        ],
+        kw: [
+          "Kampung Tugu, Jakarta Utara; <b>Mardijkers</b> (budak yang dimerdekakan)",
+          "<b>Keroncong Tugu</b> (lagu klasik: Moresco)",
+          "<b>Gereja Tugu</b>, tradisi <b>Mandi-mandi</b> dan <b>Rabo-rabo</b>",
+          "Nama keluarga Portugis: Michiels, Andries, Quiko; latar: Malaka jatuh ke VOC 1641"
+        ],
+        tbls: [{
+          t: "Jejak Budaya Portugis di Tugu", h: ["Unsur", "Contoh"],
+          r: [
+            ["Musik", "Keroncong Tugu"],
+            ["Agama/tempat ibadah", "Gereja Tugu"],
+            ["Tradisi", "Mandi-mandi, Rabo-rabo"],
+            ["Nama keluarga", "Michiels, Andries, Quiko, Abrahams"]
+          ]
+        }],
+        trik: "<b>'Tugu = Keroncong, Gereja, Mandi-mandi.'</b>",
+        jebak: "Keroncong Tugu itu <b>pengaruh Portugis</b>, bukan Belanda murni, dan bukan Arab."
+      },
+      {
+        n: 22, j: "Program Politik Etis (Trias van Deventer)",
+        alur: [
+          "Politik Etis (<i>Ethische Politiek</i>) adalah 'balas budi' Belanda setelah lama mengeruk kekayaan Nusantara. Populer berkat <b>Conrad Theodor van Deventer</b> lewat artikel <i>Een Eereschuld</i> ('Hutang Kehormatan', 1899) dan Pieter Brooshooft. Ratu Wilhelmina mengumumkannya dalam pidato tahta <b>1901</b>.",
+          "Isinya tiga program (<b>Trias van Deventer</b>): <b>Irigasi</b> (pengairan), <b>Edukasi</b> (pendidikan), dan <b>Emigrasi</b> (perpindahan penduduk/transmigrasi). Dijalankan terutama masa Gubernur Jenderal <b>Idenburg</b> (1909–1916)."
+        ],
+        kw: [
+          "<b>Trias van Deventer: Irigasi, Edukasi, Emigrasi</b>",
+          "Tokoh: C.Th. van Deventer, Pieter Brooshooft, Ratu Wilhelmina (1901)",
+          "Artikel <i>Een Eereschuld</i> (1899); politik balas budi / hutang kehormatan"
+        ],
+        tbls: [{
+          t: "Trias van Deventer", h: ["Program", "Isi"],
+          r: [
+            ["Irigasi", "Pembangunan dan perbaikan sistem pengairan"],
+            ["Edukasi", "Perluasan pendidikan bagi pribumi"],
+            ["Emigrasi", "Perpindahan penduduk dari daerah padat (Jawa) ke daerah lain"]
+          ]
+        }],
+        trik: "<b>'IEE'</b> = Irigasi, Edukasi, Emigrasi.",
+        jebak: "<b>Trias van Deventer</b> (Politik Etis) bukan <b>Trias Politica</b> (pembagian kekuasaan: eksekutif, legislatif, yudikatif)."
+      },
+      {
+        n: 23, j: "Jenjang Sekolah pada Masa Hindia Belanda",
+        alur: [
+          "Sistem sekolah Hindia Belanda bertingkat dan <b>diskriminatif</b> sesuai golongan sosial. Anak Eropa mengambil jalur <b>ELS, HBS</b>; anak elit pribumi masuk <b>HIS, MULO, AMS</b>; sedangkan rakyat biasa hanya <b>Sekolah Desa (3 tahun)</b>.",
+          "Setelah Politik Etis, pendidikan menengah dan tinggi dibuka terbatas. Sekolah profesi seperti <b>STOVIA</b> (dokter) dan <b>OSVIA</b> (calon pegawai pemerintah) melahirkan kaum terpelajar pemimpin pergerakan nasional."
+        ],
+        kw: [
+          "<b>Rendah:</b> ELS (Eropa), HIS (pribumi elit), HCS (Tionghoa), Sekolah Kelas Satu & Dua, Sekolah Desa (3 tahun)",
+          "<b>Menengah:</b> MULO (setara SMP), AMS (setara SMA), HBS (setara SMA, untuk Eropa/elit)",
+          "<b>Kejuruan:</b> STOVIA (dokter), OSVIA (pegawai), Kweekschool (guru)",
+          "<b>Tinggi:</b> THS Bandung (1920, kini ITB), RHS Batavia (1924, hukum), GHS Batavia (1927, kedokteran)"
+        ],
+        tbls: [{
+          t: "Jenjang dan Contohnya", h: ["Jenjang", "Sekolah", "Keterangan"],
+          r: [
+            ["Rendah", "ELS, HIS, HCS, Sekolah Desa", "ELS untuk Eropa, HIS pribumi elit, HCS Tionghoa"],
+            ["Menengah", "MULO, AMS, HBS", "MULO ~ SMP; AMS dan HBS ~ SMA"],
+            ["Kejuruan", "STOVIA, OSVIA, Kweekschool", "Dokter, pegawai pemerintah, guru"],
+            ["Tinggi", "THS, RHS, GHS", "Teknik, hukum, kedokteran"]
+          ]
+        }],
+        trik: "<b>'ELS-HBS untuk Eropa, HIS-MULO-AMS untuk pribumi elit.'</b>",
+        jebak: "MULO itu setara SMP, bukan SMA. AMS dan HBS yang setara SMA."
+      },
+      {
+        n: 24, j: "Latar Belakang Lahirnya Politik Etis",
+        alur: [
+          "Hasil tanam paksa dan liberal: Belanda kaya, rakyat Jawa kelaparan. Kritik bermunculan: <b>Multatuli (Max Havelaar, 1860)</b>, <b>Van Deventer (Een Eereschuld, 1899)</b>, menguatnya kaum humanis/etis & Partai Kristen di parlemen Belanda, hingga pidato Ratu Wilhelmina 1901.",
+          "Tapi ada alasan ekonomi juga: perkebunan swasta butuh <b>tenaga kerja terdidik yang murah</b> (juru tulis, mandor). Jadi motifnya campuran: <b>humanis + kepentingan ekonomi kolonial</b>."
+        ],
+        kw: [
+          "Penderitaan rakyat akibat tanam paksa dan liberal",
+          "Kritik humanis: Multatuli, Van Deventer, Brooshooft; pengaruh kaum etis di parlemen",
+          "Pidato tahta Ratu Wilhelmina 1901",
+          "Kebutuhan tenaga terdidik murah bagi swasta"
+        ],
+        tbls: [{
+          t: "Dua Motif Politik Etis", h: ["Motif Humanis", "Motif Ekonomi"],
+          r: [
+            ["Balas budi atas penderitaan rakyat", "Kebutuhan tenaga kerja terdidik murah"],
+            ["Kritik Multatuli dan Van Deventer", "Menjaga produktivitas dan stabilitas koloni"],
+            ["Pengaruh kaum etis di parlemen", "Kepentingan pengusaha swasta"]
+          ]
+        }],
+        trik: "<b>'Kritik + Kasihan + Kepentingan.'</b>",
+        jebak: "Politik Etis lahir bukan karena Belanda murni 'baik hati'. Ada kepentingan ekonomi di baliknya."
+      },
+      {
+        n: 25, j: "Praktik Politik Etis (Cita-cita vs Kenyataan)",
+        alur: [
+          "Di atas kertas Trias van Deventer mulia, tapi praktiknya <b>menyimpang</b>. <b>Irigasi</b> lebih banyak mengairi perkebunan swasta Belanda. <b>Edukasi</b> diskriminatif (terutama anak priyayi) untuk mencetak tenaga murah. <b>Emigrasi</b> dipakai memasok kuli ke perkebunan Sumatera Timur dan kolonisasi (Lampung, 1905) serta Suriname.",
+          "Ironisnya: pendidikan Politik Etis justru melahirkan <b>kaum terpelajar</b> yang memimpin <b>kebangkitan nasional</b>. Penjajah tak sengaja menyiapkan musuhnya sendiri."
+        ],
+        kw: [
+          "Irigasi: untuk perkebunan Belanda, bukan sawah rakyat",
+          "Edukasi: diskriminatif, mencetak tenaga kerja murah",
+          "Emigrasi: pemasok kuli perkebunan (Sumatera Timur), kolonisasi Lampung 1905, Suriname",
+          "Dampak tak terduga: lahirnya kaum terpelajar dan kebangkitan nasional"
+        ],
+        tbls: [{
+          t: "Cita-cita vs Praktik", h: ["Program", "Cita-cita", "Praktik"],
+          r: [
+            ["Irigasi", "Mengairi sawah rakyat", "Utamanya untuk perkebunan Belanda"],
+            ["Edukasi", "Mencerdaskan pribumi", "Diskriminatif, terbatas, mencetak tenaga murah"],
+            ["Emigrasi", "Mengurangi kepadatan Jawa", "Pemasok kuli kontrak perkebunan"]
+          ]
+        }],
+        trik: "<b>'Etis di teori, eksploitasi di praktik.'</b>",
+        jebak: "Efek 'melahirkan kaum terpelajar' itu dampak tak terduga yang menguntungkan Indonesia, bukan tujuan Belanda."
+      }
+    ],
+    latihan: [
+      { t: "HOTS", q: "Raja-raja Nusantara tetap duduk di singgasana tetapi semua keputusan penting diawasi Belanda. Dampak politik apa yang paling mendasar di sini, dan mengapa devide et impera bukan jawaban yang paling tepat?",
+        a: "Dampak paling mendasar adalah hilangnya kedaulatan (kemerdekaan) politik penguasa pribumi karena kekuasaan tertinggi beralih ke tangan kolonial. Devide et impera bukan yang paling mendasar, melainkan cara/efek turunan dari hilangnya kedaulatan tersebut." },
+      { t: "Jebakan", q: "Seorang anak buruh perkebunan hanya bisa sekolah 3 tahun, sementara anak bupati melanjutkan ke MULO lalu AMS. Sistem apa yang tergambar? Sebutkan dasar penggolongannya!",
+        a: "Tergambar sistem pendidikan kolonial yang bertingkat dan diskriminatif. Dasarnya adalah stratifikasi sosial-hukum (golongan Eropa, Timur Asing, Pribumi — serta status kebangsawanan/priyayi vs rakyat jelata)." },
+      { t: "HOTS", q: "Mengapa Politik Etis disebut 'pedang bermata dua' bagi Belanda? Jelaskan dengan memakai bidang edukasi!",
+        a: "Di satu sisi menguntungkan Belanda karena menghasilkan tenaga administrasi terdidik yang murah, namun di sisi lain menjadi senjata makan tuan karena melahirkan golongan intelektual/terpelajar pribumi yang sadar akan penindasan dan memimpin pergerakan nasional menuntut kemerdekaan." },
+      { t: "Benar / Salah", q: "Tentukan Benar/Salah dan perbaiki: (a) Trias van Deventer adalah pembagian kekuasaan eksekutif, legislatif, dan yudikatif. (b) Keroncong Tugu adalah pengaruh budaya Portugis. (c) Tionghoa pada masa kolonial termasuk golongan pribumi.",
+        a: "(a) SALAH — Trias van Deventer adalah Irigasi, Edukasi, Emigrasi (eksekutif-legislatif-yudikatif adalah Trias Politica). (b) BENAR. (c) SALAH — Tionghoa termasuk golongan Timur Asing (lapisan tengah)." }
+    ]
+  },
+
+  {
+    id: "arc-4", label: "Arc 4 · Indikator 26–35", judul: "Kebangkitan Nasional dan Sumpah Pemuda",
+    intro: "Faktor eksternal & internal nasionalisme, Budi Utomo vs Indische Partij, PNI, Taman Siswa, hingga Sumpah Pemuda 1928 dan pergeseran strategi.",
+    svg: "",
+    items: [
+      {
+        n: 26, j: "Pengaruh Eksternal Kebangkitan Nasionalisme Indonesia",
+        alur: [
+          "Faktor eksternal (dari luar Indonesia): <b>kemenangan Jepang atas Rusia (1905)</b> membuktikan bangsa Asia bisa mengalahkan bangsa Eropa. Ditambah gerakan nasionalis di India (<b>Kongres Nasional India 1885</b>, Mahatma Gandhi), Filipina (<b>Jose Rizal</b>, Katipunan, 1896), Tiongkok (<b>Revolusi 1911, Sun Yat Sen</b>), dan Turki (Turki Muda, 1908).",
+          "Selain itu ada inspirasi Revolusi Prancis (1789), Revolusi Amerika (1776), serta Pan-Islamisme (Jamaluddin al-Afghani, Muhammad Abduh)."
+        ],
+        kw: [
+          "<b>Jepang mengalahkan Rusia (1905)</b> — pemicu kepercayaan diri bangsa Asia",
+          "India: Kongres Nasional India (1885), Gandhi",
+          "Filipina: Jose Rizal, Katipunan (1896); Tiongkok: Revolusi 1911, Sun Yat Sen",
+          "Turki Muda (1908), Revolusi Prancis (1789), Revolusi Amerika (1776), Pan-Islamisme"
+        ],
+        tbls: [{
+          t: "Peristiwa Luar dan Pengaruhnya", h: ["Peristiwa", "Pengaruh bagi Indonesia"],
+          r: [
+            ["Jepang menang atas Rusia (1905)", "Bukti Asia bisa mengalahkan Eropa"],
+            ["Kongres Nasional India (1885) dan Gandhi", "Contoh perjuangan terorganisasi"],
+            ["Jose Rizal dan Katipunan (Filipina)", "Semangat nasionalisme Asia Tenggara"],
+            ["Revolusi Tiongkok (1911)", "Contoh pergantian kekuasaan oleh bangsa sendiri"]
+          ]
+        }],
+        trik: "<b>'Jepang-India-Filipina-Tiongkok-Turki.'</b> Faktor eksternal = peristiwa di luar Indonesia.",
+        jebak: "Pendidikan Barat dan Politik Etis itu <b>faktor internal</b>, bukan eksternal, walaupun idenya dari Barat."
+      },
+      {
+        n: 27, j: "Faktor Internal Kebangkitan Nasionalisme Indonesia",
+        alur: [
+          "Internal adalah 'bahan bakar dari dalam rumah': (1) <b>penderitaan akibat penjajahan</b> melahirkan rasa senasib sepenanggungan; (2) <b>kenangan kejayaan masa lalu</b> (Sriwijaya, Majapahit) menumbuhkan kebanggaan; (3) <b>pendidikan Barat</b> (Politik Etis) melahirkan kaum terpelajar pelopor pergerakan.",
+          "Dukungan lain: <b>pers</b> (misal <i>Medan Prijaji</i> oleh <b>Tirto Adhi Soerjo</b>, Bapak Pers Nasional) dan <b>bahasa Melayu</b> sebagai lingua franca. Tokoh inspiratif: Dr. Wahidin Soedirohoesodo dan Dr. Soetomo."
+        ],
+        kw: [
+          "Penderitaan akibat penjajahan, rasa senasib sepenanggungan",
+          "Kenangan kejayaan masa lalu (Sriwijaya, Majapahit)",
+          "Pendidikan Barat (Politik Etis) melahirkan kaum terpelajar",
+          "Pers (<i>Medan Prijaji</i>, Tirto Adhi Soerjo) dan bahasa Melayu sebagai lingua franca",
+          "Tokoh: Dr. Wahidin Soedirohoesodo, Dr. Soetomo, Dr. Cipto Mangunkusumo"
+        ],
+        tbls: [{
+          t: "Eksternal vs Internal", h: ["Eksternal", "Internal"],
+          r: [
+            ["Jepang menang atas Rusia (1905)", "Penderitaan akibat penjajahan"],
+            ["Kebangkitan India, Filipina, Tiongkok, Turki", "Kenangan kejayaan Sriwijaya dan Majapahit"],
+            ["Revolusi Prancis dan Amerika", "Lahirnya kaum terpelajar, pers, bahasa Melayu"]
+          ]
+        }],
+        trik: "<b>'Eksternal = Luar negeri. Internal = Derita, Jaya, Sekolah.'</b>",
+        jebak: "Kalau soal menyebut 'kemenangan Jepang atas Rusia', itu eksternal. Kalau 'pendidikan Barat bagi pribumi', itu internal."
+      },
+      {
+        n: 28, j: "Organisasi Politik Pertama pada Masa Hindia Belanda: Indische Partij",
+        alur: [
+          "Jebakan klasik! Budi Utomo (1908) adalah organisasi <b>modern pertama</b> (sosial-budaya), sedangkan <b>organisasi politik pertama adalah Indische Partij (IP)</b>, didirikan <b>25 Desember 1912</b> di Bandung oleh <b>Tiga Serangkai: E.F.E. Douwes Dekker, Tjipto Mangoenkoesoemo, dan Soewardi Soerjaningrat (Ki Hajar Dewantara)</b>.",
+          "IP berasaskan <b>'Hindia untuk orang Hindia'</b> dan bercita-cita <b>Hindia merdeka</b>. Belanda menolak badan hukumnya (1913) dan membubarkannya. Ki Hajar Dewantara menulis <i>Als ik eens Nederlander was</i> ('Seandainya Aku Seorang Belanda'); ketiganya diasingkan ke Belanda."
+        ],
+        kw: [
+          "<b>Indische Partij: 25 Desember 1912, Bandung</b>",
+          "<b>Tiga Serangkai:</b> Douwes Dekker, Tjipto Mangoenkoesoemo, Soewardi Soerjaningrat",
+          "Asas: <b>'Hindia untuk orang Hindia'</b>; tujuan: Hindia merdeka",
+          "Ditolak badan hukum 1913, ketiganya diasingkan ke Belanda; artikel <i>Als ik eens Nederlander was</i>"
+        ],
+        tbls: [{
+          t: "Budi Utomo vs Sarekat Islam vs Indische Partij", h: ["Organisasi", "Tahun", "Sifat"],
+          r: [
+            ["Budi Utomo", "1908", "Organisasi modern pertama (sosial-budaya)"],
+            ["Sarekat Islam (SDI 1905 / SI 1912)", "1905 / 1912", "Berbasis dagang dan agama, kemudian politik massa"],
+            ["Indische Partij", "1912", "Organisasi politik pertama"]
+          ]
+        }],
+        trik: "<b>'Budi Utomo = Modern. Indische Partij = Politik.'</b> Tiga Serangkai = Douwes Dekker, Tjipto, Soewardi.",
+        jebak: "Jawaban 'Budi Utomo' untuk 'organisasi politik pertama' itu salah. Budi Utomo = modern pertama; IP = politik pertama."
+      },
+      {
+        n: 29, j: "Pergerakan Organisasi Budi Utomo",
+        alur: [
+          "Awalnya <b>dr. Wahidin Soedirohoesodo</b> berkeliling mengumpulkan dana beasiswa (<i>studiefonds</i>). Gagasan itu menginspirasi pelajar <b>STOVIA</b> pimpinan <b>Soetomo</b> (bersama Goenawan Mangoenkoesoemo dkk.) mendirikan <b>Budi Utomo pada 20 Mei 1908</b> di Batavia (diperingati sebagai <b>Hari Kebangkitan Nasional</b>).",
+          "Sifat awalnya <b>sosial-budaya-pendidikan</b>, moderat, terbatas Jawa dan Madura. Ketua pertamanya <b>R.A.A. Tirtokusumo</b> (Bupati Karanganyar, Kongres Yogyakarta Oktober 1908). Ikut <b>Volksraad (1918)</b>, lalu pada <b>1935</b> melebur dengan PBI menjadi <b>Parindra</b>."
+        ],
+        kw: [
+          "Berdiri <b>20 Mei 1908</b> (STOVIA, Batavia) = Hari Kebangkitan Nasional",
+          "Pendiri: Soetomo dkk.; inspirator: dr. Wahidin Soedirohoesodo (<i>studiefonds</i>)",
+          "Ketua pertama: R.A.A. Tirtokusumo; sifat awal: sosial-budaya-pendidikan, Jawa & Madura",
+          "1935 melebur dengan PBI menjadi <b>Parindra</b>"
+        ],
+        tbls: [{
+          t: "Fase Budi Utomo", h: ["Fase", "Ciri"],
+          r: [
+            ["1908–1909", "Sosial-budaya-pendidikan, moderat, Jawa dan Madura"],
+            ["Setelah 1915", "Mulai berorientasi politik, masuk Volksraad (1918)"],
+            ["1935", "Melebur dengan PBI menjadi Parindra"]
+          ]
+        }],
+        trik: "<b>'20 Mei 1908 = Hari Kebangkitan Nasional.'</b> Wahidin = inspirator, Soetomo = pendiri.",
+        jebak: "Wahidin <b>bukan</b> pendiri Budi Utomo, dia inspirator. Pendirinya adalah pelajar STOVIA."
+      },
+      {
+        n: 30, j: "Organisasi Kooperatif dan Non-Kooperatif",
+        alur: [
+          "<b>Kooperatif</b> = mau bekerja sama dengan pemerintah kolonial (misal duduk di Volksraad). <b>Non-kooperatif</b> = menolak kerja sama dan berjuang mandiri. Pada 1920-an ke awal 1930-an banyak organisasi non-kooperatif (PNI, PKI, Partindo, PNI Baru). Setelah tekanan keras Belanda (penangkapan & Hak Luar Biasa Gubernur Jenderal), gerakan bergeser ke kooperatif (Parindra, Gerindo, Gapi).",
+          "<b>Volksraad</b> adalah 'dewan rakyat' bentukan Belanda (1918), sehingga organisasi yang masuk ke sana disebut kooperatif."
+        ],
+        kw: [
+          "<b>Kooperatif:</b> Budi Utomo (awal), Parindra, Gerindo, Gapi, Pasundan",
+          "<b>Non-kooperatif:</b> PNI (1927), PKI (1920), Partindo (1931), PNI Baru (1931), Indische Partij, PSII (1929)",
+          "<b>Volksraad</b> dibentuk 1918; <b>Perhimpunan Indonesia</b>: persatuan, mandiri, non-kooperatif (Manifesto Politik 1925)"
+        ],
+        tbls: [{
+          t: "Kooperatif vs Non-Kooperatif", h: ["Aspek", "Kooperatif", "Non-Kooperatif"],
+          r: [
+            ["Sikap", "Bekerja sama dengan Belanda", "Menolak kerja sama"],
+            ["Cara", "Lewat Volksraad dan jalur legal", "Aksi massa, kemandirian, agitasi"],
+            ["Contoh", "Parindra, Gerindo, Gapi, Budi Utomo awal", "PNI, PKI, Partindo, PNI Baru"]
+          ]
+        }],
+        trik: "<b>'Kooperatif = Kerja sama (Volksraad). Non-kooperatif = Nggak mau.'</b>",
+        jebak: "Jangan menilai dari kata 'nasional'. PNI itu nasionalis tapi <b>non-kooperatif</b>."
+      },
+      {
+        n: 31, j: "Prinsip Swadaya dalam Organisasi",
+        alur: [
+          "<b>Swadaya (self-help)</b> artinya 'menolong diri sendiri': membangun kekuatan sendiri tanpa menggantungkan diri pada bantuan penjajah. Ditegakkan oleh <b>Perhimpunan Indonesia, PNI, dan Taman Siswa (Ki Hajar Dewantara, 3 Juli 1922)</b>.",
+          "Wujudnya: mendirikan sekolah sendiri (Taman Siswa, INS Kayutanam oleh Mohammad Syafei), koperasi, dan pendanaan iuran anggota. Semboyan Taman Siswa: <b>'Ing ngarsa sung tuladha, ing madya mangun karsa, tut wuri handayani'</b>."
+        ],
+        kw: [
+          "Swadaya = <i>self-help</i>, mandiri tanpa bantuan penjajah",
+          "Wujud: sekolah sendiri (Taman Siswa, INS Kayutanam), koperasi, iuran anggota",
+          "Taman Siswa: Ki Hajar Dewantara, <b>3 Juli 1922</b>"
+        ],
+        tbls: [{
+          t: "Semboyan Taman Siswa", h: ["Ungkapan", "Arti"],
+          r: [
+            ["Ing ngarsa sung tuladha", "Di depan memberi teladan"],
+            ["Ing madya mangun karsa", "Di tengah membangun semangat"],
+            ["Tut wuri handayani", "Di belakang memberi dorongan"]
+          ]
+        }],
+        trik: "<b>'Swadaya = Sekolah Sendiri, Sumber Sendiri.'</b>",
+        jebak: "Swadaya bukan berarti menolak semua bantuan secara membabi-buta; intinya mandiri dan tidak bergantung pada penjajah."
+      },
+      {
+        n: 32, j: "Tujuan dan Asas Perjuangan PNI",
+        alur: [
+          "PNI lahir <b>4 Juli 1927</b> di Bandung dipelopori <b>Soekarno</b> (bersama Tjipto, Sartono, Iskaq Tjokrohadisoerjo, dll.), awalnya Perserikatan Nasional Indonesia lalu 1928 jadi <b>Partai Nasional Indonesia</b>. Tujuan: <b>Indonesia merdeka</b>.",
+          "Asas: <b>swadaya (self-help), non-kooperatif, dan Marhaenisme</b> (membela rakyat kecil). Strategi: aksi massa dan <i>machtvorming</i>. Soekarno ditangkap Des 1929 dan membacakan pledoi <b>'Indonesia Menggugat' (1930)</b>. PNI dibubarkan (1931) dan pecah menjadi <b>Partindo</b> (Sartono) dan <b>PNI Baru</b> (Hatta & Sjahrir)."
+        ],
+        kw: [
+          "PNI: <b>4 Juli 1927</b>, Bandung, Soekarno; tujuan: <b>Indonesia merdeka</b>",
+          "Asas: <b>self-help, non-kooperatif, Marhaenisme</b>",
+          "Pledoi <i>Indonesia Menggugat</i> (1930); pecah jadi Partindo (Sartono) & PNI Baru (Hatta-Sjahrir)"
+        ],
+        tbls: [{
+          t: "PNI vs Partindo vs PNI Baru", h: ["Aspek", "PNI (1927)", "Partindo (1931)", "PNI Baru (1931)"],
+          r: [
+            ["Tokoh", "Soekarno", "Sartono", "Hatta, Sjahrir"],
+            ["Strategi", "Aksi massa", "Aksi massa", "Pendidikan kader"],
+            ["Sikap", "Non-kooperatif", "Non-kooperatif", "Non-kooperatif"]
+          ]
+        }],
+        trik: "<b>'PNI = Merdeka, Swadaya, Non-koop, Marhaen.'</b>",
+        jebak: "PNI (1927) berbeda dari PNI Baru (1931, Hatta). PNI Baru fokus pendidikan kader, bukan aksi massa."
+      },
+      {
+        n: 33, j: "Butir-Butir Sumpah Pemuda",
+        alur: [
+          "<b>Kongres Pemuda II</b> berlangsung <b>27–28 Oktober 1928</b> di Batavia (Gedung Katholieke Jongelingen Bond, Oost-Java Bioscoop, dan Indonesische Clubgebouw Kramat 106). Ketua: <b>Soegondo Djojopoespito</b> (PPPI), wakil: <b>R.M. Djoko Marsaid</b> (Jong Java), sekretaris: <b>Mohammad Yamin</b> (Jong Sumatranen Bond), bendahara: Amir Sjarifuddin (Jong Bataks).",
+          "Teks ikrar dirumuskan <b>Moh. Yamin</b>. Ada tiga butir dan kata kerjanya berbeda — di sinilah jebakannya!"
+        ],
+        kw: [
+          "<b>Pertama:</b> Kami putra dan putri Indonesia <b>mengaku bertumpah darah yang satu</b>, tanah Indonesia.",
+          "<b>Kedua:</b> Kami putra dan putri Indonesia <b>mengaku berbangsa yang satu</b>, bangsa Indonesia.",
+          "<b>Ketiga:</b> Kami putra dan putri Indonesia <b>menjunjung bahasa persatuan</b>, bahasa Indonesia.",
+          "Kongres Pemuda I: 30 April–2 Mei 1926 (ketua M. Tabrani)"
+        ],
+        tbls: [{
+          t: "Tiga Butir Sumpah Pemuda", h: ["Butir", "Kata Kerja", "Objek"],
+          r: [
+            ["Pertama", "Mengaku (bertumpah darah)", "Tanah Indonesia"],
+            ["Kedua", "Mengaku (berbangsa)", "Bangsa Indonesia"],
+            ["Ketiga", "Menjunjung (bahasa persatuan)", "Bahasa Indonesia"]
+          ]
+        }],
+        trik: "<b>'Tanah-Bangsa-Bahasa: Mengaku, Mengaku, MENJUNJUNG.'</b>",
+        jebak: "Butir ketiga memakai <b>'menjunjung bahasa persatuan'</b>, bukan 'mengaku berbahasa satu'. Ini paling sering diplesetkan!"
+      },
+      {
+        n: 34, j: "Peristiwa Penting pada Penutupan Kongres Pemuda II",
+        alur: [
+          "Di sesi penutup (28 Oktober 1928, Gedung Indonesische Clubgebouw), <b>W.R. Supratman memperdengarkan lagu 'Indonesia Raya' dengan biola</b> (tanpa syair, karena diawasi polisi Belanda/PID). Itulah pertama kalinya Indonesia Raya diperdengarkan di depan umum. Ikrar dibacakan dan Merah Putih dikibarkan.",
+          "Saat itu disebut <b>Ikrar Pemuda</b>; Yamin menulis rumusan ikrar di secarik kertas lalu menyerahkannya ke Soegondo."
+        ],
+        kw: [
+          "<b>W.R. Supratman</b> memainkan <b>Indonesia Raya dengan biola</b> (tanpa syair)",
+          "28 Oktober 1928, Gedung Indonesische Clubgebouw (Jl. Kramat 106)",
+          "Rumusan ikrar oleh <b>Mohammad Yamin</b>; nama awal: <b>Ikrar Pemuda</b>"
+        ],
+        tbls: [{
+          t: "Siapa Melakukan Apa", h: ["Tokoh", "Peran"],
+          r: [
+            ["Soegondo Djojopoespito", "Ketua kongres"],
+            ["Mohammad Yamin", "Merumuskan teks ikrar, sekretaris"],
+            ["W.R. Supratman", "Memainkan Indonesia Raya (biola)"]
+          ]
+        }],
+        trik: "<b>'Biola Supratman = Penutup Kongres.'</b>",
+        jebak: "Lagu Indonesia Raya dibawakan dengan <b>biola tanpa lirik</b>, bukan dinyanyikan bersama oleh peserta."
+      },
+      {
+        n: 35, j: "Perubahan Strategi Perjuangan Setelah Sumpah Pemuda",
+        alur: [
+          "Sumpah Pemuda mengubah perjuangan dari <b>kedaerahan</b> menjadi <b>persatuan nasional</b>: organisasi pemuda melebur jadi <b>Indonesia Muda (31 Desember 1930)</b>. Politik 1927–1931 bersifat <b>non-kooperatif</b> (PNI, Partindo), namun setelah tekanan keras Belanda (pembuangan Soekarno, Hatta, Sjahrir & Hak Luar Biasa Gubernur Jenderal De Jonge), beralih ke strategi <b>kooperatif dan parlementer: Parindra (1935), Gerindo (1937), Gapi (1939)</b>."
+        ],
+        kw: [
+          "Dari <b>kedaerahan ke persatuan nasional</b>; peleburan pemuda jadi <b>Indonesia Muda (31 Des 1930)</b>",
+          "1927–1931: non-kooperatif (PNI, Partindo)",
+          "Setelah 1931: kooperatif/parlementer — Parindra (1935), Gerindo (1937), Gapi (1939)",
+          "Hak Luar Biasa Gubernur Jenderal membatasi gerakan non-kooperatif"
+        ],
+        tbls: [{
+          t: "Perubahan Strategi", h: ["Periode", "Ciri Strategi"],
+          r: [
+            ["Sebelum 1928", "Organisasi kedaerahan (Jong…)"],
+            ["1928–1931", "Persatuan nasional, non-kooperatif"],
+            ["1931–1942", "Kooperatif dan parlementer (Parindra, Gerindo, Gapi, Volksraad)"]
+          ]
+        }],
+        trik: "<b>'Daerah, Nasional, Non-koop, lalu Koop.'</b>",
+        jebak: "Setelah Sumpah Pemuda <b>tidak langsung</b> kooperatif. Pergeseran ke kooperatif terjadi setelah tekanan Belanda awal 1930-an."
+      }
+    ],
+    latihan: [
+      { t: "HOTS", q: "Sebutkan satu faktor eksternal dan satu faktor internal kebangkitan nasional, lalu jelaskan kenapa pendidikan hasil Politik Etis termasuk internal!",
+        a: "Eksternal: kemenangan Jepang atas Rusia (1905) / gerakan nasionalis Asia. Internal: penderitaan penjajahan / lahirnya kaum terpelajar. Pendidikan hasil Politik Etis termasuk faktor internal karena proses tumbuhnya golongan terpelajar dan kesadaran berbangsa tersebut terjadi di dalam masyarakat Hindia Belanda sendiri." },
+      { t: "Jebakan", q: "'Organisasi politik pertama', 'organisasi modern pertama', dan 'organisasi dagang Islam pertama'. Pasangkan masing-masing dengan organisasi yang tepat, lalu jelaskan pembedanya!",
+        a: "Organisasi modern pertama = Budi Utomo (1908, bergerak di bidang sosial-budaya-pendidikan); Organisasi dagang Islam pertama = Sarekat Dagang Islam/Sarekat Islam (1905/1912, awalnya melindungi pedagang pribumi muslim); Organisasi politik pertama = Indische Partij (1912, terang-terangan menuntut Hindia merdeka)." },
+      { t: "HOTS", q: "Mengapa gerakan non-kooperatif PNI (1927) melemah, dan strategi apa yang dipakai pergerakan setelahnya? Hubungkan dengan Hak Luar Biasa Gubernur Jenderal!",
+        a: "Melemah karena represi keras pemerintah kolonial (Gubernur Jenderal De Jonge memakai Hak Luar Biasa untuk menangkap dan mengasingkan tokoh seperti Soekarno, Hatta, Sjahrir serta melarang rapat). Setelahnya, pergerakan beralih ke strategi kooperatif/parlementer lewat Volksraad (Parindra, Gerindo, Gapi)." },
+      { t: "Benar / Salah", q: "Tentukan Benar/Salah dan perbaiki: (a) Butir ketiga Sumpah Pemuda berbunyi 'mengaku berbahasa yang satu'. (b) W.R. Supratman menyanyikan Indonesia Raya lengkap dengan syair pada penutupan Kongres Pemuda II. (c) Budi Utomo dipimpin ketua pertama R.A.A. Tirtokusumo.",
+        a: "(a) SALAH — bunyinya 'menjunjung bahasa persatuan, bahasa Indonesia'. (b) SALAH — dimainkan secara instrumental dengan biola tanpa syair karena diawasi polisi Belanda (PID). (c) BENAR." }
+    ]
+  },
+
+  {
+    id: "arc-5", label: "Arc 5 · Indikator 36–40", judul: "Akhir Hindia Belanda dan Pendapat Sejarawan",
+    intro: "Pendudukan Jerman atas Belanda 1940, Petisi Soetardjo & Gapi, motivasi VOC, hingga Kapitulasi Kalijati 1942 dan analisis sejarawan.",
+    svg: '<div class="vis-box"><svg viewBox="0 0 760 115" aria-label="Domino Runtuhnya Hindia Belanda 1939-1942">' +
+      '<rect width="760" height="115" fill="#0F172A"/>' +
+      '<g font-family="sans-serif">' +
+      '<rect x="18" y="22" width="132" height="72" rx="10" fill="#1E293B" stroke="#475569"/><text x="84" y="46" text-anchor="middle" font-size="11.5" font-weight="700" fill="#93C5FD">1 Sep 1939</text><text x="84" y="66" text-anchor="middle" font-size="11" fill="#E2E8F0">PD II Pecah</text><text x="84" y="81" text-anchor="middle" font-size="10" fill="#94A3B8">di Eropa</text>' +
+      '<rect x="168" y="22" width="136" height="72" rx="10" fill="#1E293B" stroke="#F59E0B"/><text x="236" y="46" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FCD34D">10 Mei 1940</text><text x="236" y="66" text-anchor="middle" font-size="11" fill="#E2E8F0">Jerman Duduki</text><text x="236" y="81" text-anchor="middle" font-size="10" fill="#94A3B8">Belanda (London)</text>' +
+      '<rect x="322" y="22" width="136" height="72" rx="10" fill="#1E293B" stroke="#FB7185"/><text x="390" y="46" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FDA4AF">7–8 Des 1941</text><text x="390" y="66" text-anchor="middle" font-size="11" fill="#E2E8F0">Pearl Harbor</text><text x="390" y="81" text-anchor="middle" font-size="10" fill="#94A3B8">Perang Pasifik</text>' +
+      '<rect x="476" y="22" width="124" height="72" rx="10" fill="#1E293B" stroke="#38BDF8"/><text x="538" y="46" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7DD3FC">27 Feb 1942</text><text x="538" y="66" text-anchor="middle" font-size="11" fill="#E2E8F0">Laut Jawa</text><text x="538" y="81" text-anchor="middle" font-size="10" fill="#94A3B8">Sekutu Kalah</text>' +
+      '<rect x="618" y="22" width="124" height="72" rx="10" fill="#881337" stroke="#FB7185"/><text x="680" y="46" text-anchor="middle" font-size="11.5" font-weight="700" fill="#FFE4E6">8 Mar 1942</text><text x="680" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF">Kalijati</text><text x="680" y="81" text-anchor="middle" font-size="10" fill="#FECDD3">Belanda Menyerah</text>' +
+      '</g></svg><div class="vcap"><b>Domino Keruntuhan (1939–1942):</b> Induk di Eropa jatuh &rarr; Hindia terisolasi &rarr; Jepang menyapu Pasifik hingga <b>Kapitulasi Kalijati</b>.</div></div>',
+    items: [
+      {
+        n: 36, j: "Pengaruh Pendudukan Jerman di Belanda terhadap Hindia Belanda",
+        alur: [
+          "Pada <b>10 Mei 1940</b> Jerman (Nazi) menyerbu Belanda hingga menyerah. <b>Ratu Wilhelmina</b> mengungsi ke London membentuk <b>pemerintahan di pengasingan</b>. 'Kantor pusat' direbut, sementara 'cabang' Hindia Belanda jalan sendiri tanpa dukungan.",
+          "Efeknya: Hindia Belanda <b>terputus dari negeri induk</b>, sulit mendapat bantuan militer, memberlakukan keadaan darurat, dan memaksakan program <b>Indie Weerbaar</b> (Hindia Tangguh). Posisi Belanda melemah tepat saat Jepang mengincar Asia Tenggara."
+        ],
+        kw: [
+          "<b>10 Mei 1940:</b> Jerman menyerbu Belanda; Ratu Wilhelmina ke London",
+          "Hindia Belanda terputus dari negeri induk; Gubernur Jenderal <b>Tjarda van Starkenborgh Stachouwer</b>",
+          "Program <i>Indie Weerbaar</i> (pertahanan) & keadaan darurat"
+        ],
+        tbls: [{
+          t: "Sebab-Akibat", h: ["Peristiwa", "Akibat bagi Hindia Belanda"],
+          r: [
+            ["Jerman menduduki Belanda (1940)", "Terputus dari negeri induk, kekurangan bantuan"],
+            ["Pemerintah di pengasingan (London)", "Wibawa pemerintah kolonial melemah"],
+            ["Ancaman Jepang di Asia", "Hindia Belanda rentan dan siaga perang"]
+          ]
+        }],
+        trik: "<b>'Induk jatuh, cabang goyah.'</b>",
+        jebak: "Pendudukan Jerman tidak langsung membuat Hindia merdeka; dampaknya melemahkan Belanda, bukan membebaskan Indonesia."
+      },
+      {
+        n: 37, j: "Tuntutan Kaum Pergerakan pada 1936–1940",
+        alur: [
+          "Menjelang PD II, kaum pergerakan memakai jalur kooperatif. <b>Petisi Soetardjo (1936)</b> diajukan Soetardjo Kartohadikusumo di Volksraad, meminta konferensi Belanda-Hindia untuk membahas <b>otonomi Hindia dalam 10 tahun</b> — ditolak Belanda (1938).",
+          "Lalu <b>Gapi (Gabungan Politik Indonesia)</b> berdiri <b>21 Mei 1939</b> (Moh. Husni Thamrin, Amir Sjarifuddin, Abikusno) dengan tuntutan <b>'Indonesia Berparlemen'</b>, disusul Kongres Rakyat Indonesia (Des 1939). Belanda hanya membentuk <b>Komisi Visman (1940)</b> tanpa perubahan mendasar."
+        ],
+        kw: [
+          "<b>Petisi Soetardjo (1936):</b> otonomi 10 tahun lewat konferensi Belanda-Hindia; ditolak 1938",
+          "<b>Gapi (21 Mei 1939):</b> tuntutan <b>Indonesia Berparlemen</b> (Thamrin, Amir Sjarifuddin, Abikusno)",
+          "Kongres Rakyat Indonesia (Des 1939); <b>Komisi Visman (1940)</b> tanpa perubahan mendasar"
+        ],
+        tbls: [{
+          t: "Petisi Soetardjo vs Gapi", h: ["Aspek", "Petisi Soetardjo", "Gapi"],
+          r: [
+            ["Tahun", "1936", "1939"],
+            ["Tuntutan", "Konferensi Belanda-Hindia, otonomi 10 tahun", "Indonesia Berparlemen"],
+            ["Tokoh", "Soetardjo Kartohadikusumo", "Thamrin, Amir Sjarifuddin, Abikusno"],
+            ["Hasil", "Ditolak (1938)", "Ditanggapi dengan Komisi Visman, tanpa perubahan"]
+          ]
+        }],
+        trik: "<b>'36 = Soetardjo (otonomi), 39 = Gapi (parlemen).'</b>",
+        jebak: "Tuntutan Gapi <b>bukan merdeka penuh</b>, melainkan Indonesia Berparlemen. Petisi Soetardjo juga menuntut otonomi dalam kerangka kerajaan Belanda."
+      },
+      {
+        n: 38, j: "Motivasi Utama VOC di Nusantara",
+        alur: [
+          "Agar para pedagang Belanda tidak saling menjatuhkan harga, mereka digabung jadi <b>VOC (20 Maret 1602)</b> atas dorongan <b>Johan van Oldenbarnevelt</b>. Motivasi utamanya jelas: <b>ekonomi, yaitu memonopoli perdagangan rempah</b> demi keuntungan sebesar-besarnya.",
+          "VOC menyingkirkan Portugis (Ambon 1605, Malaka 1641), membangun pusat di Batavia (1619), memakai militer & adu domba. Penyebaran agama Protestan hanya efek sampingan, bukan tujuan utama."
+        ],
+        kw: [
+          "<b>Motif utama: ekonomi (monopoli rempah)</b>",
+          "VOC berdiri <b>20 Maret 1602</b> (Staten Generaal; Johan van Oldenbarnevelt)",
+          "Menyingkirkan Portugis (Ambon 1605, Malaka 1641); pusat kekuasaan Batavia (1619)"
+        ],
+        tbls: [{
+          t: "Motif Dominan Bangsa Eropa", h: ["Bangsa", "Motif Dominan"],
+          r: [
+            ["Portugis", "3G dengan penekanan Gold; ada unsur Gospel"],
+            ["Spanyol", "3G dengan penekanan Gold dan Gospel"],
+            ["VOC (Belanda)", "Ekonomi (monopoli dagang)"]
+          ]
+        }],
+        trik: "<b>'VOC = Voor Onze Cuan.'</b> Motif utamanya cuan: monopoli rempah.",
+        jebak: "Kalau opsi menyebut 'menyebarkan agama Protestan' sebagai motif <b>utama</b> VOC, itu keliru."
+      },
+      {
+        n: 39, j: "Faktor Penyebab Runtuhnya Hindia Belanda (Kronologis)",
+        alur: [
+          "Seperti domino: <b>PD II pecah (1939)</b> &rarr; <b>Jerman menduduki Belanda (10 Mei 1940)</b> &rarr; Jepang menyerang <b>Pearl Harbor (7 Des 1941)</b> &amp; Hindia Belanda menyatakan perang (8 Des 1941) &rarr; Jepang merebut Tarakan (Jan 1942) &amp; menang di <b>Pertempuran Laut Jawa (27 Feb 1942)</b>.",
+          "Batavia diduduki (5 Mar 1942), dan pada <b>8 Maret 1942</b> Gubernur Jenderal Tjarda serta Letjen Ter Poorten menyerah tanpa syarat kepada Letjen Hitoshi Imamura dalam <b>Kapitulasi Kalijati</b> (Subang). Faktor pendukung: KNIL lemah, tiada dukungan rakyat, dan propaganda Jepang 3A."
+        ],
+        kw: [
+          "1 Sep 1939 PD II pecah; <b>10 Mei 1940</b> Jerman menduduki Belanda",
+          "7–8 Des 1941 Pearl Harbor & deklarasi perang Hindia Belanda",
+          "Jan 1942 Tarakan; <b>27 Feb 1942 Pertempuran Laut Jawa</b>; 5 Mar Batavia diduduki",
+          "<b>8 Maret 1942 Kapitulasi Kalijati</b> (Tjarda & Ter Poorten menyerah ke Imamura)"
+        ],
+        tbls: [{
+          t: "Kronologi Runtuhnya Hindia Belanda", h: ["Tanggal", "Peristiwa"],
+          r: [
+            ["1 Sep 1939", "Perang Dunia II pecah"],
+            ["10 Mei 1940", "Jerman menduduki Belanda; pemerintah di pengasingan"],
+            ["7–8 Des 1941", "Pearl Harbor; Hindia Belanda menyatakan perang pada Jepang"],
+            ["Jan 1942", "Jepang merebut Tarakan, kemudian Balikpapan"],
+            ["27 Feb 1942", "Pertempuran Laut Jawa"],
+            ["5 Mar 1942", "Batavia diduduki Jepang"],
+            ["8 Mar 1942", "Kapitulasi Kalijati: Belanda menyerah"]
+          ]
+        }],
+        trik: "<b>'Eropa jatuh dulu, Asia menyusul'</b>: 1940 Jerman, 1941 Pearl Harbor, 1942 Kalijati.",
+        jebak: "Kapitulasi Kalijati (8 Maret 1942, Belanda ke Jepang) berbeda dengan Kapitulasi Tuntang (1811, Belanda-Prancis ke Inggris)!"
+      },
+      {
+        n: 40, j: "Pendapat Sejarawan tentang Runtuhnya Hindia Belanda",
+        alur: [
+          "Indikator ini menguji <b>cara membaca pendapat</b>, bukan sekadar hafalan nama. Ada tiga arus: (1) <b>Faktor eksternal:</b> kekuatan militer Jepang & situasi PD II; (2) <b>Faktor internal:</b> fondasi kolonial memang rapuh karena minim legitimasi & dukungan rakyat akibat eksploitasi; (3) <b>Gabungan:</b> tekanan luar bertemu rapuhnya fondasi dalam.",
+          "Contoh sejarawan: <b>M.C. Ricklefs</b> menekankan betapa cepat dan telaknya kekuasaan Belanda runtuh; <b>Harry J. Benda</b> menempatkan pendudukan Jepang sebagai titik balik yang membongkar fondasi kolonial. <i>Cocokkan juga dengan kutipan di buku paket/catatan gurumu.</i>"
+        ],
+        kw: [
+          "<b>Tiga arus:</b> eksternal (Jepang & PD II), internal (kolonial rapuh), gabungan",
+          "Kata kunci eksternal: kekuatan militer Jepang, PD II, Jerman menduduki Belanda",
+          "Kata kunci internal: legitimasi rendah, eksploitasi, diskriminasi, rakyat tidak membela",
+          "Sejarawan sering dikutip: M.C. Ricklefs, Harry J. Benda"
+        ],
+        tbls: [{
+          t: "Tiga Cara Membaca Pendapat", h: ["Pandangan", "Argumen", "Kata Kunci Soal"],
+          r: [
+            ["Eksternal", "Jepang terlalu kuat", "militer, serangan, PD II"],
+            ["Internal", "Fondasi kolonial rapuh", "legitimasi, dukungan rakyat, diskriminasi"],
+            ["Gabungan", "Tekanan luar + kelemahan dalam", "kombinasi, saling menguatkan"]
+          ]
+        }],
+        trik: "<b>'Luar (Jepang) + Dalam (Rapuh) = Runtuh.'</b> Cocokkan kata kunci kutipan dengan salah satu arus ini.",
+        jebak: "Kalau soal mengutip pendapat sejarawan, <b>jangan menebak nama</b> — fokus baca isi argumennya (eksternal/internal/gabungan)."
+      }
+    ],
+    latihan: [
+      { t: "HOTS", q: "Jelaskan hubungan sebab-akibat antara pendudukan Jerman atas Belanda (1940) dan mudahnya Jepang menaklukkan Hindia Belanda (1942)!",
+        a: "Ketika Jerman menduduki Belanda (Mei 1940) dan pemerintah mengungsi ke London, Hindia Belanda terputus dari negeri induk sehingga kehilangan suplai militer, persenjataan, dan wibawa politik. Isolasi dan kelemahan pertahanan inilah yang membuat Hindia Belanda cepat runtuh saat diserbu Jepang pada awal 1942." },
+      { t: "Jebakan", q: "Bandingkan Petisi Soetardjo (1936) dan tuntutan Gapi (1939) dari sisi tuntutan, tokoh, dan respons Belanda. Apakah keduanya menuntut kemerdekaan penuh?",
+        a: "Keduanya TIDAK menuntut kemerdekaan penuh (jalur kooperatif). Petisi Soetardjo (1936, oleh Soetardjo Kartohadikusumo) menuntut otonomi dalam 10 tahun lewat konferensi Belanda-Hindia — ditolak Belanda 1938. Gapi (1939, oleh Thamrin, Amir Sjarifuddin, Abikusno) menuntut 'Indonesia Berparlemen' — hanya direspons Belanda dengan Komisi Visman (1940) tanpa perubahan berarti." },
+      { t: "HOTS", q: "Sebuah pendapat berbunyi: 'Hindia Belanda runtuh bukan semata karena kuatnya Jepang, tetapi karena lemahnya dukungan rakyat.' Pendapat ini termasuk arus apa? Beri alasan dan satu fakta pendukung!",
+        a: "Termasuk arus Gabungan (dengan penekanan faktor internal). Alasannya, kutipan tersebut mengakui kekuatan eksternal (serangan Jepang) sekaligus menyoroti kerapuhan internal kolonial. Fakta pendukung: rakyat pribumi tidak ikut membela Belanda saat Jepang mendarat karena kecewa atas eksploitasi, diskriminasi sosial-hukum, dan penolakan tuntutan otonomi/parlemen." },
+      { t: "Benar / Salah", q: "Tentukan Benar/Salah dan perbaiki: (a) Motif utama VOC adalah menyebarkan agama Protestan. (b) Kapitulasi Kalijati terjadi pada 8 Maret 1942. (c) Gapi menuntut Indonesia Berparlemen.",
+        a: "(a) SALAH — motif utama VOC adalah ekonomi (memonopoli perdagangan rempah). (b) BENAR. (c) BENAR." }
+    ]
+  }
+];
+
+const KRONOLOGI = [
+  ["1453", "Konstantinopel jatuh ke Turki Utsmani"],
+  ["1494", "Perjanjian Tordesillas (Portugis–Spanyol)"],
+  ["1511", "Portugis merebut Malaka"],
+  ["1521", "Spanyol (Magellan/Elcano) tiba di Tidore"],
+  ["1596", "Cornelis de Houtman tiba di Banten"],
+  ["1602", "VOC didirikan (20 Maret)"],
+  ["1619", "Batavia didirikan (J.P. Coen)"],
+  ["1628–1629", "Dua serangan Sultan Agung ke Batavia"],
+  ["1667", "Perjanjian Bongaya (Makassar)"],
+  ["1799", "VOC dibubarkan (31 Desember)"],
+  ["1808–1811", "Pemerintahan Daendels (Jalan Raya Pos, 9 prefektur)"],
+  ["1811", "Kapitulasi Tuntang"],
+  ["1811–1816", "Pemerintahan Raffles dan sistem sewa tanah (landrent)"],
+  ["1803–1837", "Perang Padri (Minangkabau)"],
+  ["1825–1830", "Perang Diponegoro"],
+  ["1830", "Tanam Paksa / Cultuurstelsel (van den Bosch)"],
+  ["1870", "Agrarische Wet dan Suiker Wet (awal Ekonomi Liberal)"],
+  ["1873–1904", "Perang Aceh"],
+  ["1899–1901", "Artikel Een Eereschuld & pidato Ratu Wilhelmina (Politik Etis)"],
+  ["1908", "Budi Utomo berdiri (20 Mei)"],
+  ["1912", "Indische Partij berdiri (25 Desember)"],
+  ["1927", "PNI berdiri di Bandung (4 Juli)"],
+  ["1928", "Sumpah Pemuda / Kongres Pemuda II (27–28 Oktober)"],
+  ["1930", "Indonesia Muda berdiri; pledoi Indonesia Menggugat"],
+  ["1936", "Petisi Soetardjo"],
+  ["1939", "Gapi berdiri (21 Mei) — tuntutan Indonesia Berparlemen"],
+  ["1940", "Jerman menduduki Belanda (10 Mei)"],
+  ["1942", "Kapitulasi Kalijati — Belanda menyerah ke Jepang (8 Maret)"]
+];
+
 (function () {
   'use strict';
   var root = document.documentElement;
-  root.style.setProperty('--al', MAPEL.al);
-  root.style.setProperty('--ad', MAPEL.ad);
-  document.getElementById('m-code').textContent = MAPEL.num + ' / ' + MAPEL.code;
-  document.getElementById('f-code').textContent = MAPEL.code;
-  document.getElementById('m-name').textContent = MAPEL.name;
+  var $ = function (id) { return document.getElementById(id); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
 
-  var KEY = 'asas.kisi.' + MAPEL.id;
-  var done = {};
-  try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} }
-  function pid(bab, poin) { return bab + '::' + poin; }
+  /* ---------- Render 5 Arcs + Kronologi ---------- */
+  var content = $('content');
+  var out = [];
 
-  var list = document.getElementById('list');
-  var q = document.getElementById('q');
+  ARCS.forEach(function (arc) {
+    var h = '<section class="sec" id="' + arc.id + '">';
+    h += '<div class="sec-meta"><span class="label"><span class="sq"></span>' + esc(arc.label) + '</span>' +
+      '<button type="button" class="master" data-id="' + arc.id + '" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button></div>';
+    h += '<h2 class="sec-title">' + esc(arc.judul) + '</h2>';
+    h += '<p class="sec-intro">' + esc(arc.intro) + '</p>';
+    if (arc.svg) h += arc.svg;
 
-  function render() {
-    var term = q.value.trim().toLowerCase();
-    list.innerHTML = '';
-    var shown = 0;
+    h += '<div class="topic-list">';
+    arc.items.forEach(function (it) {
+      var plain = (it.n + ' ' + it.j + ' ' + it.alur.join(' ') + ' ' + it.kw.join(' ') + ' ' +
+        it.tbls.map(function (tb) { return tb.t + ' ' + tb.r.map(function (r) { return r.join(' '); }).join(' '); }).join(' ') +
+        ' ' + (it.trik || '') + ' ' + (it.jebak || '')).replace(/<[^>]+>/g, '').toLowerCase();
 
-    KISI.forEach(function (b, i) {
-      var poin = b.poin || [];
-      var matchBab = !term || b.bab.toLowerCase().indexOf(term) !== -1;
-      var visible = matchBab ? poin : poin.filter(function (p) { return p.toLowerCase().indexOf(term) !== -1; });
-      if (!matchBab && !visible.length) return;
-      shown++;
+      h += '<article class="tcard" id="ind-' + it.n + '" data-search="' + esc(plain) + '">';
+      h += '<div class="tcard-head"><span class="tcard-num">' + pad(it.n) + '</span><h3>' + esc(it.j) + '</h3></div>';
+      h += '<div class="tcard-body">';
+      h += '<div class="alur"><span class="blk-label">1. Alur &amp; Plot Twist</span>' +
+        it.alur.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>';
+      h += '<div class="kw-box"><span class="blk-label">2. Keyword Ujian</span><ul>' +
+        it.kw.map(function (k) { return '<li>' + k + '</li>'; }).join('') + '</ul></div>';
 
-      var d = poin.filter(function (p) { return done[pid(b.bab, p)]; }).length;
-      var sec = document.createElement('section');
-      sec.className = 'bab';
-
-      var head = document.createElement('div'); head.className = 'bab-head';
-      var h2 = document.createElement('h2'); h2.textContent = String(i + 1).padStart(2, '0') + '. ' + b.bab;
-      var pr = document.createElement('span'); pr.className = 'bab-prog'; pr.textContent = d + '/' + poin.length;
-      head.appendChild(h2); head.appendChild(pr); sec.appendChild(head);
-
-      var ul = document.createElement('ul'); ul.className = 'poin';
-      visible.forEach(function (p, j) {
-        var id = pid(b.bab, p);
-        var li = document.createElement('li'); if (done[id]) li.className = 'done';
-        var cb = document.createElement('input');
-        cb.type = 'checkbox'; cb.className = 'chk'; cb.id = 'p' + i + '-' + j; cb.checked = !!done[id];
-        cb.addEventListener('change', function () {
-          if (cb.checked) done[id] = 1; else delete done[id];
-          save(); render();
-        });
-        var lb = document.createElement('label'); lb.htmlFor = cb.id; lb.textContent = p;
-        li.appendChild(cb); li.appendChild(lb); ul.appendChild(li);
+      it.tbls.forEach(function (tb) {
+        h += '<div><div class="tbl-title">Tabel: ' + esc(tb.t) + '</div><div class="table-wrap"><table class="tbl"><thead><tr>' +
+          tb.h.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+          tb.r.map(function (row) { return '<tr>' + row.map(function (cell, ci) {
+            return '<td' + (ci === 0 ? ' style="font-weight:600"' : '') + '>' + esc(cell) + '</td>';
+          }).join('') + '</tr>'; }).join('') + '</tbody></table></div></div>';
       });
-      sec.appendChild(ul);
 
-      if (b.catatan) {
-        var c = document.createElement('div'); c.className = 'catatan';
-        var cl = document.createElement('span'); cl.className = 'label'; cl.textContent = 'Catatan';
-        c.appendChild(cl); c.appendChild(document.createTextNode(b.catatan));
-        sec.appendChild(c);
-      }
-      list.appendChild(sec);
+      h += '<div class="tj-grid' + (it.jebak ? '' : ' one') + '">';
+      h += '<div class="trik-box"><span class="blk-label">3. Trik Hafal Cepat</span><div>' + it.trik + '</div></div>';
+      if (it.jebak) h += '<div class="jebak-box"><span class="blk-label">Awas Jebakan Soal</span><div>' + it.jebak + '</div></div>';
+      h += '</div></div></article>';
     });
+    h += '</div>';
 
-    if (!shown) {
-      var e = document.createElement('div'); e.className = 'empty';
-      e.textContent = KISI.length ? 'Tidak ada hasil untuk "' + q.value + '".' : 'Belum ada kisi-kisi.';
-      list.appendChild(e);
-    }
-    summary();
-  }
-
-  function summary() {
-    var total = 0, d = 0;
-    KISI.forEach(function (b) { (b.poin || []).forEach(function (p) { total++; if (done[pid(b.bab, p)]) d++; }); });
-    var pct = total ? Math.round(d / total * 100) : 0;
-    document.getElementById('m-bab').textContent = String(KISI.length).padStart(2, '0');
-    document.getElementById('m-done').textContent = d + '/' + total;
-    document.getElementById('m-pct').textContent = pct + '%';
-    document.getElementById('top').style.setProperty('--p', pct + '%');
-  }
-
-  q.addEventListener('input', render);
-  document.getElementById('reset').addEventListener('click', function () {
-    if (confirm('Hapus semua centang untuk ' + MAPEL.name + '?')) { done = {}; save(); render(); }
+    h += '<div class="lat-wrap"><div class="lat-head"><h3>Latihan Soal ' + esc(arc.label.split('·')[0].trim()) + ' (HOTS &amp; Jebakan)</h3><span class="label">Kerjakan dulu sebelum buka kunci</span></div><div class="soal-list">';
+    arc.latihan.forEach(function (s, idx) {
+      h += '<div class="soal"><div class="soal-n">' + pad(idx + 1) + '</div><div>' +
+        '<span class="tag">' + esc(s.t) + '</span><div class="soal-q">' + esc(s.q) + '</div>' +
+        '<div class="kunci-box"><div class="ans">Pembahasan &amp; Kunci</div><div>' + esc(s.a) + '</div></div>' +
+        '</div><button type="button" class="kbtn">Kunci</button></div>';
+    });
+    h += '</div></div></section>';
+    out.push(h);
   });
 
+  // Kronologi Besar
+  var kr = '<section class="sec" id="kronologi">';
+  kr += '<div class="sec-meta"><span class="label"><span class="sq"></span>Cheat Sheet Akhir</span>' +
+    '<button type="button" class="master" data-id="kronologi" aria-pressed="false"><span class="box"></span><span>Dikuasai</span></button></div>';
+  kr += '<h2 class="sec-title">Kronologi Besar (1453 – 1942)</h2>';
+  kr += '<p class="sec-intro">Baca dari atas ke bawah beberapa kali — urutan waktu ini paling sering keluar sebagai soal kronologis.</p>';
+  kr += '<div class="table-wrap" style="margin-top:16px"><table class="tbl"><thead><tr><th>Tahun</th><th>Peristiwa Penting</th></tr></thead><tbody>' +
+    KRONOLOGI.map(function (r) { return '<tr><td class="yr">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>'; }).join('') +
+    '</tbody></table></div></section>';
+  out.push(kr);
+
+  content.innerHTML = out.join('');
+
+  /* ---------- Interactions ---------- */
+  content.addEventListener('click', function (e) {
+    var b = e.target.closest('.kbtn');
+    if (b) {
+      var row = b.closest('.soal');
+      row.classList.toggle('open');
+      b.textContent = row.classList.contains('open') ? 'Tutup' : 'Kunci';
+      return;
+    }
+    var m = e.target.closest('.master');
+    if (m) {
+      var id = m.getAttribute('data-id');
+      if (mastered[id]) delete mastered[id]; else mastered[id] = 1;
+      save(); refresh();
+    }
+  });
+
+  /* ---------- Search across 40 indicators ---------- */
+  var qAll = $('q-all'), qCnt = $('q-count'), emptyAll = $('empty-all');
+  qAll.addEventListener('input', function () {
+    var t = qAll.value.trim().toLowerCase(), shown = 0;
+    ARCS.forEach(function (arc) {
+      var sec = document.getElementById(arc.id);
+      var arcShown = 0;
+      sec.querySelectorAll('.tcard').forEach(function (card) {
+        var ok = !t || card.getAttribute('data-search').indexOf(t) !== -1;
+        card.style.display = ok ? '' : 'none';
+        if (ok) { shown++; arcShown++; }
+      });
+      var lat = sec.querySelector('.lat-wrap');
+      var vis = sec.querySelector('.vis-box');
+      if (lat) lat.style.display = t ? 'none' : '';
+      if (vis) vis.style.display = t ? 'none' : '';
+      sec.style.display = (!t || arcShown > 0) ? '' : 'none';
+    });
+    qCnt.textContent = shown + '/40 indikator';
+    emptyAll.style.display = shown ? 'none' : 'block';
+  });
+
+  /* ---------- Show all keys ---------- */
+  var showKeys = $('show-keys');
+  try { showKeys.checked = localStorage.getItem('asas.sej.showKeys') === '1'; } catch (e) {}
+  function applyKeys() { document.body.classList.toggle('show-keys', showKeys.checked); }
+  showKeys.addEventListener('change', function () {
+    try { localStorage.setItem('asas.sej.showKeys', showKeys.checked ? '1' : '0'); } catch (e) {}
+    applyKeys();
+  });
+  applyKeys();
+
+  /* ---------- Mastered state ---------- */
+  var KEY = 'asas.kisi.sej';
+  var SECS = ['arc-1', 'arc-2', 'arc-3', 'arc-4', 'arc-5', 'kronologi'];
+  var mastered = {};
+  try { mastered = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+  if (typeof mastered !== 'object' || Array.isArray(mastered)) mastered = {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(mastered)); } catch (e) {} }
+
+  function refresh() {
+    var n = 0;
+    SECS.forEach(function (id) {
+      var on = !!mastered[id];
+      if (on) n++;
+      var btn = document.querySelector('.master[data-id="' + id + '"]');
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+      var a = document.querySelector('.toc a[data-id="' + id + '"]');
+      if (a) a.classList.toggle('mastered', on);
+    });
+    $('m-done').textContent = n + '/' + SECS.length;
+    $('top').style.setProperty('--p', (n / SECS.length * 100) + '%');
+  }
+
+  $('reset').addEventListener('click', function () {
+    if (confirm('Hapus semua tanda "dikuasai" untuk Sejarah?')) { mastered = {}; save(); refresh(); }
+  });
+
+  /* ---------- Bug-free passive scroll spy ---------- */
+  var tocEl = $('toc');
+  var links = {};
+  document.querySelectorAll('.toc a').forEach(function (a) { links[a.getAttribute('data-id')] = a; });
+  var secEls = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var curId = '';
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var best = secEls[0] ? secEls[0].id : '';
+    for (var i = 0; i < secEls.length; i++) {
+      if (secEls[i].style.display !== 'none' && secEls[i].getBoundingClientRect().top <= 120) best = secEls[i].id;
+    }
+    if (best && best !== curId) {
+      curId = best;
+      Object.keys(links).forEach(function (k) { links[k].classList.remove('active'); });
+      var a = links[best];
+      if (a) {
+        a.classList.add('active');
+        if (tocEl) tocEl.scrollLeft = a.offsetLeft - (tocEl.clientWidth - a.offsetWidth) / 2;
+      }
+    }
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+  }, { passive: true });
+  spy();
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    var y = id === 'top' ? 0 : target.getBoundingClientRect().top + window.pageYOffset - 68;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+
+  /* ---------- Theme ---------- */
   function themeLabel() {
     var dark = root.getAttribute('data-theme') === 'dark';
-    document.getElementById('theme-text').textContent = dark ? 'Gelap' : 'Terang';
-    document.getElementById('theme-toggle').setAttribute('aria-pressed', String(dark));
+    $('theme-text').textContent = dark ? 'Gelap' : 'Terang';
+    $('theme-toggle').setAttribute('aria-pressed', String(dark));
   }
-  document.getElementById('theme-toggle').addEventListener('click', function () {
+  $('theme-toggle').addEventListener('click', function () {
     var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('asas.theme', next); } catch (e) {}
@@ -250,7 +1600,7 @@ const KISI = [
   });
 
   themeLabel();
-  render();
+  refresh();
 })();
 </script>
 </body>
