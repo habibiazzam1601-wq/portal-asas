@@ -1,1219 +1,1161 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modul Belajar Lengkap Fisika XI — Portal Belajar ASAS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fisika Kelas XI — Portal Belajar ASAS</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('asas.theme');
+      if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-(function () {
-  try {
-    var t = localStorage.getItem('asas.theme');
-    if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  } catch (e) {}
-})();
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #FAF9F6;
-  --card: #FFFFFF;
-  --surface: #F3F2EE;
-  --surface-2: #EAE8E1;
-  --fg: #18181B;
-  --fg-2: #3F3F46;
-  --muted: #52525B;
-  --faint: #71717A;
-  --border: #E4E4E7;
-  --border-strong: #CCCCCC;
-
-  --acc: #1D4ED8;
-  --acc-bg: #EFF6FF;
-  --acc-bd: #BFDBFE;
-
-  --vec: #B45309;
-  --vec-bg: #FFFBEB;
-  --vec-bd: #FDE68A;
-
-  --ok: #047857;
-  --ok-bg: #ECFDF5;
-  --ok-bd: #A7F3D0;
-
-  --danger: #B91C1C;
-  --danger-bg: #FEF2F2;
-  --danger-bd: #FECACA;
-
-  --svg-bg: #FCFBF9;
-  --svg-grid: #ECEAE4;
-  --svg-ink: #18181B;
-  --svg-muted: #64748B;
-
-  --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-html[data-theme="dark"] {
-  --bg: #141416;
-  --card: #1C1C20;
-  --surface: #232329;
-  --surface-2: #2B2B33;
-  --fg: #F4F4F5;
-  --fg-2: #D4D4D8;
-  --muted: #A1A1AA;
-  --faint: #71717A;
-  --border: #2C2C33;
-  --border-strong: #3F3F48;
-
-  --acc: #60A5FA;
-  --acc-bg: #17253B;
-  --acc-bd: #1E3A5F;
-
-  --vec: #F59E0B;
-  --vec-bg: #292012;
-  --vec-bd: #573E16;
-
-  --ok: #34D399;
-  --ok-bg: #112821;
-  --ok-bd: #1B4B3B;
-
-  --danger: #F87171;
-  --danger-bg: #2A1618;
-  --danger-bd: #562428;
-
-  --svg-bg: #17171B;
-  --svg-grid: #25252C;
-  --svg-ink: #F4F4F5;
-  --svg-muted: #94A3B8;
-}
-
-*, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1.65;
-}
-
-a { color: inherit; text-decoration: none; }
-button, input, select { font: inherit; color: inherit; }
-sub, sup { font-size: 0.74em; line-height: 0; position: relative; vertical-align: baseline; }
-sup { top: -0.45em; }
-sub { bottom: -0.22em; }
-code, .mono, .math { font-family: var(--mono); font-size: 0.92em; }
-
-/* ---------- Top Header Bar ---------- */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-}
-.topbar-inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.top-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.btn-menu {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 34px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.portal-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  transition: border-color 0.15s, background 0.15s;
-}
-.portal-link:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-2);
-}
-.brand-meta {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding-left: 6px;
-  border-left: 1px solid var(--border);
-}
-.brand-code {
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--acc);
-}
-.brand-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--fg);
-}
-
-.nav-tabs {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--surface);
-  padding: 3px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-}
-.tab-btn {
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  cursor: pointer;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.tab-btn:hover { color: var(--fg); }
-.tab-btn.active {
-  background: var(--card);
-  color: var(--fg);
-  font-weight: 600;
-  border-color: var(--border);
-}
-
-.top-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.prog-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-}
-.prog-track {
-  width: 88px;
-  height: 6px;
-  background: var(--surface-2);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.prog-fill {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--ok);
-  transition: width 0.2s ease;
-}
-.theme-btn {
-  padding: 6px 11px;
-  font-size: 12.5px;
-  font-family: var(--mono);
-  font-weight: 500;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.theme-btn:hover { border-color: var(--border-strong); }
-
-/* ---------- Layout Shell ---------- */
-.layout {
-  max-width: 1440px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  align-items: start;
-}
-
-/* ---------- Sidebar ---------- */
-.sidebar {
-  position: sticky;
-  top: 57px;
-  height: calc(100vh - 57px);
-  overflow-y: auto;
-  border-right: 1px solid var(--border);
-  background: var(--bg);
-  padding: 16px 14px 36px;
-}
-.side-search {
-  margin-bottom: 14px;
-}
-.side-search input {
-  width: 100%;
-  padding: 7px 10px;
-  font-size: 13px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  outline: none;
-}
-.side-search input:focus { border-color: var(--acc); }
-
-.side-prog-box {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 16px;
-}
-.side-prog-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  margin-bottom: 6px;
-}
-.side-prog-row b { font-family: var(--mono); color: var(--fg); }
-.side-reset {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 11.5px;
-  color: var(--muted);
-  text-decoration: underline;
-  cursor: pointer;
-}
-.side-reset:hover { color: var(--danger); }
-
-.chap-group { margin-bottom: 14px; }
-.chap-head {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: none;
-  border: none;
-  padding: 5px 6px;
-  text-align: left;
-  cursor: pointer;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-.chap-head-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-}
-.chap-head-title {
-  display: block;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--fg);
-  margin-top: 1px;
-}
-.chap-count {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-}
-.ind-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.ind-link {
-  display: grid;
-  grid-template-columns: 26px 1fr 16px;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  font-size: 12.8px;
-  line-height: 1.35;
-  color: var(--fg-2);
-  border-radius: 5px;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.ind-link:hover {
-  background: var(--surface);
-  color: var(--fg);
-}
-.ind-link.active {
-  background: var(--acc-bg);
-  border-color: var(--acc-bd);
-  color: var(--acc);
-  font-weight: 600;
-}
-.ind-num {
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--faint);
-}
-.ind-link.active .ind-num { color: var(--acc); }
-.ind-dot {
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--border-strong);
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: transparent;
-}
-.ind-link.done .ind-dot {
-  background: var(--ok-bg);
-  border-color: var(--ok);
-  color: var(--ok);
-}
-
-/* ---------- Main Content ---------- */
-.main-col {
-  padding: 28px 36px 80px;
-  max-width: 980px;
-  width: 100%;
-}
-
-.view-panel { display: none; }
-.view-panel.active { display: block; }
-
-/* Hero / Module Intro */
-.mod-hero {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 24px 28px;
-  margin-bottom: 24px;
-}
-.mod-kicker {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--acc);
-}
-.mod-hero h1 {
-  margin: 6px 0 8px;
-  font-size: 26px;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-}
-.mod-sub {
-  margin: 0 0 16px;
-  color: var(--muted);
-  font-size: 14.5px;
-}
-.konvensi-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--acc);
-  border-radius: 6px;
-  padding: 12px 14px;
-  font-size: 13.5px;
-}
-.konvensi-box b {
-  font-family: var(--mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--fg);
-}
-.filter-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.bab-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.bab-pill {
-  padding: 5px 11px;
-  font-size: 12.5px;
-  font-weight: 500;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  cursor: pointer;
-  color: var(--muted);
-}
-.bab-pill:hover { border-color: var(--border-strong); color: var(--fg); }
-.bab-pill.active {
-  background: var(--fg);
-  color: var(--bg);
-  border-color: var(--fg);
-}
-
-/* Chapter Divider */
-.bab-banner {
-  margin: 36px 0 16px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--fg);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-}
-.bab-banner:first-child { margin-top: 8px; }
-.bab-banner-code {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--acc);
-  letter-spacing: 0.06em;
-}
-.bab-banner h2 {
-  margin: 2px 0 0;
-  font-size: 21px;
-  letter-spacing: -0.01em;
-}
-.bab-banner-meta {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* Indicator Card */
-.ind-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 28px;
-  scroll-margin-top: 72px;
-}
-.ind-card.mastered {
-  border-color: var(--ok-bd);
-}
-.ind-head {
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-.ind-meta-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-family: var(--mono);
-  font-size: 12px;
-}
-.ind-badge {
-  background: var(--acc-bg);
-  color: var(--acc);
-  border: 1px solid var(--acc-bd);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 700;
-}
-.ind-bab-tag { color: var(--muted); }
-.ind-head h3 {
-  margin: 0 0 6px;
-  font-size: 19px;
-  line-height: 1.3;
-}
-.ind-kisi {
-  margin: 0;
-  font-size: 13.5px;
-  color: var(--muted);
-}
-.ind-kisi strong { color: var(--fg-2); font-weight: 600; }
-
-.check-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 12px;
-  font-size: 12.5px;
-  font-weight: 600;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.check-btn:hover { border-color: var(--border-strong); }
-.check-btn.done {
-  background: var(--ok-bg);
-  border-color: var(--ok);
-  color: var(--ok);
-}
-.check-box-ico {
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mono);
-  font-size: 10px;
-}
-
-.ind-body {
-  padding: 20px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-/* 8 Subsections */
-.sec-block {
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-}
-.sec-block:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-.sec-title {
-  margin: 0 0 10px;
-  font-size: 13px;
-  font-family: var(--mono);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--acc);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.sec-text { margin: 0; color: var(--fg-2); }
-.sec-list {
-  margin: 0;
-  padding-left: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  color: var(--fg-2);
-}
-.sec-list li strong { color: var(--fg); }
-
-/* Formula Encyclopedia */
-.formula-display {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 14px 16px;
-  margin: 8px 0 12px;
-  text-align: center;
-}
-.formula-main {
-  font-family: var(--mono);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--fg);
-  line-height: 1.6;
-}
-.formula-deriv {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--muted);
-  border-top: 1px dashed var(--border-strong);
-  padding-top: 6px;
-}
-.konvensi-note {
-  margin-top: 10px;
-  padding: 10px 12px;
-  background: var(--vec-bg);
-  border: 1px solid var(--vec-bd);
-  border-radius: 6px;
-  font-size: 13.5px;
-  color: var(--fg-2);
-}
-.konvensi-note strong { color: var(--vec); }
-
-/* Tables */
-.tbl-wrap {
-  width: 100%;
-  overflow-x: auto;
-  margin: 10px 0;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-}
-table.tech-tbl {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  text-align: left;
-}
-table.tech-tbl th {
-  background: var(--surface);
-  color: var(--fg);
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 8px 11px;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-table.tech-tbl td {
-  padding: 8px 11px;
-  border-bottom: 1px solid var(--border);
-  color: var(--fg-2);
-  vertical-align: top;
-}
-table.tech-tbl tr:last-child td { border-bottom: none; }
-table.tech-tbl td:first-child {
-  font-family: var(--mono);
-  font-weight: 600;
-  color: var(--fg);
-}
-
-/* Interactive SVG Workbench */
-.vis-workbench {
-  background: var(--svg-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.vis-toolbar {
-  padding: 10px 14px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.vis-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-}
-.vis-chip-hint {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-  margin-right: 2px;
-}
-.hl-chip {
-  padding: 4px 9px;
-  font-size: 12px;
-  font-family: var(--mono);
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  cursor: pointer;
-  color: var(--fg-2);
-  transition: border-color 0.12s, background 0.12s, color 0.12s;
-}
-.hl-chip:hover, .hl-chip.active {
-  background: var(--acc-bg);
-  border-color: var(--acc);
-  color: var(--acc);
-  font-weight: 600;
-}
-
-.vis-controls {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-}
-.ctrl-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-}
-.ctrl-item label {
-  font-weight: 600;
-  color: var(--fg-2);
-}
-.ctrl-item input[type="range"] {
-  width: 120px;
-  accent-color: var(--acc);
-  cursor: pointer;
-}
-.ctrl-val {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--acc);
-  min-width: 44px;
-}
-.ctrl-seg {
-  display: inline-flex;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  overflow: hidden;
-}
-.ctrl-seg button {
-  padding: 4px 10px;
-  font-size: 12px;
-  background: var(--surface);
-  border: none;
-  border-right: 1px solid var(--border);
-  cursor: pointer;
-  color: var(--muted);
-}
-.ctrl-seg button:last-child { border-right: none; }
-.ctrl-seg button.active {
-  background: var(--acc);
-  color: #FFFFFF;
-  font-weight: 600;
-}
-html[data-theme="dark"] .ctrl-seg button.active {
-  color: #0F172A;
-}
-
-.svg-stage {
-  position: relative;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.svg-stage svg {
-  width: 100%;
-  max-width: 760px;
-  height: auto;
-  display: block;
-  font-family: var(--sans);
-}
-.svg-stage svg [data-hl] {
-  cursor: pointer;
-  transition: opacity 0.15s ease, filter 0.15s ease;
-}
-.svg-stage.has-hl svg [data-hl] {
-  opacity: 0.28;
-}
-.svg-stage.has-hl svg [data-hl].hl-on {
-  opacity: 1;
-}
-
-.vis-readout {
-  padding: 9px 14px;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.vis-tooltip-msg {
-  color: var(--fg);
-}
-.vis-tooltip-msg b {
-  font-family: var(--mono);
-  color: var(--acc);
-}
-.vis-grafik-note {
-  padding: 9px 14px;
-  border-top: 1px solid var(--border);
-  background: var(--card);
-  font-size: 12.8px;
-  color: var(--muted);
-}
-.vis-grafik-note strong { color: var(--fg); }
-
-/* Radar Decision & SOP */
-.radar-notes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
-}
-.radar-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px 12px;
-  font-size: 13px;
-}
-.radar-box strong {
-  display: block;
-  font-family: var(--mono);
-  font-size: 11.5px;
-  text-transform: uppercase;
-  color: var(--fg);
-  margin-bottom: 4px;
-}
-
-/* Traps / Jebakan Maut */
-.trap-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.trap-item {
-  background: var(--danger-bg);
-  border: 1px solid var(--danger-bd);
-  border-left: 3px solid var(--danger);
-  border-radius: 5px;
-  padding: 8px 12px;
-  font-size: 13.5px;
-  color: var(--fg-2);
-}
-.trap-item b {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--danger);
-}
-
-/* Step-by-Step Worked Examples */
-.soal-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.soal-card {
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
-  overflow: hidden;
-}
-.soal-head {
-  padding: 10px 14px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.soal-lvl {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--fg);
-}
-.soal-actions {
-  display: flex;
-  gap: 6px;
-}
-.step-ctrl-btn {
-  padding: 4px 10px;
-  font-size: 12px;
-  font-family: var(--mono);
-  font-weight: 600;
-  background: var(--card);
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  cursor: pointer;
-}
-.step-ctrl-btn.primary {
-  background: var(--acc-bg);
-  border-color: var(--acc);
-  color: var(--acc);
-}
-.step-ctrl-btn:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-.soal-q {
-  padding: 12px 14px;
-  font-size: 14px;
-  color: var(--fg);
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
-}
-.steps-wrap {
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.step-row {
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--card);
-  overflow: hidden;
-}
-.step-trigger {
-  width: 100%;
-  padding: 8px 12px;
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-align: left;
-  cursor: pointer;
-  font-size: 13px;
-}
-.step-trigger:hover { background: var(--surface); }
-.step-code {
-  font-family: var(--mono);
-  font-weight: 700;
-  color: var(--acc);
-  margin-right: 8px;
-}
-.step-state {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--faint);
-}
-.step-row.open .step-state { color: var(--ok); }
-.step-content {
-  display: none;
-  padding: 8px 12px 10px;
-  border-top: 1px solid var(--border);
-  font-size: 13.5px;
-  color: var(--fg-2);
-  background: var(--surface);
-}
-.step-row.open .step-content { display: block; }
-
-/* ---------- Global View: Radar Diagnosa ---------- */
-.diag-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 12px;
-  margin: 14px 0 24px;
-}
-.diag-card {
-  text-align: left;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.diag-card:hover, .diag-card.active {
-  border-color: var(--acc);
-  background: var(--acc-bg);
-}
-.diag-card-kicker {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--acc);
-  margin-bottom: 4px;
-}
-.diag-card-cue {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--fg);
-}
-.diag-result {
-  background: var(--card);
-  border: 1px solid var(--acc);
-  border-radius: 8px;
-  padding: 18px 20px;
-  margin-bottom: 24px;
-}
-.diag-jump-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-.jump-btn {
-  padding: 5px 10px;
-  font-family: var(--mono);
-  font-size: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  cursor: pointer;
-}
-.jump-btn:hover { border-color: var(--acc); color: var(--acc); }
-
-/* ---------- Global View: Master Cheat Sheet ---------- */
-.cs-controls {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.cs-controls input {
-  flex: 1;
-  min-width: 240px;
-  padding: 9px 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  outline: none;
-}
-.cs-controls input:focus { border-color: var(--acc); }
-
-/* Mobile Overlay */
-.side-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 60;
-}
-
-@media (max-width: 1024px) {
-  .layout { grid-template-columns: 1fr; }
-  .btn-menu { display: inline-flex; }
-  .brand-meta { display: none; }
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-    height: 100vh;
-    z-index: 70;
-    transform: translateX(-100%);
-    transition: transform 0.2s ease;
-    border-right: 1px solid var(--border);
+  :root {
+    --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    --pad: clamp(14px, 4vw, 32px);
+    --g1: #0B7FA8;
+    --g2: #15A37A;
   }
-  .sidebar.open { transform: translateX(0); }
-  .side-backdrop.open { display: block; }
-  .main-col { padding: 20px 16px 64px; }
-  .radar-notes { grid-template-columns: 1fr; }
-}
 
-@media (max-width: 640px) {
-  .topbar-inner { padding: 8px 12px; }
-  .nav-tabs { order: 3; width: 100%; overflow-x: auto; }
-  .tab-btn { flex: 1; text-align: center; padding: 6px 8px; font-size: 12px; }
-  .prog-track { width: 56px; }
-  .ind-head { flex-direction: column; }
-  .ind-body { padding: 16px; }
-  .mod-hero { padding: 18px; }
-}
+  html[data-theme="light"] {
+    --bg: #F3F5FA;
+    --paper: #FFFFFF;
+    --card: #FFFFFF;
+    --surface: #F7F8FC;
+    --surface-2: #ECEFF7;
+    --fg: #171B2E;
+    --fg-2: #2E344D;
+    --muted: #5B6278;
+    --faint: #7B839B;
+    --line: #DFE3EE;
+    --border: #DFE3EE;
+    --border-strong: #C5CCE0;
+
+    --a: #0B7FA8;
+    --tip: #13865A;
+    --trap: #B57A00;
+    --why: #6D3CE8;
+    --danger: #C92A4E;
+
+    --b1: #2563EB;
+    --b2: #D9541E;
+    --b3: #0D9488;
+    --b4: #6D3CE8;
+    --b5: #C2255C;
+    --b6: #0B7FA8;
+
+    /* Variabel fungsional untuk diagram SVG */
+    --acc: #2563EB;
+    --acc-bg: #EFF6FF;
+    --acc-bd: #BFDBFE;
+    --vec: #D97706;
+    --vec-bg: #FFFBEB;
+    --vec-bd: #FDE68A;
+    --ok: #059669;
+    --ok-bg: #ECFDF5;
+    --ok-bd: #A7F3D0;
+    --danger-bg: #FFF1F2;
+    --danger-bd: #FECDD3;
+    --svg-bg: #FAFBFD;
+    --svg-ink: #171B2E;
+    --svg-muted: #64748B;
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    --bg: #0E111B;
+    --paper: #171B28;
+    --card: #171B28;
+    --surface: #1E2334;
+    --surface-2: #262D42;
+    --fg: #E8EBF4;
+    --fg-2: #CFD5E6;
+    --muted: #9DA5B8;
+    --faint: #788199;
+    --line: #2A3042;
+    --border: #2A3042;
+    --border-strong: #3C445C;
+
+    --a: #5CC8F0;
+    --tip: #5FD69C;
+    --trap: #FFC94F;
+    --why: #B49BFF;
+    --danger: #FF7FA3;
+
+    --b1: #7DA2FF;
+    --b2: #FF945E;
+    --b3: #4FD1C5;
+    --b4: #B49BFF;
+    --b5: #FF7FA3;
+    --b6: #5CC8F0;
+
+    /* Variabel fungsional untuk diagram SVG */
+    --acc: #60A5FA;
+    --acc-bg: #1A2742;
+    --acc-bd: #28406B;
+    --vec: #FBBF24;
+    --vec-bg: #2E2414;
+    --vec-bd: #59431B;
+    --ok: #34D399;
+    --ok-bg: #132C26;
+    --ok-bd: #1E4E41;
+    --danger-bg: #311722;
+    --danger-bd: #5C2538;
+    --svg-bg: #141824;
+    --svg-ink: #E8EBF4;
+    --svg-muted: #94A3B8;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-padding-top: 76px; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .2s ease, color .2s ease;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
+  b, strong { font-weight: 700; color: var(--fg); }
+  sub, sup { font-size: 0.74em; line-height: 0; position: relative; vertical-align: baseline; }
+  sup { top: -0.45em; }
+  sub { bottom: -0.22em; }
+  .math, code {
+    font-family: var(--mono);
+    font-size: 0.91em;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--b, var(--a)) 9%, var(--surface));
+    color: var(--fg);
+  }
+  .formula-pill .math { background: transparent; padding: 0; font-size: 1em; }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 var(--pad); }
+
+  /* ---------- Sticky Top Pill Nav (Persis Sejarah & Seni Budaya) ---------- */
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--line);
+  }
+  .topnav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1.5px;
+    height: 3px;
+    width: var(--p, 0%);
+    background: linear-gradient(90deg, var(--g1), var(--g2));
+    transition: width .35s ease;
+  }
+  .nav-in {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 10px var(--pad);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 13px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .pill:hover { border-color: var(--a); }
+  .toc {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+    min-width: 0;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc a {
+    --b: var(--a);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--muted);
+  }
+  .toc a .n { font-family: var(--mono); color: var(--b); }
+  .toc a .st { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--line); }
+  .toc a.mastered .st { background: var(--tip); border-color: var(--tip); }
+  .toc a.active { background: var(--b); border-color: var(--b); color: #fff; }
+  .toc a.active .n { color: #fff; }
+  html[data-theme="dark"] .toc a.active,
+  html[data-theme="dark"] .toc a.active .n { color: #0E111B; }
+
+  .nav-r { display: flex; align-items: center; gap: 8px; flex: none; }
+  .key-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .key-pill input { position: absolute; opacity: 0; pointer-events: none; }
+  .key-pill:has(input:checked) { background: var(--why); border-color: var(--why); color: #fff; }
+  html[data-theme="dark"] .key-pill:has(input:checked) { color: #0E111B; }
+
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    padding: 5px 11px 5px 6px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .switch {
+    position: relative;
+    width: 30px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--line);
+    flex: none;
+  }
+  .switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform .22s ease;
+  }
+  html[data-theme="dark"] .toggle .switch { background: var(--a); }
+  html[data-theme="dark"] .toggle .switch::after { transform: translateX(12px); }
+
+  /* ---------- Hero & Peta Bab ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: 24px;
+    border-radius: 24px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    padding: clamp(24px, 4vw, 36px);
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--b1), var(--b2), var(--b3), var(--b4), var(--b5));
+  }
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .code {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--a) 14%, var(--paper));
+    color: var(--a);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+    font-weight: 800;
+  }
+  .subtitle {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 15.5px;
+    max-width: 68ch;
+  }
+  .hero-stats {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1.5px solid var(--line);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .link-btn {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .link-btn:hover { color: var(--fg); }
+
+  /* Kartu Peta 5 Bab */
+  .peta {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin: 16px 0 18px;
+  }
+  .peta button {
+    --b: var(--a);
+    text-align: left;
+    border-radius: 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-top: 5px solid var(--b);
+    padding: 13px 14px;
+    cursor: pointer;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease;
+  }
+  .peta button:hover { transform: translateY(-2px); border-color: var(--b); }
+  .peta button.active {
+    border-color: var(--b);
+    background: color-mix(in srgb, var(--b) 10%, var(--paper));
+  }
+  .peta button span {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--b);
+  }
+  .peta button b {
+    display: block;
+    margin-top: 5px;
+    font-size: 13.8px;
+    line-height: 1.3;
+  }
+
+  /* Kotak Konvensi & Cara Belajar Nyaman */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .guide {
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+    border-left: 6px solid var(--a);
+    padding: 16px 20px;
+    background: var(--paper);
+  }
+  .guide.tips {
+    border-left-color: var(--why);
+  }
+  .guide .label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--a);
+    font-weight: 700;
+  }
+  .guide.tips .label { color: var(--why); }
+  .konv-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .konv-chip {
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .guide ul {
+    margin: 0;
+    padding: 0 0 0 18px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .guide li { margin-bottom: 5px; color: var(--fg-2); }
+
+  /* Search & Filter Bar */
+  .tools-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 24px;
+    flex-wrap: wrap;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 18px;
+    padding: 10px 16px;
+  }
+  .search {
+    flex: 1 1 260px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+  }
+  .search svg { width: 17px; height: 17px; stroke: var(--muted); fill: none; stroke-width: 1.8; flex: none; }
+  .search input {
+    border: 0;
+    background: transparent;
+    padding: 6px 0;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+  }
+  .search input::placeholder { color: var(--muted); }
+  .filter-reset-pill {
+    display: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1.5px solid var(--a);
+    background: color-mix(in srgb, var(--a) 12%, var(--paper));
+    color: var(--a);
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .filter-reset-pill.show { display: inline-flex; align-items: center; gap: 5px; }
+
+  .empty-search {
+    padding: 28px;
+    text-align: center;
+    color: var(--muted);
+    border: 1.5px dashed var(--line);
+    border-radius: 18px;
+    display: none;
+    margin-bottom: 24px;
+  }
+
+  /* ---------- Bab Section Container ---------- */
+  main.content { padding-bottom: 56px; }
+  .sec {
+    --b: var(--b1);
+    border-radius: 24px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-top: 6px solid var(--b);
+    padding: clamp(20px, 3.8vw, 32px);
+    margin-bottom: 30px;
+  }
+  #bab-1 { --b: var(--b1); }
+  #bab-2 { --b: var(--b2); }
+  #bab-3 { --b: var(--b3); }
+  #bab-4 { --b: var(--b4); }
+  #bab-5 { --b: var(--b5); }
+  #extra-sec { --b: var(--b6); }
+
+  .sec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1.5px solid var(--line);
+    margin-bottom: 22px;
+  }
+  .sec-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--b);
+  }
+  .sq { width: 9px; height: 9px; border-radius: 3px; background: var(--b); display: inline-block; }
+  .sec-title {
+    margin: 6px 0 4px;
+    font-size: clamp(22px, 3.2vw, 29px);
+    line-height: 1.2;
+    letter-spacing: -.02em;
+    font-weight: 800;
+  }
+  .sec-sub { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .sec-prog-badge {
+    padding: 6px 13px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* ---------- Kartu Indikator (Lega, Fokus, Anti-Penuh) ---------- */
+  .topic-list { display: grid; gap: 22px; }
+
+  .tcard {
+    border-radius: 20px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    overflow: hidden;
+    transition: border-color .18s ease;
+  }
+  .tcard.mastered {
+    border-color: color-mix(in srgb, var(--tip) 55%, var(--line));
+  }
+
+  .tcard-head {
+    padding: 16px 20px 14px;
+    background: color-mix(in srgb, var(--b) 9%, var(--paper));
+    border-bottom: 1.5px solid var(--line);
+  }
+  .tcard-toprow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .tcard-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .tcard-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 34px;
+    padding: 0 9px;
+    border-radius: 11px;
+    background: var(--b);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    font-weight: 700;
+    flex: none;
+    margin-top: 1px;
+  }
+  html[data-theme="dark"] .tcard-num { color: #0E111B; }
+
+  .tcard-head h3 {
+    margin: 0;
+    font-size: 18.5px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -.015em;
+  }
+  .tcard-kisi {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .paham-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 13px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    flex: none;
+  }
+  .paham-btn:hover { border-color: var(--tip); color: var(--fg); }
+  .paham-btn.done {
+    background: color-mix(in srgb, var(--tip) 14%, var(--paper));
+    border-color: var(--tip);
+    color: var(--tip);
+  }
+  .paham-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
+    border: 1.5px solid currentColor;
+    display: inline-grid;
+    place-items: center;
+    font-size: 10px;
+    font-family: var(--mono);
+  }
+
+  /* 4 Pill Sub-Tabs di dalam Kartu Indikator */
+  .subtabs {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .stab {
+    padding: 6px 13px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .stab:hover { border-color: var(--b); color: var(--fg); }
+  .stab.active {
+    background: var(--b);
+    border-color: var(--b);
+    color: #fff;
+  }
+  html[data-theme="dark"] .stab.active { color: #0E111B; }
+
+  /* Body Panel per Sub-Tab */
+  .tcard-body {
+    padding: 20px 22px 22px;
+    background: var(--paper);
+  }
+  .tabpanel { display: none; }
+  .tabpanel.active {
+    display: grid;
+    gap: 16px;
+  }
+
+  /* Panel 1: Konsep & Rumus (Super Bersih & Lega) */
+  .formula-showcase {
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--b) 8%, var(--surface));
+    border: 1.5px solid color-mix(in srgb, var(--b) 28%, var(--line));
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .formula-showcase-lbl {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--b);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .formula-pill {
+    font-family: var(--mono);
+    font-size: clamp(15px, 2.2vw, 18px);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.65;
+    padding: 3px 0;
+  }
+
+  .clean-card {
+    border-radius: 15px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    padding: 15px 18px;
+  }
+  .blk-label {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--b);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .clean-list {
+    margin: 0;
+    padding: 0 0 0 19px;
+    display: grid;
+    gap: 8px;
+    font-size: 15.2px;
+    color: var(--fg-2);
+  }
+
+  /* Kotak Kembar Trik & Jebakan (Persis Sejarah) */
+  .tj-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .trik-box {
+    border-radius: 15px;
+    padding: 14px 17px;
+    border: 1.5px solid color-mix(in srgb, var(--trap) 30%, var(--line));
+    border-left: 5px solid var(--trap);
+    background: color-mix(in srgb, var(--trap) 8%, var(--paper));
+    font-size: 14.4px;
+  }
+  .trik-box .blk-label { color: var(--trap); }
+  .jebak-box {
+    border-radius: 15px;
+    padding: 14px 17px;
+    border: 1.5px solid color-mix(in srgb, var(--danger) 28%, var(--line));
+    border-left: 5px solid var(--danger);
+    background: color-mix(in srgb, var(--danger) 7%, var(--paper));
+    font-size: 14.4px;
+  }
+  .jebak-box .blk-label { color: var(--danger); }
+  .trik-box ul, .jebak-box ul {
+    margin: 0;
+    padding: 0 0 0 17px;
+    display: grid;
+    gap: 6px;
+    color: var(--fg-2);
+  }
+
+  /* Panel 2: Visual SVG Interaktif */
+  .vis-workbench {
+    border-radius: 16px;
+    border: 1.5px solid var(--line);
+    background: var(--svg-bg);
+    overflow: hidden;
+  }
+  .vis-toolbar {
+    padding: 11px 15px;
+    background: var(--surface);
+    border-bottom: 1.5px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    align-items: center;
+  }
+  .vis-hint {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  .hl-chip {
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    cursor: pointer;
+    color: var(--fg-2);
+  }
+  .hl-chip:hover, .hl-chip.active {
+    background: var(--b);
+    border-color: var(--b);
+    color: #fff;
+  }
+  html[data-theme="dark"] .hl-chip.active { color: #0E111B; }
+
+  .vis-controls {
+    padding: 11px 15px;
+    background: var(--paper);
+    border-bottom: 1.5px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+  .ctrl-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .ctrl-item label { font-weight: 700; color: var(--fg-2); }
+  .ctrl-item input[type="range"] { width: 125px; accent-color: var(--b); cursor: pointer; }
+  .ctrl-val { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--b); }
+  .ctrl-seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .ctrl-seg button {
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .ctrl-seg button.active {
+    background: var(--b);
+    border-color: var(--b);
+    color: #fff;
+  }
+  html[data-theme="dark"] .ctrl-seg button.active { color: #0E111B; }
+
+  .svg-stage {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: center;
+  }
+  .svg-stage svg { width: 100%; max-width: 760px; height: auto; display: block; }
+  .svg-stage svg [data-hl] { cursor: pointer; transition: opacity .15s ease; }
+  .svg-stage.has-hl svg [data-hl] { opacity: 0.26; }
+  .svg-stage.has-hl svg [data-hl].hl-on { opacity: 1; }
+
+  .vis-readout {
+    padding: 11px 16px;
+    border-top: 1.5px solid var(--line);
+    background: var(--surface);
+    font-size: 13.8px;
+    color: var(--fg-2);
+  }
+  .vis-readout b { color: var(--b); font-family: var(--mono); font-size: 0.94em; }
+  .vis-grafik-note {
+    padding: 10px 16px;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  /* Panel 3: Turunan, Satuan & Radar Kata Kunci */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+  }
+  table.tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  table.tbl th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--b);
+    background: color-mix(in srgb, var(--b) 10%, var(--paper));
+    border-bottom: 1.5px solid var(--line);
+    padding: 10px 13px;
+    white-space: nowrap;
+  }
+  table.tbl td {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 13px;
+    vertical-align: top;
+    color: var(--fg-2);
+  }
+  table.tbl tr:last-child td { border-bottom: 0; }
+  table.tbl td:first-child { font-weight: 700; color: var(--fg); }
+
+  .konvensi-pillbox {
+    border-radius: 14px;
+    padding: 12px 16px;
+    border-left: 5px solid var(--why);
+    background: color-mix(in srgb, var(--why) 8%, var(--surface));
+    font-size: 14.2px;
+    color: var(--fg-2);
+  }
+
+  /* Panel 4: Latihan 3 Level */
+  .soal-list { display: grid; gap: 14px; }
+  .soal-item {
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    padding: 16px 18px;
+  }
+  .soal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--b) 14%, var(--paper));
+    color: var(--b);
+    padding: 3px 10px;
+  }
+  .soal-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .kbtn {
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    padding: 5px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--fg-2);
+  }
+  .kbtn:hover { border-color: var(--b); color: var(--b); }
+  .kbtn.primary {
+    background: color-mix(in srgb, var(--b) 12%, var(--paper));
+    border-color: color-mix(in srgb, var(--b) 40%, var(--line));
+    color: var(--b);
+  }
+  .soal-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.65;
+  }
+  .steps-box {
+    margin-top: 12px;
+    display: none;
+    gap: 8px;
+  }
+  .soal-item.has-open .steps-box,
+  body.show-keys .steps-box {
+    display: grid;
+  }
+  .step-line {
+    display: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--b);
+    font-size: 14.2px;
+    color: var(--fg-2);
+  }
+  .step-line.step-e {
+    border-left-color: var(--tip);
+    background: color-mix(in srgb, var(--tip) 8%, var(--paper));
+  }
+  .step-line.open,
+  body.show-keys .step-line {
+    display: block;
+  }
+  .step-badge {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--b);
+    text-transform: uppercase;
+    margin-right: 6px;
+  }
+  .step-line.step-e .step-badge { color: var(--tip); }
+
+  /* ---------- Bagian Penutup: Radar Diagnosa & Master Cheat Sheet ---------- */
+  .diag-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .diag-btn {
+    text-align: left;
+    padding: 13px 15px;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    cursor: pointer;
+  }
+  .diag-btn:hover { border-color: var(--b6); }
+  .diag-btn.active {
+    border-color: var(--b6);
+    background: color-mix(in srgb, var(--b6) 11%, var(--paper));
+  }
+  .diag-btn span {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--b6);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .diag-btn b { font-size: 13.8px; line-height: 1.4; display: block; }
+  .diag-answer {
+    border-radius: 18px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1.5px solid color-mix(in srgb, var(--b6) 40%, var(--line));
+    margin-bottom: 24px;
+  }
+  .jump-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .jump-chip:hover { border-color: var(--b6); color: var(--b6); }
+
+  footer {
+    border-top: 1.5px solid var(--line);
+    padding: 20px 0 36px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 820px) {
+    .peta { grid-template-columns: repeat(2, 1fr); }
+    .guide-grid, .tj-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 15px; }
+    .tcard-toprow { flex-direction: column; }
+    .tcard-body { padding: 16px; }
+    .subtabs { gap: 5px; }
+    .stab { font-size: 12px; padding: 5px 10px; }
+  }
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="top-left">
-      <button type="button" class="btn-menu" id="btn-menu" aria-label="Buka daftar indikator">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
-      <a href="index.html" class="portal-link" id="portal-back-link">&larr; Kembali ke Portal</a>
-      <div class="brand-meta">
-        <span class="brand-code">FISIKA XI</span>
-        <span class="brand-title">5 Bab &middot; 24 Indikator</span>
-      </div>
+<nav class="topnav" id="top" aria-label="Navigasi Bab Fisika">
+  <div class="nav-in">
+    <a class="pill" href="index.html" id="portal-back-link">&larr; Indeks</a>
+    <div class="toc" id="toc">
+      <a href="#bab-1" data-id="bab-1" style="--b:var(--b1)"><span class="n">Bab 1</span><span>Dinamika Rotasi</span><span class="st"></span></a>
+      <a href="#bab-2" data-id="bab-2" style="--b:var(--b2)"><span class="n">Bab 2</span><span>Elastisitas &amp; Pegas</span><span class="st"></span></a>
+      <a href="#bab-3" data-id="bab-3" style="--b:var(--b3)"><span class="n">Bab 3</span><span>Fluida Statis</span><span class="st"></span></a>
+      <a href="#bab-4" data-id="bab-4" style="--b:var(--b4)"><span class="n">Bab 4</span><span>Fluida Dinamis</span><span class="st"></span></a>
+      <a href="#bab-5" data-id="bab-5" style="--b:var(--b5)"><span class="n">Bab 5</span><span>Kalor &amp; Muai</span><span class="st"></span></a>
+      <a href="#extra-sec" data-id="extra-sec" style="--b:var(--b6)"><span class="n">++</span><span>Radar &amp; Cheat Sheet</span></a>
     </div>
-
-    <nav class="nav-tabs" aria-label="Mode tampilan modul">
-      <button type="button" class="tab-btn active" data-view="materi">Materi (24 Indikator)</button>
-      <button type="button" class="tab-btn" data-view="diagnosa">Radar Diagnosa Soal Acak</button>
-      <button type="button" class="tab-btn" data-view="cheatsheet">Master Cheat Sheet</button>
-    </nav>
-
-    <div class="top-right">
-      <div class="prog-pill" title="Indikator yang sudah ditandai paham">
-        <span id="top-prog-text">0/24</span>
-        <span class="prog-track"><span class="prog-fill" id="top-prog-bar"></span></span>
-      </div>
-      <button type="button" class="theme-btn" id="theme-toggle">Mode Gelap</button>
+    <div class="nav-r">
+      <label class="key-pill" title="Buka semua pembahasan contoh soal">
+        <input type="checkbox" id="show-keys"><span>Kunci</span>
+      </label>
+      <button class="toggle" id="theme-toggle" type="button" aria-label="Ganti mode terang atau gelap">
+        <span class="switch" aria-hidden="true"></span><span id="theme-text">Gelap</span>
+      </button>
     </div>
   </div>
-</header>
+</nav>
 
-<div class="side-backdrop" id="side-backdrop"></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-top">
+      <span class="code">04 / FIS</span>
+      <span class="label">5 Bab &middot; 24 Indikator &middot; 72 Latihan Bertahap</span>
+    </div>
+    <h1>Fisika Kelas XI</h1>
+    <div class="subtitle">Dirancang nyaman dibaca: pahami <b>Konsep &amp; Rumus Inti</b> dulu, lalu klik tab <b>Visual Interaktif</b>, <b>Detail &amp; Radar</b>, atau <b>Contoh Soal</b> kapan pun kamu butuh.</div>
+    <div class="hero-stats">
+      <span>Indikator dipahami: <b id="m-done">0 / 24</b></span>
+      <button class="link-btn" id="btn-reset-prog" type="button">Reset tanda paham</button>
+    </div>
+  </header>
 
-<div class="layout">
-  <aside class="sidebar" id="sidebar" aria-label="Navigasi Bab dan Indikator">
-    <div class="side-prog-box">
-      <div class="side-prog-row">
-        <span>Progres Penguasaan</span>
-        <b id="side-prog-text">0 / 24 Paham</b>
-      </div>
-      <div class="prog-track" style="width:100%;height:7px;margin-bottom:8px;">
-        <span class="prog-fill" id="side-prog-bar"></span>
-      </div>
-      <div class="side-prog-row" style="margin-bottom:0;">
-        <span class="mono" style="font-size:11px;color:var(--faint);" id="side-prog-pct">0% selesai</span>
-        <button type="button" class="side-reset" id="btn-reset-prog">Reset progres</button>
+  <div class="peta" id="peta-bab">
+    <button type="button" data-filter-bab="1" style="--b:var(--b1)"><span>BAB 1 · IND 1–6</span><b>Dinamika Rotasi &amp; Kesetimbangan</b></button>
+    <button type="button" data-filter-bab="2" style="--b:var(--b2)"><span>BAB 2 · IND 7–8</span><b>Elastisitas &amp; Energi Pegas</b></button>
+    <button type="button" data-filter-bab="3" style="--b:var(--b3)"><span>BAB 3 · IND 9–13</span><b>Fluida Statis, Pascal &amp; Archimedes</b></button>
+    <button type="button" data-filter-bab="4" style="--b:var(--b4)"><span>BAB 4 · IND 14–19</span><b>Fluida Dinamis &amp; Bernoulli</b></button>
+    <button type="button" data-filter-bab="5" style="--b:var(--b5)"><span>BAB 5 · IND 20–24</span><b>Suhu, Kalor, Azas Black &amp; Muai</b></button>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide">
+      <span class="label">Tetapan &amp; Konvensi Ujian (Kecuali Disebut Lain)</span>
+      <div class="konv-chips">
+        <span class="konv-chip"><span class="math">g = 10 m/s<sup>2</sup></span></span>
+        <span class="konv-chip"><span class="math">&rho;<sub>air</sub> = 1000 kg/m<sup>3</sup></span></span>
+        <span class="konv-chip"><span class="math">c<sub>air</sub> = 4200 J/kg&middot;K</span></span>
+        <span class="konv-chip"><span class="math">L<sub>lebur es</sub> = 336.000 J/kg</span></span>
+        <span class="konv-chip"><span class="math">L<sub>uap air</sub> = 2.260.000 J/kg</span></span>
+        <span class="konv-chip"><span class="math">P<sub>0</sub> = 10<sup>5</sup> Pa</span></span>
       </div>
     </div>
-
-    <div class="side-search">
-      <input type="search" id="side-filter" placeholder="Filter indikator / kata kunci..." aria-label="Filter daftar indikator">
+    <div class="guide tips">
+      <span class="label">Cara Pakai Biar Nggak Pusing</span>
+      <ul>
+        <li><b>Ketuk kartu Bab di atas</b> kalau mau fokus belajar 1 Bab saja di layar.</li>
+        <li>Baca tab <b>Inti &amp; Rumus</b> dulu sampai kebayang, baru coba geser-geser <b>Visual Interaktif</b>.</li>
+        <li>Lupa rumus waktu latihan acak? Loncat ke <b>++ Radar &amp; Cheat Sheet</b> di bawah.</li>
+      </ul>
     </div>
+  </div>
 
-    <div id="sidebar-nav"></div>
-  </aside>
+  <div class="tools-bar">
+    <label class="search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input id="q-all" type="search" placeholder="Cari nomor (1–24), topik, atau kata kunci (misal: torsi, pegas, pipa U, Torricelli, Azas Black)..." aria-label="Cari indikator">
+    </label>
+    <button type="button" class="filter-reset-pill" id="btn-show-all-bab">Tampilkan Semua Bab &times;</button>
+    <span class="label" id="q-count">24 indikator</span>
+  </div>
 
-  <main class="main-col">
-    <!-- VIEW 1: MATERI 24 INDIKATOR -->
-    <section class="view-panel active" id="view-materi">
-      <div class="mod-hero">
-        <span class="mod-kicker">ASAS Ganjil &middot; Fisika Kelas XI &middot; 2026&ndash;2027</span>
-        <h1>Modul Belajar Lengkap Fisika XI</h1>
-        <p class="mod-sub">5 Bab &middot; 24 Indikator &middot; Nol Lompatan Langkah &middot; Diagram Vektor &amp; Grafik Interaktif</p>
-        <div class="konvensi-box">
-          <b>Konvensi Modul:</b> <span class="math">g = 10 m/s<sup>2</sup></span>, massa jenis air <span class="math">&rho;<sub>air</sub> = 1000 kg/m<sup>3</sup></span>, kalor jenis air <span class="math">c<sub>air</sub> = 4200 J/kg&middot;K</span>, kalor lebur es <span class="math">L<sub>f</sub> = 336.000 J/kg</span>, kalor uap air <span class="math">L<sub>v</sub> = 2.260.000 J/kg</span>, tekanan atmosfer <span class="math">P<sub>0</sub> = 10<sup>5</sup> Pa</span> (kecuali soal menyebut lain).
-        </div>
-      </div>
+  <div class="empty-search" id="empty-all">Tidak ada indikator yang cocok dengan pencarianmu.</div>
 
-      <div class="filter-bar">
-        <div class="bab-pills" id="bab-pills"></div>
-      </div>
+  <main class="content" id="main-content"></main>
 
-      <div id="indicators-container"></div>
-    </section>
-
-    <!-- VIEW 2: RADAR DIAGNOSA SOAL ACAK -->
-    <section class="view-panel" id="view-diagnosa">
-      <div class="mod-hero">
-        <span class="mod-kicker">Penutup Modul &middot; Bagian A</span>
-        <h1>Peta Diagnosa Soal Acak (Mode Ujian Asli)</h1>
-        <p class="mod-sub">Klik ciri kata kunci yang muncul pada soal acak untuk memunculkan bab, pohon keputusan cepat, rumus utama, dan tautan langsung ke indikator terkait.</p>
-      </div>
-      <div id="diagnosa-container"></div>
-    </section>
-
-    <!-- VIEW 3: MASTER CHEAT SHEET -->
-    <section class="view-panel" id="view-cheatsheet">
-      <div class="mod-hero">
-        <span class="mod-kicker">Penutup Modul &middot; Bagian B</span>
-        <h1>Master Cheat Sheet Fisika XI</h1>
-        <p class="mod-sub">Ringkasan 24 indikator: rumus utama &amp; turunan, kata kunci pemicu di soal, dan kapan dipakai. Gunakan kotak pencarian untuk filter instan.</p>
-      </div>
-      <div class="cs-controls">
-        <input type="search" id="cs-search" placeholder="Cari rumus, simbol, kata kunci pemicu, atau nomor indikator (1-24)...">
-        <div class="bab-pills" id="cs-bab-pills"></div>
-      </div>
-      <div id="cheatsheet-container"></div>
-    </section>
-  </main>
+  <footer>
+    <span class="label">Fisika Kelas XI &middot; Portal Belajar ASAS</span>
+    <a href="#top" class="link-btn">Kembali ke atas &uarr;</a>
+  </footer>
 </div>
 
 <script>
@@ -1223,13 +1165,14 @@ html[data-theme="dark"] .ctrl-seg button.active {
   var PORTAL_URL = 'index.html';
   var STORAGE_KISI = 'asas.kisi.fis';
   var STORAGE_THEME = 'asas.theme';
+  var STORAGE_KEYS = 'asas.fis.showKeys';
 
   var CHAPTERS = [
-    { id: 1, code: 'BAB 1', title: 'Dinamika Rotasi', range: [1, 6] },
-    { id: 2, code: 'BAB 2', title: 'Elastisitas Bahan & Getaran', range: [7, 8] },
-    { id: 3, code: 'BAB 3', title: 'Fluida Statis', range: [9, 13] },
-    { id: 4, code: 'BAB 4', title: 'Fluida Dinamis', range: [14, 19] },
-    { id: 5, code: 'BAB 5', title: 'Kalor dan Perpindahan Kalor', range: [20, 24] }
+    { id: 1, code: 'BAB 1', title: 'Dinamika Rotasi', sub: 'Torsi, momen inersia, kesetimbangan, momentum sudut, penari balet & pemain sirkus', range: [1, 6] },
+    { id: 2, code: 'BAB 2', title: 'Elastisitas Bahan & Getaran', sub: 'Hukum Hooke, susunan pegas seri-paralel-campuran & energi potensial elastis', range: [7, 8] },
+    { id: 3, code: 'BAB 3', title: 'Fluida Statis', sub: 'Tekanan hidrostatis, pipa U, dongkrak/rem Hukum Pascal & gaya apung Archimedes', range: [9, 13] },
+    { id: 4, code: 'BAB 4', title: 'Fluida Dinamis', sub: 'Persamaan kontinuitas, tangki bocor Torricelli, debit, venturimeter & sayap Bernoulli', range: [14, 19] },
+    { id: 5, code: 'BAB 5', title: 'Kalor dan Perpindahan Kalor', sub: 'Skala termometer, perubahan wujud, Azas Black, konduksi logam & pemuaian volume', range: [20, 24] }
   ];
 
   var PHYSICS_DATA = [];
@@ -5229,181 +5172,123 @@ html[data-theme="dark"] .ctrl-seg button.active {
     return { svg: svgWrap(24, inner), readout: readout };
   };
 
-  /* ==================== STATE & RENDERER UTAMA ==================== */
+  /* ==================== RENDERER SANTAI, BERSIH & ANTI-PENUH ==================== */
   var masteredSet = new Set();
   var simStates = {};
-  var activeBabFilter = 0; // 0 = semua bab
-  var csBabFilter = 0;
+  var renderedVisuals = new Set();
+  var activeBabOnly = 0; // 0 = semua bab tampil, 1..5 = filter 1 bab fokus
   var activeDiagId = 'd1';
 
-  function loadMastered() {
+  function loadState() {
     try {
       var raw = JSON.parse(localStorage.getItem(STORAGE_KISI));
-      if (Array.isArray(raw)) {
-        raw.forEach(function (n) { masteredSet.add(Number(n)); });
+      if (Array.isArray(raw)) raw.forEach(function (n) { masteredSet.add(Number(n)); });
+    } catch (e) {}
+    try {
+      if (localStorage.getItem(STORAGE_KEYS) === '1') {
+        document.body.classList.add('show-keys');
+        document.getElementById('show-keys').checked = true;
       }
     } catch (e) {}
   }
 
   function saveMastered() {
-    try {
-      localStorage.setItem(STORAGE_KISI, JSON.stringify(Array.from(masteredSet)));
-    } catch (e) {}
+    try { localStorage.setItem(STORAGE_KISI, JSON.stringify(Array.from(masteredSet))); } catch (e) {}
   }
 
   function initSimStates() {
     PHYSICS_DATA.forEach(function (ind) {
       var st = {};
-      (ind.visual.controls || []).forEach(function (c) {
-        st[c.id] = c.val;
-      });
+      (ind.visual.controls || []).forEach(function (c) { st[c.id] = c.val; });
       simStates[ind.id] = st;
     });
   }
 
-  /* ---------- Theme Toggle ---------- */
+  /* ---------- Theme & Show Keys ---------- */
   var themeBtn = document.getElementById('theme-toggle');
-  function syncThemeLabel() {
-    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    themeBtn.textContent = isDark ? 'Mode Terang' : 'Mode Gelap';
+  var themeTxt = document.getElementById('theme-text');
+  function syncThemeText() {
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    themeTxt.textContent = dark ? 'Gelap' : 'Terang';
   }
   themeBtn.addEventListener('click', function () {
-    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    if (isDark) {
-      document.documentElement.removeAttribute('data-theme');
-      try { localStorage.setItem(STORAGE_THEME, 'light'); } catch (e) {}
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      try { localStorage.setItem(STORAGE_THEME, 'dark'); } catch (e) {}
-    }
-    syncThemeLabel();
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var next = dark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(STORAGE_THEME, next); } catch (e) {}
+    syncThemeText();
   });
-  syncThemeLabel();
+  syncThemeText();
+
+  document.getElementById('show-keys').addEventListener('change', function (e) {
+    var on = e.target.checked;
+    document.body.classList.toggle('show-keys', on);
+    try { localStorage.setItem(STORAGE_KEYS, on ? '1' : '0'); } catch (err) {}
+  });
 
   document.getElementById('portal-back-link').setAttribute('href', PORTAL_URL);
 
-  /* ---------- Progress Sync ---------- */
-  function updateProgressUI() {
-    var done = masteredSet.size;
-    var total = PHYSICS_DATA.length;
-    var pct = Math.round((done / total) * 100);
-    document.getElementById('top-prog-text').textContent = done + '/' + total;
-    document.getElementById('top-prog-bar').style.width = pct + '%';
-    document.getElementById('side-prog-text').textContent = done + ' / ' + total + ' Paham';
-    document.getElementById('side-prog-bar').style.width = pct + '%';
-    document.getElementById('side-prog-pct').textContent = pct + '% selesai';
-
-    PHYSICS_DATA.forEach(function (ind) {
-      var isDone = masteredSet.has(ind.id);
-      var card = document.getElementById('ind-' + ind.id);
-      if (card) card.classList.toggle('mastered', isDone);
-      var btn = document.querySelector('.check-btn[data-ind="' + ind.id + '"]');
-      if (btn) {
-        btn.classList.toggle('done', isDone);
-        btn.innerHTML = '<span class="check-box-ico">' + (isDone ? '&check;' : '') + '</span> ' + (isDone ? 'Sudah Paham' : 'Tandai Sudah Paham');
-      }
-      var sLink = document.querySelector('.ind-link[data-ind="' + ind.id + '"]');
-      if (sLink) {
-        sLink.classList.toggle('done', isDone);
-        var dot = sLink.querySelector('.ind-dot');
-        if (dot) dot.innerHTML = isDone ? '&check;' : '';
-      }
-    });
-
-    CHAPTERS.forEach(function (ch) {
-      var cntEl = document.getElementById('chap-cnt-' + ch.id);
-      if (cntEl) {
-        var cDone = 0, cTot = ch.range[1] - ch.range[0] + 1;
-        for (var k = ch.range[0]; k <= ch.range[1]; k++) {
-          if (masteredSet.has(k)) cDone++;
-        }
-        cntEl.textContent = cDone + '/' + cTot;
-      }
-    });
+  /* ---------- Bersihkan awalan "Jebakan X:" supaya lebih enak dibaca ---------- */
+  function cleanTrapText(str) {
+    return str.replace(/^<strong>Jebakan\s*\d+:\s*<\/strong>\s*/i, '');
   }
 
-  /* ---------- Render Sidebar ---------- */
-  function renderSidebar(filterText) {
-    var q = (filterText || '').trim().toLowerCase();
-    var nav = document.getElementById('sidebar-nav');
+  /* ---------- Render Seluruh Bab & Kartu Indikator ---------- */
+  function buildMainContent() {
+    var main = document.getElementById('main-content');
     var html = '';
+
     CHAPTERS.forEach(function (ch) {
-      var items = PHYSICS_DATA.filter(function (d) {
-        if (d.bab !== ch.id) return false;
-        if (!q) return true;
-        return (
-          String(d.id) === q ||
-          d.title.toLowerCase().indexOf(q) !== -1 ||
-          d.kisi.toLowerCase().indexOf(q) !== -1
-        );
-      });
-      if (!items.length) return;
-      html += '<div class="chap-group">' +
-        '<button type="button" class="chap-head" data-bab-jump="' + ch.id + '">' +
-          '<div><span class="chap-head-label">' + ch.code + '</span><span class="chap-head-title">' + ch.title + '</span></div>' +
-          '<span class="chap-count" id="chap-cnt-' + ch.id + '">0/' + (ch.range[1] - ch.range[0] + 1) + '</span>' +
-        '</button>' +
-        '<ul class="ind-list">';
+      var items = PHYSICS_DATA.filter(function (d) { return d.bab === ch.id; });
+      html += '<section class="sec" id="bab-' + ch.id + '" data-bab-sec="' + ch.id + '">' +
+        '<div class="sec-head">' +
+          '<div>' +
+            '<span class="sec-kicker"><span class="sq"></span>' + ch.code + ' &middot; Indikator ' + ch.range[0] + '&ndash;' + ch.range[1] + '</span>' +
+            '<h2 class="sec-title">' + ch.title + '</h2>' +
+            '<p class="sec-sub">' + ch.sub + '</p>' +
+          '</div>' +
+          '<span class="sec-prog-badge" id="bab-prog-' + ch.id + '">0 / ' + items.length + ' paham</span>' +
+        '</div>' +
+        '<div class="topic-list">';
+
       items.forEach(function (ind) {
         var isDone = masteredSet.has(ind.id);
-        html += '<li>' +
-          '<a href="#ind-' + ind.id + '" class="ind-link' + (isDone ? ' done' : '') + '" data-ind="' + ind.id + '">' +
-            '<span class="ind-num">' + String(ind.id).padStart(2, '0') + '</span>' +
-            '<span>' + ind.title + '</span>' +
-            '<span class="ind-dot">' + (isDone ? '&check;' : '') + '</span>' +
-          '</a>' +
-        '</li>';
-      });
-      html += '</ul></div>';
-    });
-    nav.innerHTML = html || '<p style="font-size:12.5px;color:var(--muted);padding:8px;">Tidak ada indikator yang cocok.</p>';
-  }
 
-  /* ---------- Render Bab Filter Pills ---------- */
-  function renderBabPills(targetId, activeVal) {
-    var el = document.getElementById(targetId);
-    var html = '<button type="button" class="bab-pill' + (activeVal === 0 ? ' active' : '') + '" data-bab="0">Semua Bab (1–24)</button>';
-    CHAPTERS.forEach(function (ch) {
-      html += '<button type="button" class="bab-pill' + (activeVal === ch.id ? ' active' : '') + '" data-bab="' + ch.id + '">' + ch.code + ': ' + ch.title + '</button>';
-    });
-    el.innerHTML = html;
-  }
-
-  /* ---------- Render All 24 Indicators ---------- */
-  function renderIndicators() {
-    var container = document.getElementById('indicators-container');
-    var html = '';
-    CHAPTERS.forEach(function (ch) {
-      if (activeBabFilter !== 0 && activeBabFilter !== ch.id) return;
-      html += '<div class="bab-banner" id="bab-' + ch.id + '">' +
-        '<div><div class="bab-banner-code">' + ch.code + '</div><h2>' + ch.title + '</h2></div>' +
-        '<div class="bab-banner-meta">Indikator ' + ch.range[0] + '&ndash;' + ch.range[1] + '</div>' +
-      '</div>';
-
-      PHYSICS_DATA.filter(function (d) { return d.bab === ch.id; }).forEach(function (ind) {
-        var isDone = masteredSet.has(ind.id);
-
-        /* 3. Ensiklopedia Rumus */
-        var extraTblHtml = '';
+        /* Tabel tambahan (Ind 2 & Ind 20) */
+        var extraTbl = '';
         if (ind.rumus.extraTable) {
-          extraTblHtml += '<div class="tbl-wrap"><table class="tech-tbl"><thead><tr>' +
+          extraTbl = '<div class="table-wrap"><table class="tbl"><thead><tr>' +
             ind.rumus.extraTable.headers.map(function (h) { return '<th>' + h + '</th>'; }).join('') +
             '</tr></thead><tbody>' +
             ind.rumus.extraTable.rows.map(function (r) {
-              return '<tr>' + r.map(function (c, idx) { return '<td' + (idx === 2 ? ' class="math"' : '') + '>' + c + '</td>'; }).join('') + '</tr>';
+              return '<tr>' + r.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>';
             }).join('') +
             '</tbody></table></div>';
         }
 
-        var varTblHtml = '<div class="tbl-wrap"><table class="tech-tbl"><thead><tr>' +
-          '<th>Simbol</th><th>Nama Besaran</th><th>Vektor/Skalar</th><th>Satuan SI</th><th>Satuan Jebakan &amp; Cara Konversi</th>' +
+        /* Tabel Variabel */
+        var varTbl = '<div class="table-wrap"><table class="tbl"><thead><tr>' +
+          '<th>Simbol</th><th>Besaran</th><th>Jenis</th><th>Satuan SI</th><th>Catatan &amp; Konversi</th>' +
           '</tr></thead><tbody>' +
           ind.rumus.variabel.map(function (r) {
-            return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td class="math">' + r[3] + '</td><td>' + r[4] + '</td></tr>';
+            return '<tr><td><span class="math">' + r[0] + '</span></td><td>' + r[1] + '</td><td>' + r[2] + '</td><td><span class="math">' + r[3] + '</span></td><td>' + r[4] + '</td></tr>';
           }).join('') +
           '</tbody></table></div>';
 
-        /* 5. Controls for Interactive SVG */
+        /* Tabel Radar Kata Kunci */
+        var radarTbl = '<div class="table-wrap"><table class="tbl"><thead><tr>' +
+          '<th>Kata Kunci di Soal</th><th>Makna Tersembunyi</th><th>Rumus yang Aktif</th>' +
+          '</tr></thead><tbody>' +
+          ind.radar.kataKunci.map(function (r) {
+            return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td><span class="math">' + r[2] + '</span></td></tr>';
+          }).join('') +
+          '</tbody></table></div>';
+
+        /* Kontrol Visual (lazy render SVG saat tab Visual diklik) */
+        var chipsHtml = ind.visual.chips.map(function (chp) {
+          return '<button type="button" class="hl-chip" data-ind="' + ind.id + '" data-hlkey="' + chp.key + '">' + chp.key + '. ' + chp.label + '</button>';
+        }).join('');
+
         var ctrlsHtml = (ind.visual.controls || []).map(function (c) {
           if (c.type === 'range') {
             return '<div class="ctrl-item">' +
@@ -5423,135 +5308,164 @@ html[data-theme="dark"] .ctrl-seg button.active {
           '</div>';
         }).join('');
 
-        var chipsHtml = ind.visual.chips.map(function (chp) {
-          return '<button type="button" class="hl-chip" data-ind="' + ind.id + '" data-hlkey="' + chp.key + '">' + chp.key + '. ' + chp.label + '</button>';
-        }).join('');
-
-        var initVis = SVG_RENDERERS[ind.id](simStates[ind.id]);
-
-        /* 6. Radar */
-        var radarTbl = '<div class="tbl-wrap"><table class="tech-tbl"><thead><tr>' +
-          '<th>Frasa/Kata Kunci di Soal</th><th>Makna Fisis &amp; Nilai Tersembunyi</th><th>Teori/Hukum yang Otomatis Aktif</th>' +
-          '</tr></thead><tbody>' +
-          ind.radar.kataKunci.map(function (r) {
-            return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="math">' + r[2] + '</td></tr>';
-          }).join('') +
-          '</tbody></table></div>';
-
-        /* 8. Contoh Soal 3 Level */
+        /* Contoh Soal 3 Level */
         var soalHtml = ind.soal.map(function (s, sIdx) {
-          var cardKey = ind.id + '-' + sIdx;
-          return '<div class="soal-card" data-soal-card="' + cardKey + '" data-step-count="0">' +
-            '<div class="soal-head">' +
-              '<span class="soal-lvl">' + s.level + '</span>' +
-              '<div class="soal-actions">' +
-                '<button type="button" class="step-ctrl-btn primary" data-action="next-step" data-target="' + cardKey + '">Buka Langkah a &rarr;</button>' +
-                '<button type="button" class="step-ctrl-btn" data-action="all-steps" data-target="' + cardKey + '">Buka Semua</button>' +
-                '<button type="button" class="step-ctrl-btn" data-action="reset-steps" data-target="' + cardKey + '">Tutup</button>' +
+          var skey = ind.id + '-' + sIdx;
+          return '<div class="soal-item" data-skey="' + skey + '">' +
+            '<div class="soal-top">' +
+              '<span class="tag">' + s.level + '</span>' +
+              '<div class="soal-btns">' +
+                '<button type="button" class="kbtn primary" data-sact="next" data-skey="' + skey + '">Buka Langkah a &rarr;</button>' +
+                '<button type="button" class="kbtn" data-sact="all" data-skey="' + skey + '">Buka Semua</button>' +
+                '<button type="button" class="kbtn" data-sact="close" data-skey="' + skey + '" style="display:none;">Tutup</button>' +
               '</div>' +
             '</div>' +
             '<div class="soal-q">' + s.q + '</div>' +
-            '<div class="steps-wrap">' +
+            '<div class="steps-box">' +
               s.steps.map(function (stObj, stIdx) {
-                return '<div class="step-row" data-step-idx="' + stIdx + '">' +
-                  '<button type="button" class="step-trigger" data-action="toggle-single" data-target="' + cardKey + '" data-idx="' + stIdx + '">' +
-                    '<span><span class="step-code">Langkah ' + stObj.code + ')</span> <strong>' + stObj.label + '</strong></span>' +
-                    '<span class="step-state">[Buka]</span>' +
-                  '</button>' +
-                  '<div class="step-content">' + stObj.body + '</div>' +
+                return '<div class="step-line' + (stObj.code === 'e' ? ' step-e' : '') + '" data-stidx="' + stIdx + '">' +
+                  '<span class="step-badge">' + stObj.code + ') ' + stObj.label + ':</span> ' + stObj.body +
                 '</div>';
               }).join('') +
             '</div>' +
           '</div>';
         }).join('');
 
-        html += '<article class="ind-card' + (isDone ? ' mastered' : '') + '" id="ind-' + ind.id + '">' +
-          '<header class="ind-head">' +
-            '<div>' +
-              '<div class="ind-meta-line">' +
-                '<span class="ind-badge">INDIKATOR ' + String(ind.id).padStart(2, '0') + '</span>' +
-                '<span class="ind-bab-tag">BAB ' + ind.bab + ' &middot; ' + ind.babTitle + '</span>' +
-              '</div>' +
-              '<h3>' + ind.title + '</h3>' +
-              '<p class="ind-kisi"><strong>Kalimat Kisi-Kisi:</strong> ' + ind.kisi + '</p>' +
-            '</div>' +
-            '<button type="button" class="check-btn' + (isDone ? ' done' : '') + '" data-ind="' + ind.id + '">' +
-              '<span class="check-box-ico">' + (isDone ? '&check;' : '') + '</span> ' + (isDone ? 'Sudah Paham' : 'Tandai Sudah Paham') +
-            '</button>' +
-          '</header>' +
+        var searchBlob = (
+          ind.id + ' ' + ind.title + ' ' + ind.kisi + ' ' + ind.target + ' ' +
+          ind.teori.join(' ') + ' ' + ind.rumus.utama.join(' ') + ' ' +
+          ind.trik.join(' ') + ' ' + ind.jebakan.join(' ')
+        ).replace(/<[^>]+>/g, ' ').toLowerCase();
 
-          '<div class="ind-body">' +
-            /* 1 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">1. Bedah Target Indikator</h4>' +
-              '<p class="sec-text">' + ind.target + '</p>' +
-            '</section>' +
-            /* 2 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">2. Teori &amp; Intuisi Fisis Mendalam</h4>' +
-              '<ul class="sec-list">' + ind.teori.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
-            '</section>' +
-            /* 3 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">3. Ensiklopedia Rumus Lengkap (Nol Kecuali)</h4>' +
-              (ind.rumus.intro ? '<p class="sec-text" style="margin-bottom:6px;">' + ind.rumus.intro + '</p>' : '') +
-              '<div class="formula-display">' +
-                ind.rumus.utama.map(function (u) { return '<div class="formula-main">' + u + '</div>'; }).join('') +
-                (ind.rumus.penurunan ? '<div class="formula-deriv">' + ind.rumus.penurunan + '</div>' : '') +
+        html += '<article class="tcard' + (isDone ? ' mastered' : '') + '" id="ind-' + ind.id + '" data-ind-card="' + ind.id + '" data-search="' + searchBlob.replace(/"/g, '') + '">' +
+          '<div class="tcard-head">' +
+            '<div class="tcard-toprow">' +
+              '<div class="tcard-title-wrap">' +
+                '<span class="tcard-num">' + String(ind.id).padStart(2, '0') + '</span>' +
+                '<div>' +
+                  '<h3>' + ind.title + '</h3>' +
+                  '<p class="tcard-kisi">' + ind.kisi + '</p>' +
+                '</div>' +
               '</div>' +
-              extraTblHtml +
-              '<ul class="sec-list">' + ind.rumus.poin.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>' +
-              varTblHtml +
-              '<div class="konvensi-note">' + ind.rumus.konvensi + '</div>' +
-            '</section>' +
-            /* 4 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">4. Trik Perbandingan Variabel (Soal Tanpa Angka)</h4>' +
-              '<ul class="sec-list">' + ind.trik.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
-            '</section>' +
-            /* 5 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">5. Diagram SVG Interaktif &amp; Analisis Grafik</h4>' +
+              '<button type="button" class="paham-btn' + (isDone ? ' done' : '') + '" data-paham="' + ind.id + '">' +
+                '<span class="paham-dot">' + (isDone ? '&check;' : '') + '</span>' +
+                '<span>' + (isDone ? 'Sudah Paham' : 'Tandai Paham') + '</span>' +
+              '</button>' +
+            '</div>' +
+
+            '<div class="subtabs" role="tablist">' +
+              '<button type="button" class="stab active" data-stab="inti" data-ind="' + ind.id + '">Inti &amp; Rumus</button>' +
+              '<button type="button" class="stab" data-stab="visual" data-ind="' + ind.id + '">Visual Interaktif</button>' +
+              '<button type="button" class="stab" data-stab="detail" data-ind="' + ind.id + '">Detail &amp; Radar</button>' +
+              '<button type="button" class="stab" data-stab="latihan" data-ind="' + ind.id + '">Contoh Soal (3)</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="tcard-body">' +
+            /* TAB 1: INTI & RUMUS (Default tampil — bersih, tenang, langsung paham!) */
+            '<div class="tabpanel active" data-panel="inti" data-ind="' + ind.id + '">' +
+              '<div class="formula-showcase">' +
+                '<span class="formula-showcase-lbl">Rumus Utama</span>' +
+                ind.rumus.utama.map(function (u) { return '<div class="formula-pill">' + u + '</div>'; }).join('') +
+              '</div>' +
+
+              '<div class="clean-card">' +
+                '<span class="blk-label">Konsep &amp; Intuisi Fisis</span>' +
+                '<ul class="clean-list">' + ind.teori.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
+              '</div>' +
+
+              (extraTbl ? '<div><span class="blk-label">Tabel Referensi Cepat</span>' + extraTbl + '</div>' : '') +
+
+              '<div class="tj-grid">' +
+                '<div class="trik-box">' +
+                  '<span class="blk-label">Trik Cepat &amp; Perbandingan</span>' +
+                  '<ul>' + ind.trik.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>' +
+                '</div>' +
+                '<div class="jebak-box">' +
+                  '<span class="blk-label">Awas Jebakan Soal!</span>' +
+                  '<ul>' + ind.jebakan.map(function (j) { return '<li>' + cleanTrapText(j) + '</li>'; }).join('') + '</ul>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            /* TAB 2: VISUAL INTERAKTIF (Lazy rendered saat dibuka) */
+            '<div class="tabpanel" data-panel="visual" data-ind="' + ind.id + '">' +
               '<div class="vis-workbench" id="wb-' + ind.id + '">' +
                 '<div class="vis-toolbar">' +
-                  '<div class="vis-chips"><span class="vis-chip-hint">Hover/Klik Elemen:</span>' + chipsHtml + '</div>' +
+                  '<span class="vis-hint">Sorot Bagian:</span>' + chipsHtml +
                 '</div>' +
                 (ctrlsHtml ? '<div class="vis-controls">' + ctrlsHtml + '</div>' : '') +
-                '<div class="svg-stage" id="stage-' + ind.id + '" data-ind="' + ind.id + '">' + initVis.svg + '</div>' +
-                '<div class="vis-readout">' +
-                  '<div class="vis-tooltip-msg" id="readout-' + ind.id + '">' + initVis.readout + '</div>' +
+                '<div class="svg-stage" id="stage-' + ind.id + '" data-ind="' + ind.id + '"></div>' +
+                '<div class="vis-readout" id="readout-' + ind.id + '"></div>' +
+                '<div class="vis-grafik-note"><b>Makna Grafik:</b> ' + ind.visual.maknaGrafik + '</div>' +
+              '</div>' +
+            '</div>' +
+
+            /* TAB 3: DETAIL TURUNAN, KONVERSI SATUAN & RADAR */
+            '<div class="tabpanel" data-panel="detail" data-ind="' + ind.id + '">' +
+              '<div class="clean-card">' +
+                '<span class="blk-label">Tipe Soal yang Hampir Pasti Keluar</span>' +
+                '<div style="font-size:14.8px;color:var(--fg-2);">' + ind.target + '</div>' +
+              '</div>' +
+
+              '<div class="clean-card">' +
+                '<span class="blk-label">Rumus Turunan &amp; Kasus Khusus</span>' +
+                (ind.rumus.penurunan ? '<p style="margin:0 0 10px;font-size:14px;color:var(--muted);">' + ind.rumus.penurunan + '</p>' : '') +
+                '<ul class="clean-list">' + ind.rumus.poin.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>' +
+              '</div>' +
+
+              '<div class="konvensi-pillbox">' + ind.rumus.konvensi + '</div>' +
+
+              '<div>' +
+                '<span class="blk-label">Tabel Besaran, Satuan SI &amp; Cara Konversi</span>' +
+                varTbl +
+              '</div>' +
+
+              '<div>' +
+                '<span class="blk-label">Radar Kata Kunci Soal &amp; Strategi Pilih Rumus</span>' +
+                radarTbl +
+                '<div class="tj-grid" style="margin-top:12px;">' +
+                  '<div class="clean-card"><span class="blk-label">Pohon Keputusan</span><div style="font-size:14.2px;color:var(--fg-2);">' + ind.radar.pohon + '</div></div>' +
+                  '<div class="clean-card"><span class="blk-label">SOP Pilih Rumus</span><div style="font-size:14.2px;color:var(--fg-2);">' + ind.radar.sop + '</div></div>' +
                 '</div>' +
-                '<div class="vis-grafik-note"><strong>Makna Grafik:</strong> ' + ind.visual.maknaGrafik + '</div>' +
               '</div>' +
-            '</section>' +
-            /* 6 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">6. Radar Identifikasi Soal (Cara Tahu Pakai Teori &amp; Rumus Mana)</h4>' +
-              radarTbl +
-              '<div class="radar-notes">' +
-                '<div class="radar-box"><strong>Pohon Keputusan</strong>' + ind.radar.pohon + '</div>' +
-                '<div class="radar-box"><strong>SOP Pilih Rumus</strong>' + ind.radar.sop + '</div>' +
-              '</div>' +
-            '</section>' +
-            /* 7 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">7. Daftar Jebakan Maut &amp; Miskonsepsi</h4>' +
-              '<div class="trap-list">' + ind.jebakan.map(function (j) { return '<div class="trap-item">' + j + '</div>'; }).join('') + '</div>' +
-            '</section>' +
-            /* 8 */
-            '<section class="sec-block">' +
-              '<h4 class="sec-title">8. Contoh Soal Prediksi (3 Level) &amp; Pembahasan Nol-Lompatan</h4>' +
-              '<div class="soal-grid">' + soalHtml + '</div>' +
-            '</section>' +
+            '</div>' +
+
+            /* TAB 4: CONTOH SOAL 3 LEVEL */
+            '<div class="tabpanel" data-panel="latihan" data-ind="' + ind.id + '">' +
+              '<div class="soal-list">' + soalHtml + '</div>' +
+            '</div>' +
           '</div>' +
         '</article>';
       });
+
+      html += '</div></section>';
     });
-    container.innerHTML = html;
+
+    /* ---------- Bagian Penutup: Radar Diagnosa & Master Cheat Sheet ---------- */
+    html += '<section class="sec" id="extra-sec">' +
+      '<div class="sec-head">' +
+        '<div>' +
+          '<span class="sec-kicker"><span class="sq"></span>PENUTUP MODUL &middot; MODE UJIAN CEPAT</span>' +
+          '<h2 class="sec-title">Radar Diagnosa Soal Acak &amp; Master Cheat Sheet</h2>' +
+          '<p class="sec-sub">Klik ciri kata kunci soal di bawah untuk langsung menemukan bab, rumus utama, dan indikatornya.</p>' +
+        '</div>' +
+      '</div>' +
+      '<div id="diagnosa-box"></div>' +
+      '<div style="margin-top:26px;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">' +
+          '<span class="blk-label" style="margin:0;font-size:12.5px;">Master Cheat Sheet (24 Indikator Lengkap)</span>' +
+          '<input id="cs-filter" type="search" placeholder="Filter cepat rumus / kata kunci di Cheat Sheet..." style="padding:7px 13px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-size:13.5px;min-width:250px;outline:none;">' +
+        '</div>' +
+        '<div id="cheatsheet-box"></div>' +
+      '</div>' +
+    '</section>';
+
+    main.innerHTML = html;
   }
 
-  /* ---------- Refresh Single SVG Diagram ---------- */
-  function refreshDiagram(indId) {
+  /* ---------- Render / Refresh Visual SVG ---------- */
+  function ensureVisualRendered(indId) {
     var stage = document.getElementById('stage-' + indId);
     var readout = document.getElementById('readout-' + indId);
     if (!stage || !SVG_RENDERERS[indId]) return;
@@ -5559,9 +5473,9 @@ html[data-theme="dark"] .ctrl-seg button.active {
     stage.innerHTML = res.svg;
     readout.innerHTML = res.readout;
     stage.classList.remove('has-hl');
+    renderedVisuals.add(indId);
   }
 
-  /* ---------- Hover / Click Highlight Logic ---------- */
   function setHighlight(indId, hlKey) {
     var stage = document.getElementById('stage-' + indId);
     var wb = document.getElementById('wb-' + indId);
@@ -5591,130 +5505,139 @@ html[data-theme="dark"] .ctrl-seg button.active {
     }
   }
 
-  /* ---------- Render View 2: Radar Diagnosa Soal Acak ---------- */
+  /* ---------- Render Diagnosa & Cheat Sheet ---------- */
   function renderDiagnosa() {
-    var el = document.getElementById('diagnosa-container');
-    var activeItem = DIAGNOSA_DATA.langkah1.find(function (d) { return d.id === activeDiagId; }) || DIAGNOSA_DATA.langkah1[0];
+    var box = document.getElementById('diagnosa-box');
+    if (!box) return;
+    var cur = DIAGNOSA_DATA.langkah1.find(function (d) { return d.id === activeDiagId; }) || DIAGNOSA_DATA.langkah1[0];
 
-    var cardsHtml = DIAGNOSA_DATA.langkah1.map(function (d) {
-      return '<button type="button" class="diag-card' + (d.id === activeItem.id ? ' active' : '') + '" data-diag-id="' + d.id + '">' +
-        '<div class="diag-card-kicker">' + d.bab.toUpperCase() + ' &middot; ' + d.rangeText + '</div>' +
-        '<div class="diag-card-cue">&ldquo;' + d.cue + '&rdquo;</div>' +
+    var btns = DIAGNOSA_DATA.langkah1.map(function (d) {
+      return '<button type="button" class="diag-btn' + (d.id === cur.id ? ' active' : '') + '" data-diag="' + d.id + '">' +
+        '<span>' + d.bab.toUpperCase() + ' (' + d.rangeText + ')</span>' +
+        '<b>&ldquo;' + d.cue + '&rdquo;</b>' +
       '</button>';
     }).join('');
 
-    var jumpsHtml = activeItem.inds.map(function (n) {
-      var ind = PHYSICS_DATA[n - 1];
-      var cs = CHEATSHEET_DATA[n - 1];
-      return '<div style="padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">' +
-        '<div>' +
-          '<div style="font-size:13.5px;font-weight:600;color:var(--fg);">Indikator ' + n + ': ' + ind.title + '</div>' +
-          '<div class="math" style="font-size:12.5px;color:var(--acc);margin-top:2px;">' + cs.rumus + '</div>' +
-        '</div>' +
-        '<button type="button" class="jump-btn" data-jump-ind="' + n + '">Buka Indikator ' + n + ' &rarr;</button>' +
-      '</div>';
+    var chips = cur.inds.map(function (n) {
+      return '<button type="button" class="jump-chip" data-jump="' + n + '">Ind. ' + n + ': ' + PHYSICS_DATA[n - 1].title + ' &rarr;</button>';
     }).join('');
 
-    var tblLangkah1 = '<div class="tbl-wrap"><table class="tech-tbl"><thead><tr><th>Jika soal menyebut ...</th><th>Bab</th><th>Langsung ke</th></tr></thead><tbody>' +
-      DIAGNOSA_DATA.langkah1.map(function (d) {
-        return '<tr><td style="font-family:var(--sans);font-weight:500;">' + d.cue + '</td><td><strong>' + d.bab + '</strong></td><td class="math">' + d.rangeText + '</td></tr>';
-      }).join('') +
-      '</tbody></table></div>';
-
-    var listLangkah2 = '<ul class="sec-list">' +
-      DIAGNOSA_DATA.langkah1.map(function (d) {
-        return '<li><strong>' + d.bab.split(' ').slice(0, 2).join(' ') + ':</strong> ' + d.pohon + '</li>';
-      }).join('') +
-      '</ul>';
-
-    el.innerHTML =
-      '<h3 style="margin:0 0 6px;font-size:17px;">Langkah 1 (Interaktif): Klik Ciri Kata Kunci pada Soal</h3>' +
-      '<div class="diag-grid">' + cardsHtml + '</div>' +
-      '<div class="diag-result">' +
-        '<div class="mod-kicker">' + activeItem.bab + ' (' + activeItem.rangeText + ')</div>' +
-        '<h3 style="margin:6px 0 8px;font-size:18px;">Pohon Keputusan Cepat</h3>' +
-        '<p style="margin:0 0 14px;font-size:14px;color:var(--fg-2);">' + activeItem.pohon + '</p>' +
-        '<div style="display:flex;flex-direction:column;gap:8px;">' + jumpsHtml + '</div>' +
-      '</div>' +
-      '<div class="ind-card" style="padding:20px 24px;">' +
-        '<h4 class="sec-title">Tabel Lengkap Langkah 1: Tentukan Bab dari Kata Kunci Pertama</h4>' +
-        tblLangkah1 +
-        '<h4 class="sec-title" style="margin-top:20px;">Langkah 2: Pohon Keputusan Cepat di Setiap Bab</h4>' +
-        listLangkah2 +
-        '<h4 class="sec-title" style="margin-top:20px;">Langkah 3: Cek Akhir</h4>' +
-        '<div class="konvensi-note">' + DIAGNOSA_DATA.langkah3 + '</div>' +
+    box.innerHTML =
+      '<div class="diag-cards">' + btns + '</div>' +
+      '<div class="diag-answer">' +
+        '<span class="blk-label" style="color:var(--b6);">Pohon Keputusan Cepat &middot; ' + cur.bab + '</span>' +
+        '<div style="font-size:15px;color:var(--fg);margin-bottom:12px;">' + cur.pohon + '</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:7px;">' + chips + '</div>' +
+        '<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.2px;color:var(--muted);"><b>Cek Akhir Ujian:</b> ' + DIAGNOSA_DATA.langkah3 + '</div>' +
       '</div>';
   }
 
-  /* ---------- Render View 3: Master Cheat Sheet ---------- */
-  function renderCheatSheet() {
-    var q = (document.getElementById('cs-search').value || '').trim().toLowerCase();
+  function renderCheatSheet(qText) {
+    var box = document.getElementById('cheatsheet-box');
+    if (!box) return;
+    var q = (qText || '').trim().toLowerCase();
     var rows = CHEATSHEET_DATA.filter(function (r) {
-      if (csBabFilter !== 0 && r.bab !== csBabFilter) return false;
       if (!q) return true;
-      var plain = (r.label + ' ' + r.rumus + ' ' + r.kunci + ' ' + r.kapan + ' ' + r.ind).toLowerCase();
-      return plain.indexOf(q) !== -1;
+      return (r.label + ' ' + r.rumus + ' ' + r.kunci + ' ' + r.kapan).toLowerCase().indexOf(q) !== -1;
     });
-
-    var el = document.getElementById('cheatsheet-container');
     if (!rows.length) {
-      el.innerHTML = '<div class="ind-card" style="padding:24px;text-align:center;color:var(--muted);">Tidak ada baris Cheat Sheet yang cocok dengan pencarian tersebut.</div>';
+      box.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:14px;">Tidak ada rumus yang cocok.</div>';
       return;
     }
-
-    el.innerHTML = '<div class="tbl-wrap" style="background:var(--card);"><table class="tech-tbl"><thead><tr>' +
-      '<th>Bab &amp; Indikator</th><th>Rumus Utama &amp; Turunan</th><th>Kata Kunci Pemicu di Soal</th><th>Kapan Dipakai</th><th>Aksi</th>' +
+    box.innerHTML = '<div class="table-wrap"><table class="tbl"><thead><tr>' +
+      '<th>Bab &amp; Topik</th><th>Rumus Utama</th><th>Kata Kunci Pemicu</th><th>Loncat</th>' +
       '</tr></thead><tbody>' +
       rows.map(function (r) {
         return '<tr>' +
           '<td>' + r.label + '</td>' +
-          '<td class="math">' + r.rumus + '</td>' +
+          '<td><span class="math">' + r.rumus + '</span></td>' +
           '<td>' + r.kunci + '</td>' +
-          '<td>' + r.kapan + '</td>' +
-          '<td><button type="button" class="jump-btn" data-jump-ind="' + r.ind + '">Buka &rarr;</button></td>' +
+          '<td><button type="button" class="jump-chip" data-jump="' + r.ind + '">Buka</button></td>' +
         '</tr>';
       }).join('') +
       '</tbody></table></div>';
   }
 
-  /* ---------- Switch Top View Tabs ---------- */
-  function switchView(viewName) {
-    document.querySelectorAll('.tab-btn').forEach(function (b) {
-      b.classList.toggle('active', b.getAttribute('data-view') === viewName);
+  /* ---------- Update Progress UI ---------- */
+  function syncProgressUI() {
+    var done = masteredSet.size;
+    var total = PHYSICS_DATA.length;
+    document.getElementById('m-done').textContent = done + ' / ' + total;
+    document.getElementById('top').style.setProperty('--p', Math.round((done / total) * 100) + '%');
+
+    PHYSICS_DATA.forEach(function (ind) {
+      var isDone = masteredSet.has(ind.id);
+      var card = document.getElementById('ind-' + ind.id);
+      if (card) card.classList.toggle('mastered', isDone);
+      var btn = document.querySelector('[data-paham="' + ind.id + '"]');
+      if (btn) {
+        btn.classList.toggle('done', isDone);
+        btn.innerHTML = '<span class="paham-dot">' + (isDone ? '&check;' : '') + '</span><span>' + (isDone ? 'Sudah Paham' : 'Tandai Paham') + '</span>';
+      }
     });
-    document.querySelectorAll('.view-panel').forEach(function (p) {
-      p.classList.toggle('active', p.id === 'view-' + viewName);
+
+    CHAPTERS.forEach(function (ch) {
+      var cDone = 0, cTot = ch.range[1] - ch.range[0] + 1;
+      for (var k = ch.range[0]; k <= ch.range[1]; k++) {
+        if (masteredSet.has(k)) cDone++;
+      }
+      var badge = document.getElementById('bab-prog-' + ch.id);
+      if (badge) badge.textContent = cDone + ' / ' + cTot + ' paham';
+      var tocLink = document.querySelector('.toc a[data-id="bab-' + ch.id + '"]');
+      if (tocLink) tocLink.classList.toggle('mastered', cDone === cTot);
     });
   }
 
-  function jumpToIndicator(indId) {
-    switchView('materi');
-    if (activeBabFilter !== 0) {
-      activeBabFilter = 0;
-      renderBabPills('bab-pills', 0);
-      renderIndicators();
-      updateProgressUI();
-    }
-    var el = document.getElementById('ind-' + indId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    closeMobileSidebar();
+  /* ---------- Filter Bab & Pencarian Global ---------- */
+  function applyFilters() {
+    var q = (document.getElementById('q-all').value || '').trim().toLowerCase();
+    var visibleCount = 0;
+
+    document.querySelectorAll('#peta-bab button').forEach(function (b) {
+      b.classList.toggle('active', Number(b.getAttribute('data-filter-bab')) === activeBabOnly);
+    });
+    document.getElementById('btn-show-all-bab').classList.toggle('show', activeBabOnly !== 0);
+
+    CHAPTERS.forEach(function (ch) {
+      var sec = document.getElementById('bab-' + ch.id);
+      if (activeBabOnly !== 0 && activeBabOnly !== ch.id) {
+        sec.style.display = 'none';
+        return;
+      }
+      var secVisible = 0;
+      sec.querySelectorAll('.tcard').forEach(function (card) {
+        var idStr = card.getAttribute('data-ind-card');
+        var blob = card.getAttribute('data-search') || '';
+        var match = !q || idStr === q || blob.indexOf(q) !== -1;
+        card.style.display = match ? '' : 'none';
+        if (match) { secVisible++; visibleCount++; }
+      });
+      sec.style.display = secVisible > 0 ? '' : 'none';
+    });
+
+    var extraSec = document.getElementById('extra-sec');
+    if (extraSec) extraSec.style.display = (activeBabOnly === 0 && !q) ? '' : 'none';
+
+    document.getElementById('q-count').textContent = visibleCount + ' indikator';
+    document.getElementById('empty-all').style.display = visibleCount === 0 ? 'block' : 'none';
   }
 
-  /* ---------- Step-by-Step Worked Examples Handler ---------- */
+  /* ---------- Step-by-Step Contoh Soal ---------- */
   var STEP_CODES = ['a', 'b', 'c', 'd', 'e'];
-  function syncSoalCardUI(card) {
-    var rows = card.querySelectorAll('.step-row');
-    var nextBtn = card.querySelector('[data-action="next-step"]');
-    var firstClosed = -1;
-    rows.forEach(function (r, idx) {
-      var isOpen = r.classList.contains('open');
-      r.querySelector('.step-state').textContent = isOpen ? '[Terbuka ✓]' : '[Buka]';
-      if (!isOpen && firstClosed === -1) firstClosed = idx;
+  function syncSoalButtons(box) {
+    var lines = box.querySelectorAll('.step-line');
+    var nextBtn = box.querySelector('[data-sact="next"]');
+    var closeBtn = box.querySelector('[data-sact="close"]');
+    var anyOpen = false, firstClosed = -1;
+    lines.forEach(function (l, idx) {
+      var op = l.classList.contains('open');
+      if (op) anyOpen = true;
+      else if (firstClosed === -1) firstClosed = idx;
     });
+    box.classList.toggle('has-open', anyOpen);
+    closeBtn.style.display = anyOpen ? '' : 'none';
     if (firstClosed === -1) {
-      nextBtn.textContent = 'Semua Langkah Terbuka ✓';
+      nextBtn.textContent = 'Semua Terbuka ✓';
       nextBtn.disabled = true;
     } else {
       nextBtn.innerHTML = 'Buka Langkah ' + STEP_CODES[firstClosed] + ' &rarr;';
@@ -5722,152 +5645,133 @@ html[data-theme="dark"] .ctrl-seg button.active {
     }
   }
 
-  /* ---------- Mobile Sidebar ---------- */
-  var sidebarEl = document.getElementById('sidebar');
-  var backdropEl = document.getElementById('side-backdrop');
-  function closeMobileSidebar() {
-    sidebarEl.classList.remove('open');
-    backdropEl.classList.remove('open');
-  }
-  document.getElementById('btn-menu').addEventListener('click', function () {
-    sidebarEl.classList.toggle('open');
-    backdropEl.classList.toggle('open');
-  });
-  backdropEl.addEventListener('click', closeMobileSidebar);
-
-  /* ---------- Delegated Event Listeners ---------- */
+  /* ---------- Event Delegation ---------- */
   document.addEventListener('click', function (e) {
-    /* Tab View */
-    var tabBtn = e.target.closest('.tab-btn');
-    if (tabBtn) {
-      switchView(tabBtn.getAttribute('data-view'));
-      window.scrollTo({ top: 0 });
-      return;
-    }
-
-    /* Check Sudah Paham */
-    var chkBtn = e.target.closest('.check-btn');
-    if (chkBtn) {
-      var id = Number(chkBtn.getAttribute('data-ind'));
-      if (masteredSet.has(id)) masteredSet.delete(id);
-      else masteredSet.add(id);
-      saveMastered();
-      updateProgressUI();
-      return;
-    }
-
-    /* Sidebar indicator link */
-    var indLink = e.target.closest('.ind-link');
-    if (indLink) {
-      e.preventDefault();
-      jumpToIndicator(Number(indLink.getAttribute('data-ind')));
-      return;
-    }
-
-    /* Sidebar chapter jump */
-    var chapBtn = e.target.closest('[data-bab-jump]');
-    if (chapBtn) {
-      var babId = Number(chapBtn.getAttribute('data-bab-jump'));
-      switchView('materi');
-      if (activeBabFilter !== 0 && activeBabFilter !== babId) {
-        activeBabFilter = 0;
-        renderBabPills('bab-pills', 0);
-        renderIndicators();
-        updateProgressUI();
+    /* Sub-tab switcher di dalam kartu indikator */
+    var stab = e.target.closest('.stab');
+    if (stab) {
+      var indId = Number(stab.getAttribute('data-ind'));
+      var targetTab = stab.getAttribute('data-stab');
+      var card = document.getElementById('ind-' + indId);
+      card.querySelectorAll('.stab').forEach(function (b) { b.classList.toggle('active', b === stab); });
+      card.querySelectorAll('.tabpanel').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-panel') === targetTab);
+      });
+      if (targetTab === 'visual' && !renderedVisuals.has(indId)) {
+        ensureVisualRendered(indId);
       }
-      var bEl = document.getElementById('bab-' + babId);
-      if (bEl) bEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      closeMobileSidebar();
       return;
     }
 
-    /* Bab filter pills on Materi */
-    var babPill = e.target.closest('#bab-pills .bab-pill');
-    if (babPill) {
-      activeBabFilter = Number(babPill.getAttribute('data-bab'));
-      renderBabPills('bab-pills', activeBabFilter);
-      renderIndicators();
-      updateProgressUI();
+    /* Tandai Sudah Paham */
+    var pahamBtn = e.target.closest('[data-paham]');
+    if (pahamBtn) {
+      var pid = Number(pahamBtn.getAttribute('data-paham'));
+      if (masteredSet.has(pid)) masteredSet.delete(pid);
+      else masteredSet.add(pid);
+      saveMastered();
+      syncProgressUI();
       return;
     }
 
-    /* Bab filter pills on Cheat Sheet */
-    var csPill = e.target.closest('#cs-bab-pills .bab-pill');
-    if (csPill) {
-      csBabFilter = Number(csPill.getAttribute('data-bab'));
-      renderBabPills('cs-bab-pills', csBabFilter);
-      renderCheatSheet();
+    /* Filter Bab dari Peta Bab */
+    var petaBtn = e.target.closest('[data-filter-bab]');
+    if (petaBtn) {
+      var bNum = Number(petaBtn.getAttribute('data-filter-bab'));
+      activeBabOnly = (activeBabOnly === bNum) ? 0 : bNum;
+      applyFilters();
+      if (activeBabOnly !== 0) {
+        var secEl = document.getElementById('bab-' + activeBabOnly);
+        if (secEl) secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       return;
     }
 
-    /* Segmented control inside SVG Workbench */
+    if (e.target.closest('#btn-show-all-bab')) {
+      activeBabOnly = 0;
+      applyFilters();
+      return;
+    }
+
+    /* Navigasi Topnav TOC */
+    var tocA = e.target.closest('.toc a');
+    if (tocA) {
+      e.preventDefault();
+      var tid = tocA.getAttribute('data-id');
+      if (activeBabOnly !== 0) {
+        activeBabOnly = 0;
+        applyFilters();
+      }
+      var targetSec = document.getElementById(tid);
+      if (targetSec) targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    /* Segmented toggle pada diagram SVG */
     var segBtn = e.target.closest('.ctrl-seg button');
     if (segBtn) {
       var sInd = Number(segBtn.getAttribute('data-ind'));
       var sCid = segBtn.getAttribute('data-cid');
-      var sVal = segBtn.getAttribute('data-cval');
-      simStates[sInd][sCid] = sVal;
-      segBtn.parentElement.querySelectorAll('button').forEach(function (b) {
-        b.classList.toggle('active', b === segBtn);
-      });
-      refreshDiagram(sInd);
+      simStates[sInd][sCid] = segBtn.getAttribute('data-cval');
+      segBtn.parentElement.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b === segBtn); });
+      ensureVisualRendered(sInd);
       return;
     }
 
-    /* Chip click toggle highlight */
-    var chipBtn = e.target.closest('.hl-chip');
-    if (chipBtn) {
-      var cInd = Number(chipBtn.getAttribute('data-ind'));
-      var cKey = chipBtn.getAttribute('data-hlkey');
-      var already = chipBtn.classList.contains('active');
-      setHighlight(cInd, already ? null : cKey);
+    /* Chip highlight */
+    var hlBtn = e.target.closest('.hl-chip');
+    if (hlBtn) {
+      var cInd = Number(hlBtn.getAttribute('data-ind'));
+      var cKey = hlBtn.getAttribute('data-hlkey');
+      setHighlight(cInd, hlBtn.classList.contains('active') ? null : cKey);
       return;
     }
 
-    /* Step-by-step buttons */
-    var stepAct = e.target.closest('[data-action]');
-    if (stepAct) {
-      var act = stepAct.getAttribute('data-action');
-      var targetKey = stepAct.getAttribute('data-target');
-      var card = document.querySelector('[data-soal-card="' + targetKey + '"]');
-      if (!card) return;
-      var rows = card.querySelectorAll('.step-row');
-      if (act === 'next-step') {
-        for (var i = 0; i < rows.length; i++) {
-          if (!rows[i].classList.contains('open')) {
-            rows[i].classList.add('open');
-            break;
-          }
+    /* Tombol pembahasan bertahap pada Contoh Soal */
+    var sBtn = e.target.closest('[data-sact]');
+    if (sBtn) {
+      var act = sBtn.getAttribute('data-sact');
+      var skey = sBtn.getAttribute('data-skey');
+      var sBox = document.querySelector('[data-skey="' + skey + '"]');
+      if (!sBox) return;
+      var lines = sBox.querySelectorAll('.step-line');
+      if (act === 'next') {
+        for (var i = 0; i < lines.length; i++) {
+          if (!lines[i].classList.contains('open')) { lines[i].classList.add('open'); break; }
         }
-      } else if (act === 'all-steps') {
-        rows.forEach(function (r) { r.classList.add('open'); });
-      } else if (act === 'reset-steps') {
-        rows.forEach(function (r) { r.classList.remove('open'); });
-      } else if (act === 'toggle-single') {
-        var idx = Number(stepAct.getAttribute('data-idx'));
-        if (rows[idx]) rows[idx].classList.toggle('open');
+      } else if (act === 'all') {
+        lines.forEach(function (l) { l.classList.add('open'); });
+      } else if (act === 'close') {
+        lines.forEach(function (l) { l.classList.remove('open'); });
       }
-      syncSoalCardUI(card);
+      syncSoalButtons(sBox);
       return;
     }
 
-    /* Diagnosa card click */
-    var diagCard = e.target.closest('.diag-card');
-    if (diagCard) {
-      activeDiagId = diagCard.getAttribute('data-diag-id');
+    /* Klik kartu Diagnosa */
+    var diagBtn = e.target.closest('[data-diag]');
+    if (diagBtn) {
+      activeDiagId = diagBtn.getAttribute('data-diag');
       renderDiagnosa();
       return;
     }
 
-    /* Jump button from Diagnosa or Cheat Sheet */
-    var jumpBtn = e.target.closest('[data-jump-ind]');
+    /* Loncat ke indikator dari Diagnosa / Cheat Sheet */
+    var jumpBtn = e.target.closest('[data-jump]');
     if (jumpBtn) {
-      jumpToIndicator(Number(jumpBtn.getAttribute('data-jump-ind')));
+      var jId = Number(jumpBtn.getAttribute('data-jump'));
+      if (activeBabOnly !== 0 || document.getElementById('q-all').value) {
+        activeBabOnly = 0;
+        document.getElementById('q-all').value = '';
+        applyFilters();
+      }
+      var targetCard = document.getElementById('ind-' + jId);
+      if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
   });
 
-  /* Range Sliders Input */
+  /* Slider & Search Input */
   document.addEventListener('input', function (e) {
     if (e.target.matches('.ctrl-item input[type="range"]')) {
       var indId = Number(e.target.getAttribute('data-ind'));
@@ -5875,18 +5779,18 @@ html[data-theme="dark"] .ctrl-seg button.active {
       var val = e.target.value;
       simStates[indId][cid] = val;
       var ind = PHYSICS_DATA[indId - 1];
-      var ctrlSpec = ind.visual.controls.find(function (c) { return c.id === cid; });
-      var valSpan = document.getElementById('cval-' + indId + '-' + cid);
-      if (valSpan) valSpan.textContent = val + (ctrlSpec && ctrlSpec.unit ? ctrlSpec.unit : '');
-      refreshDiagram(indId);
-    } else if (e.target.id === 'side-filter') {
-      renderSidebar(e.target.value);
-    } else if (e.target.id === 'cs-search') {
-      renderCheatSheet();
+      var cSpec = ind.visual.controls.find(function (c) { return c.id === cid; });
+      var vEl = document.getElementById('cval-' + indId + '-' + cid);
+      if (vEl) vEl.textContent = val + (cSpec && cSpec.unit ? cSpec.unit : '');
+      ensureVisualRendered(indId);
+    } else if (e.target.id === 'q-all') {
+      applyFilters();
+    } else if (e.target.id === 'cs-filter') {
+      renderCheatSheet(e.target.value);
     }
   });
 
-  /* Hover-to-Highlight (Chips <-> SVG Elements) */
+  /* Hover-to-Highlight (Dua Arah: Chip <-> Elemen SVG) */
   document.addEventListener('mouseover', function (e) {
     var chip = e.target.closest('.hl-chip');
     if (chip) {
@@ -5895,10 +5799,8 @@ html[data-theme="dark"] .ctrl-seg button.active {
     }
     var svgHl = e.target.closest('.svg-stage [data-hl]');
     if (svgHl) {
-      var stage = svgHl.closest('.svg-stage');
-      if (stage) {
-        setHighlight(Number(stage.getAttribute('data-ind')), svgHl.getAttribute('data-hl'));
-      }
+      var stg = svgHl.closest('.svg-stage');
+      if (stg) setHighlight(Number(stg.getAttribute('data-ind')), svgHl.getAttribute('data-hl'));
     }
   });
 
@@ -5910,56 +5812,59 @@ html[data-theme="dark"] .ctrl-seg button.active {
     }
     var svgHl = e.target.closest('.svg-stage [data-hl]');
     if (svgHl && !svgHl.contains(e.relatedTarget)) {
-      var stage = svgHl.closest('.svg-stage');
-      if (stage) setHighlight(Number(stage.getAttribute('data-ind')), null);
+      var stg = svgHl.closest('.svg-stage');
+      if (stg) setHighlight(Number(stg.getAttribute('data-ind')), null);
     }
   });
 
-  /* Reset Progress */
+  /* Reset Progres */
   document.getElementById('btn-reset-prog').addEventListener('click', function () {
     if (!masteredSet.size) return;
-    if (window.confirm('Reset semua tanda "Sudah Paham" (0/24) untuk Fisika XI?')) {
+    if (window.confirm('Reset semua tanda "Sudah Paham" (0/24) pada Fisika XI?')) {
       masteredSet.clear();
       saveMastered();
-      updateProgressUI();
+      syncProgressUI();
     }
   });
 
-  /* Passive Scroll-Spy for Sidebar Active Indicator */
-  var spyTicking = false;
-  function onScrollSpy() {
-    if (spyTicking) return;
-    spyTicking = true;
-    window.requestAnimationFrame(function () {
-      spyTicking = false;
-      var cards = document.querySelectorAll('.ind-card');
-      var currentId = 1;
-      for (var i = 0; i < cards.length; i++) {
-        var rect = cards[i].getBoundingClientRect();
-        if (rect.top <= 140) {
-          currentId = Number(cards[i].id.replace('ind-', ''));
-        } else {
-          break;
+  /* Passive Scroll-Spy Tanpa Bug Jitter (Persis Sejarah) */
+  var tocEl = document.getElementById('toc');
+  var spyPending = false;
+  function updateTocActive() {
+    spyPending = false;
+    var secs = document.querySelectorAll('main.content > section.sec');
+    var activeId = 'bab-1';
+    for (var i = 0; i < secs.length; i++) {
+      if (secs[i].style.display === 'none') continue;
+      if (secs[i].getBoundingClientRect().top <= 130) {
+        activeId = secs[i].id;
+      }
+    }
+    document.querySelectorAll('.toc a').forEach(function (a) {
+      var act = a.getAttribute('data-id') === activeId;
+      if (act !== a.classList.contains('active')) {
+        a.classList.toggle('active', act);
+        if (act && tocEl) {
+          tocEl.scrollLeft = a.offsetLeft - (tocEl.clientWidth - a.offsetWidth) / 2;
         }
       }
-      document.querySelectorAll('.ind-link').forEach(function (a) {
-        a.classList.toggle('active', Number(a.getAttribute('data-ind')) === currentId);
-      });
     });
   }
-  window.addEventListener('scroll', onScrollSpy, { passive: true });
+  window.addEventListener('scroll', function () {
+    if (!spyPending) {
+      spyPending = true;
+      window.requestAnimationFrame(updateTocActive);
+    }
+  }, { passive: true });
 
   /* ---------- Init ---------- */
-  loadMastered();
+  loadState();
   initSimStates();
-  renderSidebar('');
-  renderBabPills('bab-pills', 0);
-  renderBabPills('cs-bab-pills', 0);
-  renderIndicators();
+  buildMainContent();
   renderDiagnosa();
-  renderCheatSheet();
-  updateProgressUI();
-  onScrollSpy();
+  renderCheatSheet('');
+  syncProgressUI();
+  updateTocActive();
 })();
 </script>
 </body>
